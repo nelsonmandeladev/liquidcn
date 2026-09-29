@@ -13,22 +13,9 @@
   text-align: center;
 }
 
-.hero-badge.liquid-button {
-  min-height: 34px;
-  gap: 6px;
-  padding-inline: 14px 12px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.hero-badge svg {
-  width: 14px;
-  height: 14px;
-}
-
 .hero h1 {
-  margin: 24px 0 0;
-  font: 700 clamp(2.9rem, 7.4vw, 5.75rem)/0.98 var(--font-display);
+  margin: 0;
+  font: 700 clamp(2.5rem, 6.4vw, 5rem)/0.98 var(--font-display);
   letter-spacing: -0.048em;
   text-wrap: balance;
 }

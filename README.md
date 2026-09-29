@@ -1,6 +1,6 @@
 # liquidcn
 
-**Liquid Glass for shadcn/ui.** Glass components that swell under your finger, lift a magnifying lens across tabs, and grow menus out of their buttons, the way iOS 26 does. Each one extends a shadcn/ui component instead of rebuilding it, and installs as source from a shadcn registry.
+**Liquid Glass for shadcn/ui.** Glass components that swell under your finger, lift a magnifying lens across tabs, and grow menus out of their buttons, inspired by Apple's Liquid Glass. Each one extends a shadcn/ui component instead of rebuilding it, and installs from a shadcn registry.
 
 **[Docs and live examples →](https://liquidcn.snmandela.com)**
 
@@ -9,14 +9,14 @@
 
 ## Components
 
-| Component     | Item                   | What it does                                                                                       |
-| ------------- | ---------------------- | -------------------------------------------------------------------------------------------------- |
-| Button        | `liquid-button`        | Swells when pressed, stretches on drag, morphs its width and content. `prominent` variant.         |
-| Tab bar       | `liquid-tab-bar`       | iOS 26 tab bar with a search button: the tabs fold into a circle as search stretches into a field. |
-| Tabs          | `liquid-tabs`          | A lens that lifts, magnifies, and tints the labels beneath it. Drag it across tabs to choose.      |
-| Dropdown menu | `liquid-dropdown-menu` | Grows out of and over its trigger as a droplet, folds back into it through a teardrop neck.        |
-| Toolbar       | `liquid-toolbar`       | Groups of swelling actions with a selection lens, and round buttons that fuse with them.           |
-| Toast         | `liquid-sonner`        | Top-center glass pills that form and fold away (Sonner).                                           |
+| Component     | Item                   | What it does                                                                                         |
+| ------------- | ---------------------- | ---------------------------------------------------------------------------------------------------- |
+| Button        | `liquid-button`        | Swells when pressed, stretches on drag, morphs its width and content. `prominent` variant.           |
+| Tab bar       | `liquid-tab-bar`       | Floating tab bar with a search button: the tabs fold into a circle as search stretches into a field. |
+| Tabs          | `liquid-tabs`          | A lens that lifts, magnifies, and tints the labels beneath it. Drag it across tabs to choose.        |
+| Dropdown menu | `liquid-dropdown-menu` | Grows out of and over its trigger as a droplet, folds back into it through a teardrop neck.          |
+| Toolbar       | `liquid-toolbar`       | Groups of swelling actions with a selection lens, and round buttons that fuse with them.             |
+| Toast         | `liquid-sonner`        | Top-center glass pills that form and fold away (Sonner).                                             |
 
 ## Install
 
@@ -79,7 +79,7 @@ Use `.dark` or `data-liquid-theme="dark"` for dark material, and `data-reduced-t
 
 DOM and CSS glass with spring-driven motion; no WebGL, and no runtime dependency beyond the primitives. Springs write CSS custom properties directly and never re-render React per frame. The motion layer owns the `translate` and `scale` properties of interactive elements, so `transform` stays yours.
 
-- [Design language](docs/design.md): what we match from iOS 26, with the numbers.
+- [Design language](docs/design.md): the motion rules and the numbers behind them.
 - [Architecture](docs/architecture.md): the spring, the lens, menu morphs, and the registry.
 - [Deployment](docs/deployment.md): Vercel and the custom domain.
 

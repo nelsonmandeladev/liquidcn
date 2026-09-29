@@ -65,7 +65,7 @@ export const tabsDoc: ComponentDoc = {
     ["Landing", "Lift returns to 0 once within 15% of the target"],
   ],
   accessibility: [
-    "Radix Tabs semantics: `tablist`, `tab`, and `tabpanel` roles, with arrow keys, Home, and End.",
+    "Tabs semantics from the base component: `tablist`, `tab`, and `tabpanel` roles, with arrow keys, Home, and End.",
     "The lens shows an `inert`, `aria-hidden` copy of the list. Screen readers only meet the real tabs.",
     "A drag selects the tab where it is released and moves focus with it, so the roving tab stop stays in sync.",
   ],

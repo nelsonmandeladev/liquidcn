@@ -12,7 +12,7 @@ export default function Home() {
         <div>
           <h2 id="install-title">Start with one component.</h2>
           <p>
-            Each installs as source through the shadcn CLI and keeps the API you already use.{" "}
+            Each installs through the shadcn CLI and keeps the API you already use.{" "}
             <Link href="/docs/installation">Installation</Link>
           </p>
         </div>

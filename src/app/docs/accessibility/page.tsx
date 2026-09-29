@@ -6,7 +6,7 @@ import { ValueTable } from "@/www/docs/tables";
 export const metadata: Metadata = {
   title: "Accessibility",
   description:
-    "How liquidcn keeps Radix semantics and honors motion, transparency, and contrast settings.",
+    "How liquidcn keeps the semantics of your shadcn components and honors motion, transparency, and contrast settings.",
   alternates: { canonical: "/docs/accessibility" },
 };
 
@@ -43,7 +43,7 @@ export default function Page() {
     <DocArticle
       path="/docs/accessibility"
       title="Accessibility"
-      description="The glass sits on top of Radix. Semantics, focus, and keyboard behavior are Radix's, and every interaction works without the motion or the transparency."
+      description="The glass sits on top of your shadcn components. Semantics, focus, and keyboard behavior come from the primitives underneath, and every interaction works without the motion or the transparency."
       toc={tocOf(sections)}
     >
       <Section id="semantics" title="Semantics and focus">
@@ -58,8 +58,8 @@ export default function Page() {
             readers and the keyboard only ever reach the real items.
           </li>
           <li>
-            Menus keep Radix focus management: opening from the keyboard focuses the first item, and
-            Escape returns focus to the trigger.
+            Menus keep the base menu&rsquo;s focus management: opening from the keyboard focuses the
+            first item, and Escape returns focus to the trigger.
           </li>
         </ul>
       </Section>

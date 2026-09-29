@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const sections = [
   { id: "principles", title: "Principles" },
   { id: "spring", title: "The spring" },
-  { id: "reference", title: "Against the reference" },
+  { id: "inspiration", title: "From Liquid Glass" },
   { id: "numbers", title: "Numbers" },
   { id: "reduced", title: "Reduced motion" },
 ];
@@ -45,7 +45,7 @@ const principles = [
   ],
 ];
 
-const reference = [
+const moments = [
   [
     "Tab press",
     "The bar grows about 2%; the pill lifts into clear glass about 30% taller than the bar.",
@@ -109,7 +109,7 @@ export default function Page() {
     <DocArticle
       path="/docs/motion"
       title="Motion"
-      description="liquidcn moves the way Liquid Glass does in iOS 26. These are the rules it follows and the numbers it uses."
+      description="liquidcn's motion is inspired by Apple's Liquid Glass. These are the rules it follows and the numbers it uses."
       toc={tocOf(sections)}
     >
       <Section id="principles" title="Principles">
@@ -143,15 +143,15 @@ export default function Page() {
 }`}
         />
       </Section>
-      <Section id="reference" title="Against the reference">
+      <Section id="inspiration" title="From Liquid Glass">
         <p>
-          Timings come from a frame-by-frame study of a 60 fps screen recording of the iOS 26 Phone
-          app.
+          Each moment starts from how Liquid Glass behaves on Apple platforms, then says how
+          liquidcn brings it to the web.
         </p>
         <ValueTable
-          label="iOS 26 compared with liquidcn"
-          headings={["Moment", "iOS 26", "liquidcn"]}
-          rows={reference}
+          label="Liquid Glass compared with liquidcn"
+          headings={["Moment", "Liquid Glass", "liquidcn"]}
+          rows={moments}
         />
       </Section>
       <Section id="numbers" title="Numbers">

@@ -15,7 +15,7 @@ export default function Page() {
     <DocArticle
       path="/docs/components"
       title="Components"
-      description="Each one wraps the shadcn/ui component of the same name and keeps its API. Open one to try it on glass."
+      description="Each one extends the shadcn/ui component of the same name and keeps its API. Open one to try it on glass."
       toc={[]}
     >
       <ul className="component-grid">

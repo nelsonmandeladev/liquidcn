@@ -2,7 +2,7 @@
   "name": "liquidcn",
   "version": "0.1.0",
   "private": true,
-  "description": "Liquid Glass components for shadcn/ui: spring-driven glass on Radix primitives, installed from a registry.",
+  "description": "Liquid Glass components for shadcn/ui: spring-driven glass on top of the shadcn components you already use, installed from a registry.",
   "license": "MIT",
   "homepage": "https://liquidcn.snmandela.com",
   "repository": {

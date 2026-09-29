@@ -52,7 +52,7 @@ export function Showcase() {
       </Tile>
       <section className="tile tile-material" aria-labelledby="material-title">
         <h3 id="material-title">Material</h3>
-        <p>Every glass surface on this site follows these controls, including the header.</p>
+        <p>Every glass surface on this site follows these controls.</p>
         <MaterialControls />
       </section>
       <Tile area="button" scene="lake" label="Button" href="/docs/components/button">

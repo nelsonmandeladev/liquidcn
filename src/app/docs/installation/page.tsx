@@ -59,8 +59,9 @@ export default function Page() {
         </p>
         <PackageCommand args="shadcn@latest add {origin}/r/liquid-button.json" />
         <p>
-          An item brings the wrapper, the shadcn component it wraps, <code>liquid.css</code>, and
-          the motion modules it needs. Installing a second component reuses the shared files.
+          An item brings the liquid component, the shadcn component it extends,{" "}
+          <code>liquid.css</code>, and the motion modules it needs. Installing a second component
+          reuses the shared files.
         </p>
       </Section>
       <Section id="namespace" title="Use a namespace">

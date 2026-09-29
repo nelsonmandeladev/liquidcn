@@ -65,7 +65,7 @@
       "name": "liquid-tab-bar",
       "type": "registry:ui",
       "title": "Liquid Tab Bar",
-      "description": "iOS 26 tab bar with a search button: search collapses the tabs into a circle and stretches the button into a field, and the two glass surfaces fuse when pressed.",
+      "description": "Floating glass tab bar with a search button: search collapses the tabs into a circle and stretches the button into a field, and the two glass surfaces fuse when pressed.",
       "dependencies": ["lucide-react"],
       "registryDependencies": ["utils", "tabs"],
       "files": [

@@ -3,7 +3,7 @@ export type SearchPage = { href: string; title: string; section: string; text: s
 
 /** Words people search for that the guide titles do not contain. */
 export const guideKeywords: Record<string, string> = {
-  "/docs": "overview introduction liquid glass ios 26 shadcn radix why",
+  "/docs": "overview introduction liquid glass apple inspiration ios 26 shadcn radix why",
   "/docs/installation": "install setup cli npx pnpm registry add tailwind",
   "/docs/components": "all components list gallery",
   "/docs/theming":

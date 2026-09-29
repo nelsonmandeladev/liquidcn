@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { components } from "@/examples";
-import { site } from "@/site";
 import { CodeBlock } from "@/www/code-block";
 import { DocArticle } from "@/www/docs/article";
 import { Section, tocOf } from "@/www/docs/prose";
@@ -15,7 +14,7 @@ export const metadata: Metadata = {
 const sections = [
   { id: "what-you-get", title: "What you get" },
   { id: "one-import", title: "One import away" },
-  { id: "reference", title: "Where the motion comes from" },
+  { id: "inspiration", title: "Inspiration" },
   { id: "limits", title: "Limits" },
   { id: "browsers", title: "Browser support" },
 ];
@@ -25,7 +24,7 @@ export default function Page() {
     <DocArticle
       path="/docs"
       title="Introduction"
-      description="Liquid Glass components for shadcn/ui. They look and move like the controls in iOS 26, and you install them like any shadcn component: as source code you own."
+      description="Liquid Glass components for shadcn/ui. You install them like any shadcn component."
       toc={tocOf(sections)}
     >
       <Section id="what-you-get" title="What you get">
@@ -41,8 +40,8 @@ export default function Page() {
             .
           </li>
           <li>
-            Each wraps the shadcn/ui component of the same name and forwards its props, refs, and
-            events. Radix still handles semantics, focus, and keyboard input.
+            Each extends the shadcn/ui component of the same name and forwards its props, refs, and
+            events. The primitives still handle semantics, focus, and keyboard input.
           </li>
           <li>
             The glass is CSS: a backdrop blur, a tinted fill, and a few highlights. The motion is a
@@ -61,16 +60,16 @@ import { Button } from "@/components/ui/button"
 import { Button } from "@/components/ui/liquid/button"`}
         />
       </Section>
-      <Section id="reference" title="Where the motion comes from">
+      <Section id="inspiration" title="Inspiration">
         <p>
-          The timings come from a frame-by-frame study of a screen recording of the iOS 26 Phone
-          app: the tab bar lens, the press swell, the menu that grows out of its button, and the
-          Edit button that turns into a check. <Link href="/docs/motion">Motion</Link> lists what
-          was matched and the numbers behind it.
+          liquidcn is inspired by Apple&rsquo;s Liquid Glass: the lens that lifts across a tab bar,
+          the swell of a pressed control, the menu that grows out of its button, and the Edit button
+          that turns into a check. <Link href="/docs/motion">Motion</Link> lists the principles and
+          the numbers behind them.
         </p>
       </Section>
       <Section id="limits" title="Limits">
-        <p>What the reference does that the web version does differently:</p>
+        <p>Where the web version differs from Liquid Glass on Apple platforms:</p>
         <ul>
           <li>
             Refraction of the page behind the glass needs Chromium, the only engine that renders SVG
@@ -86,17 +85,13 @@ import { Button } from "@/components/ui/liquid/button"`}
             menu and its trigger.
           </li>
         </ul>
-        <p>
-          Open work is tracked in <a href={`${site.repository}/blob/HEAD/tasks.todo`}>tasks.todo</a>
-          .
-        </p>
       </Section>
       <Section id="browsers" title="Browser support">
         <p>
           Current Chrome, Edge, Safari, and Firefox all support backdrop blur. Where it is missing,
           glass falls back to an opaque fill. Chrome and Edge also bend the backdrop at the rim of
           bars and toolbars. Pointer events cover mouse, pen, and touch, and every interaction has a
-          keyboard path through Radix.
+          keyboard path.
         </p>
       </Section>
     </DocArticle>

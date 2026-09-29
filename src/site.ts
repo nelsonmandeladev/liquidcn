@@ -4,5 +4,5 @@ export const site = {
   url: "https://liquidcn.snmandela.com",
   repository: "https://github.com/nelsonmandeladev/liquidcn",
   description:
-    "Liquid Glass components for shadcn/ui: spring-driven glass on Radix primitives, installed from a registry.",
+    "Liquid Glass components for shadcn/ui: spring-driven glass on top of the shadcn components you already use, installed from a registry.",
 } as const;

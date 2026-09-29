@@ -78,7 +78,7 @@ export const dropdownMenuDoc: ComponentDoc = {
     ["Still press", "A press that moves less than 10 px never selects an item"],
   ],
   accessibility: [
-    "Radix menu semantics and focus management: opening from the keyboard focuses the first item, Escape returns focus to the trigger.",
+    "The base menu's semantics and focus management: opening from the keyboard focuses the first item, Escape returns focus to the trigger.",
     "The press that opens the menu cannot select the item that appears under the finger. Press, drag, and release still selects, as on iOS.",
     "Under reduced motion the panel appears and disappears without the droplet.",
   ],
