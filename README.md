@@ -45,25 +45,25 @@ Each item includes its source, `liquid.css`, and the shared `liquid-motion.ts` e
 
 ## Material
 
-Set `--liquid-blur`, `--liquid-tint`, `--liquid-fill`, and `--liquid-ink` on a glass component. Use `.dark` or `data-liquid-theme="dark"` on a common ancestor (including portals) for dark material. Set `data-reduced-transparency="true"` on that ancestor for opaque surfaces.
+Set `--liquid-blur`, `--liquid-tint`, `--liquid-fill`, and `--liquid-ink` on a glass component. `--liquid-accent` (default `#007aff`) tints prominent buttons and the labels under a tab or toolbar lens; set `--liquid-lens-ink` to tint only the lens, for example `var(--liquid-ink)` for a neutral segmented control. Use `.dark` or `data-liquid-theme="dark"` on a common ancestor (including portals) for dark material. Set `data-reduced-transparency="true"` on that ancestor for opaque surfaces.
 
 The material honors reduced-motion, reduced-transparency, and increased-contrast media preferences. Backdrop-filter fallback is opaque. Contrast should be assessed against your content.
 
 ## Liquid interaction
 
-- **Buttons:** pointer-following light, subtle attraction, elastic compression, and spring release. Touch receives press feedback without hover attraction. The playground also demonstrates a button changing width after activation.
-- **Tabs:** one continuous glass lens moves and stretches between selections, including keyboard changes. Retargeting preserves momentum. Resizing, RTL, and vertical lists use measured layout geometry.
-- **Menus:** the surface unfolds from the trigger's measured position into the collision-adjusted panel. Content fades in as the surface forms; closing folds back toward the trigger. Radix continues to manage focus, dismissal, and keyboard navigation.
-- **Toolbars:** elastic actions and a shared lens following the first button with `aria-pressed="true"`. Use a single selected action for a moving lens; independently pressed buttons retain their semantic states.
+- **Buttons:** pressing swells the glass toward the finger and floods it with light. Small controls grow more than large ones, as on iOS. Dragging while pressed stretches the glass on a rubber band; release springs it back. Hover adds pointer-following light and slight attraction (not on touch). When a button's content or variant changes, its width springs to the new size, the surface pops, and the new content condenses in. `variant="prominent"` is accent-tinted glass, like iOS `.glassProminent`.
+- **Tabs:** one continuous glass lens. Pressing swells the bar and lifts the lens into clear, magnifying glass that overflows the bar. Labels beneath it take the accent color, so a label can be split mid-flight. Drag to scrub across tabs; releasing selects the tab under the lens. The lens stretches with speed, then lands and frosts over the selection. Keyboard changes travel lifted and land the same way. Resizing, RTL, and vertical lists use measured layout geometry. The lens shows an inert, `aria-hidden` copy of the list; the real triggers stay untouched for Radix and assistive technology.
+- **Menus:** a menu opens over its trigger and grows out of it, aligned to the nearer screen edge, as on iOS. The trigger swells into a round droplet that stretches into the panel while the content comes into focus. Closing collapses the panel into a droplet that is drawn back into the trigger, which bulges as it lands. Pass `overlap={false}` to open beside the trigger instead. A still click or tap never selects the item that appears under it; pressing the trigger and dragging onto an item selects it on release. Radix continues to manage focus, dismissal, and keyboard navigation.
+- **Toolbars:** buttons swell like liquid buttons, and a shared lens lifts, travels, and lands on the button with `aria-pressed="true"`. Use a single selected action for a moving lens; independently pressed buttons retain their semantic states.
 - **Toasts:** top-center glass pills expand with a soft spring, reveal their content, and fold away on dismissal. Existing Sonner calls, loading/success updates, actions, stacking, announcements, swipe dismissal, and timers remain available. Mount `Toaster` from `liquid-sonner` once in your app and call its re-exported `toast` API. The playground includes success, loading-to-success, and error previews.
 
 Set `--liquid-viscosity` (0–1, default 0.5) on a common ancestor: lower values produce a firmer, bouncier spring; higher values produce a slower, softer response. `--liquid-morph-duration` (default `520ms`) controls menu formation. The playground links these controls. Motion runs only while a spring is moving and does not rerender React on every frame.
 
 Set `data-reduced-motion="true"` on an ancestor to disable motion explicitly. The OS `prefers-reduced-motion` preference always takes precedence. For portaled menus, put theme/motion/transparency settings on `document.documentElement` or use a portal container within the configured ancestor. Keep the liquid `DropdownMenu`, trigger, and content wrappers together for trigger-aware morphing.
 
-The motion layer owns the CSS `translate` and `scale` properties of interactive elements, leaving `transform` available to consumers. Avoid overriding those two properties when using the built-in spring.
+The motion layer owns the CSS `translate` and `scale` properties of interactive elements, leaving `transform` available to consumers. Avoid overriding those two properties when using the built-in spring. During a content morph, a button carries a temporary inline `width`; a button with its own inline width keeps it and skips the width spring. Tab and toolbar lenses set a temporary `mask-image` on the items they pass over.
 
-This is DOM/CSS glass with spring-driven interaction, inspired by [Plasma UI](https://github.com/CruxGarden/plasma-ui). It does **not** implement Plasma's WebGL refraction, fusion between separate surfaces, or automatic background luminance adaptation. The spring and morph implementation is local; Plasma is not a runtime dependency.
+This is DOM/CSS glass with spring-driven interaction, inspired by [Plasma UI](https://github.com/CruxGarden/plasma-ui). It does **not** implement Plasma's WebGL refraction, fusion between separate surfaces, or automatic background luminance adaptation. Lens magnification enlarges a copy of the control's own labels; it does not refract the page behind the glass. The spring and morph implementation is local; Plasma is not a runtime dependency.
 
 ## Registry and Publishing
 

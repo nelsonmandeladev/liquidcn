@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type CSSProperties } from "react";
-import { ArrowRight, Check, ChevronDown, Code2, Copy, Heart, Layers2, MoreHorizontal, Plus, RectangleHorizontal, RotateCcw, SlidersHorizontal, ToggleLeft, Grid2X2, Download, Bookmark, Bell, MousePointer2, Crop, Sparkles } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Code2, Copy, Heart, Layers2, MoreHorizontal, Plus, RectangleHorizontal, RotateCcw, SlidersHorizontal, ToggleLeft, Grid2X2, Download, Bookmark, Bell, MousePointer2, Crop, Sparkles, Clock, CircleUserRound, Grip } from "lucide-react";
 import { ToggleGroup, Switch } from "radix-ui";
 import { Toaster, toast } from "@/components/ui/liquid-sonner";
 import { Button } from "@/components/ui/liquid-button";
@@ -20,9 +20,9 @@ const components = [
 ];
 const examples: Record<string, string> = {
   "liquid-sonner": 'import { Toaster, toast } from "@/components/ui/liquid-sonner";\n\n// Mount once in your app. Defaults to top center.\n<Toaster />\n\ntoast.success("Saved to your collection", {\n  description: "A little moment, kept forever.",\n});',
-  "liquid-button": 'import { Button } from "@/components/ui/liquid-button";\n\n<Button onClick={() => console.log("Continue")} size="lg">\n  Continue\n</Button>',
+  "liquid-button": 'import { Button } from "@/components/ui/liquid-button";\n\n<Button onClick={() => console.log("Continue")} size="lg">\n  Continue\n</Button>\n\n// Accent-tinted glass. Content and width changes morph.\n<Button variant="prominent" size="icon-lg" aria-label="Done">\n  <Check />\n</Button>',
   "liquid-tabs": 'import { Tabs, TabsList, TabsTrigger, TabsContent }\n  from "@/components/ui/liquid-tabs";\n\n<Tabs defaultValue="photos">\n  <TabsList aria-label="Library">\n    <TabsTrigger value="photos">Photos</TabsTrigger>\n    <TabsTrigger value="albums">Albums</TabsTrigger>\n  </TabsList>\n  <TabsContent value="photos">Your photos</TabsContent>\n  <TabsContent value="albums">Your albums</TabsContent>\n</Tabs>',
-  "liquid-dropdown-menu": 'import { DropdownMenu, DropdownMenuTrigger,\n  DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem\n} from "@/components/ui/liquid-dropdown-menu";\n\n<DropdownMenu>\n  <DropdownMenuTrigger>Options</DropdownMenuTrigger>\n  <DropdownMenuContent>\n    <DropdownMenuGroup>\n      <DropdownMenuItem>Save to collection</DropdownMenuItem>\n    </DropdownMenuGroup>\n  </DropdownMenuContent>\n</DropdownMenu>',
+  "liquid-dropdown-menu": 'import { DropdownMenu, DropdownMenuTrigger,\n  DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem\n} from "@/components/ui/liquid-dropdown-menu";\n\n<DropdownMenu>\n  <DropdownMenuTrigger>Options</DropdownMenuTrigger>\n  {/* Grows out of and over its trigger. overlap={false} opens beside it. */}\n  <DropdownMenuContent>\n    <DropdownMenuGroup>\n      <DropdownMenuItem>Save to collection</DropdownMenuItem>\n    </DropdownMenuGroup>\n  </DropdownMenuContent>\n</DropdownMenu>',
   "liquid-toolbar": 'import { Toolbar, ToolbarButton, ToolbarSeparator }\n  from "@/components/ui/liquid-toolbar";\n\n<Toolbar aria-label="Photo actions">\n  <ToolbarButton aria-label="Save">Save</ToolbarButton>\n  <ToolbarSeparator />\n  <ToolbarButton aria-label="Add">Add</ToolbarButton>\n</Toolbar>',
 };
 async function copy(text: string) { try { await navigator.clipboard.writeText(text); toast.success("Copied to clipboard"); } catch { toast.error("Clipboard unavailable. Select and copy the text."); } }
@@ -46,9 +46,9 @@ function EditingToolbar() {
 
 const interactionHints: Record<string, string> = {
   "liquid-sonner": "Send a notification. A glass pill forms at the top.",
-  "liquid-button": "Move across the glass. Press, then release.",
-  "liquid-tabs": "Switch tabs and watch the lens stretch into place.",
-  "liquid-dropdown-menu": "Open the menu. The glass unfolds from its trigger.",
+  "liquid-button": "Press and hold. The glass swells toward you. Tap Edit to morph it.",
+  "liquid-tabs": "Press and drag across the tab bar. The lens lifts, magnifies, and lands.",
+  "liquid-dropdown-menu": "Open the menu. The button swells into a droplet, then a panel.",
   "liquid-toolbar": "Choose a tool. One glass lens follows your selection.",
 };
 
@@ -56,13 +56,28 @@ function ToastDemo() {
   return <div className="toast-demo"><Button size="lg" onClick={() => toast.success("Saved to your collection", { description: "A little moment, kept forever." })}><Bell data-icon="inline-start" />Show notification</Button><div className="toast-demo-options"><Button size="sm" onClick={() => toast.promise(new Promise(resolve => setTimeout(resolve, 1500)), { loading: "Preparing your preview…", success: "Your preview is ready", error: "Could not prepare preview", description: "Liquid glass, in motion." })}>Loading → success</Button><Button size="sm" onClick={() => toast.error("Something went wrong", { description: "This is a notification preview. Try again whenever you like." })}>Error</Button></div><p>Top center. Softly in, softly out.</p></div>;
 }
 
-function Demo({ id }: { id: string }) {
+function ButtonDemo() {
   const [done, setDone] = useState(false);
+  const [editing, setEditing] = useState(false);
+  return <div className="button-demo">
+    <Button size="lg" className="hero-button" onClick={() => setDone(!done)}>{done ? "All set" : "Continue"}{done ? <Check data-icon="inline-end" /> : <ArrowRight data-icon="inline-end" />}</Button>
+    <Button variant={editing ? "prominent" : "default"} size={editing ? "icon-lg" : "lg"} aria-label={editing ? "Done editing" : undefined} onClick={() => setEditing(!editing)}>{editing ? <Check /> : "Edit"}</Button>
+  </div>;
+}
+
+function TabsDemo() {
+  return <div className="tabs-demo">
+    <Tabs defaultValue="photos" className="demo-tabs"><TabsList aria-label="Photo library"><TabsTrigger value="photos">Photos</TabsTrigger><TabsTrigger value="albums">Albums</TabsTrigger><TabsTrigger value="favorites">Favorites</TabsTrigger></TabsList><TabsContent value="photos">All your moments.</TabsContent><TabsContent value="albums">A place for every adventure.</TabsContent><TabsContent value="favorites">The ones worth keeping.</TabsContent></Tabs>
+    <Tabs defaultValue="keypad" className="demo-tabs demo-tabbar"><TabsContent value="calls">Recent calls</TabsContent><TabsContent value="contacts">393 contacts</TabsContent><TabsContent value="keypad">Keypad</TabsContent><TabsList aria-label="Phone" className="liquid-tabbar"><TabsTrigger value="calls"><Clock />Calls</TabsTrigger><TabsTrigger value="contacts"><CircleUserRound />Contacts</TabsTrigger><TabsTrigger value="keypad"><Grip />Keypad</TabsTrigger></TabsList></Tabs>
+  </div>;
+}
+
+function Demo({ id }: { id: string }) {
   if (id === "liquid-sonner") return <ToastDemo />;
-  if (id === "liquid-tabs") return <Tabs defaultValue="photos" className="demo-tabs"><TabsList aria-label="Photo library"><TabsTrigger value="photos">Photos</TabsTrigger><TabsTrigger value="albums">Albums</TabsTrigger><TabsTrigger value="favorites">Favorites</TabsTrigger></TabsList><TabsContent value="photos">All your moments.</TabsContent><TabsContent value="albums">A place for every adventure.</TabsContent><TabsContent value="favorites">The ones worth keeping.</TabsContent></Tabs>;
+  if (id === "liquid-tabs") return <TabsDemo />;
   if (id === "liquid-dropdown-menu") return <DropdownMenu><DropdownMenuTrigger asChild><Button size="lg">Options <ChevronDown data-icon="inline-end" /></Button></DropdownMenuTrigger><DropdownMenuContent><DropdownMenuGroup><DropdownMenuItem onSelect={() => toast.success("Saved to collection")}><Bookmark />Save to collection</DropdownMenuItem><DropdownMenuItem onSelect={() => copy(window.location.href)}><Copy />Copy link</DropdownMenuItem><DropdownMenuItem asChild><a href="/assets/alpine-lake.png" download><Download />Download photo</a></DropdownMenuItem></DropdownMenuGroup></DropdownMenuContent></DropdownMenu>;
   if (id === "liquid-toolbar") return <EditingToolbar />;
-  return <Button size="lg" className="hero-button" data-complete={done} onClick={() => setDone(!done)}>{done ? "All set" : "Continue"}{done ? <Check data-icon="inline-end" /> : <ArrowRight data-icon="inline-end" />}</Button>;
+  return <ButtonDemo />;
 }
 
 export default function App() {

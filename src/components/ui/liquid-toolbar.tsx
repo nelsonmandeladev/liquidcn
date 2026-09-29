@@ -6,7 +6,7 @@ import { useLiquidElement, useLiquidIndicator, useLiquidInteraction } from "@/co
 import "./liquid.css";
 export function Toolbar({ className, ref, ...props }: ComponentProps<typeof Primitive.Root>) {
   const [node, mergedRef] = useLiquidElement(ref);
-  useLiquidIndicator(node, '.liquid-toolbar-button[aria-pressed="true"]');
+  useLiquidIndicator(node, { selected: '.liquid-toolbar-button[aria-pressed="true"]', items: ".liquid-toolbar-button" });
   return <Primitive.Root ref={mergedRef} className={cn("liquid-surface liquid-toolbar", className)} {...props} />;
 }
 export function ToolbarButton({ className, ref, ...props }: ComponentProps<typeof Primitive.Button>) {

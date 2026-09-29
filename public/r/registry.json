@@ -6,7 +6,7 @@
     {
       "name": "liquid-button",
       "title": "Liquid Button",
-      "description": "Pointer-lit glass button with elastic press and spring release.",
+      "description": "Glass button that swells under the finger, stretches on drag, and morphs its width and content. Includes a prominent tinted variant.",
       "dependencies": [
         "radix-ui",
         "class-variance-authority"
@@ -37,7 +37,7 @@
     {
       "name": "liquid-tabs",
       "title": "Liquid Tabs",
-      "description": "Glass segmented tabs with a continuous spring lens and Radix keyboard navigation.",
+      "description": "Glass tabs with a lifting, magnifying lens you can drag across tabs, plus Radix keyboard navigation.",
       "dependencies": [
         "radix-ui",
         "class-variance-authority"
@@ -68,7 +68,7 @@
     {
       "name": "liquid-dropdown-menu",
       "title": "Liquid Dropdown Menu",
-      "description": "Glass menus that morph from their trigger with Radix focus management.",
+      "description": "Glass menus that grow out of their trigger as a droplet and fold back into it, with Radix focus management.",
       "dependencies": [
         "radix-ui",
         "lucide-react"
@@ -99,7 +99,7 @@
     {
       "name": "liquid-toolbar",
       "title": "Liquid Toolbar",
-      "description": "Floating glass toolbar with an animated selection lens and elastic actions.",
+      "description": "Floating glass toolbar with swelling actions and a lifting selection lens.",
       "dependencies": [
         "radix-ui"
       ],
