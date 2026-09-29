@@ -22,12 +22,12 @@ export const metadata: Metadata = {
   title: { default: title, template: "%s · liquidcn" },
   description: site.description,
   icons: { icon: "/favicon.svg" },
+  // The shared image is app/opengraph-image.tsx.
   openGraph: {
     type: "website",
     siteName: site.name,
     title,
-    description: site.description,
-    images: [{ url: "/assets/alpine-lake.png", width: 1536, height: 1024 }],
+    description: site.tagline,
   },
   twitter: { card: "summary_large_image" },
 };

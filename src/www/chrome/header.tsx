@@ -26,7 +26,6 @@ export function SiteHeader() {
     <header className="site-header">
       <Link href="/" className="site-brand">
         <Logo className="site-logo" />
-        liquidcn
       </Link>
       <SiteTabBar links={mainNav} pages={searchIndex} />
       <GlassGroup className="site-actions site-glass">

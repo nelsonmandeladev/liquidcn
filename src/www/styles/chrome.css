@@ -49,8 +49,8 @@
 }
 
 .site-logo {
-  width: 28px;
-  height: 28px;
+  width: auto;
+  height: 24px;
 }
 
 /* Glass with enough fill to keep labels legible over anything scrolling beneath. */
