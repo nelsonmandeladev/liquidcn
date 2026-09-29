@@ -7,20 +7,13 @@
       "name": "liquid-button",
       "title": "Liquid Button",
       "description": "Glass button that swells under the finger, stretches on drag, and morphs its width and content. Includes a prominent tinted variant.",
-      "dependencies": [
-        "radix-ui",
-        "class-variance-authority"
-      ],
       "registryDependencies": [
-        "utils"
+        "utils",
+        "button"
       ],
       "files": [
         {
           "path": "src/components/ui/liquid/button.tsx",
-          "type": "registry:ui"
-        },
-        {
-          "path": "src/components/ui/button.tsx",
           "type": "registry:ui"
         },
         {
@@ -41,21 +34,14 @@
     {
       "name": "liquid-tabs",
       "title": "Liquid Tabs",
-      "description": "Glass tabs with a lifting, magnifying lens you can drag across tabs, plus Radix keyboard navigation.",
-      "dependencies": [
-        "radix-ui",
-        "class-variance-authority"
-      ],
+      "description": "Glass tabs with a lifting, magnifying lens you can drag across tabs, keeping the keyboard navigation of shadcn Tabs.",
       "registryDependencies": [
-        "utils"
+        "utils",
+        "tabs"
       ],
       "files": [
         {
           "path": "src/components/ui/liquid/tabs.tsx",
-          "type": "registry:ui"
-        },
-        {
-          "path": "src/components/ui/tabs.tsx",
           "type": "registry:ui"
         },
         {
@@ -86,12 +72,11 @@
       "title": "Liquid Tab Bar",
       "description": "iOS 26 tab bar with a search button: search collapses the tabs into a circle and stretches the button into a field, and the two glass surfaces fuse when pressed.",
       "dependencies": [
-        "radix-ui",
-        "class-variance-authority",
         "lucide-react"
       ],
       "registryDependencies": [
-        "utils"
+        "utils",
+        "tabs"
       ],
       "files": [
         {
@@ -100,10 +85,6 @@
         },
         {
           "path": "src/components/ui/liquid/tabs.tsx",
-          "type": "registry:ui"
-        },
-        {
-          "path": "src/components/ui/tabs.tsx",
           "type": "registry:ui"
         },
         {
@@ -131,6 +112,10 @@
           "type": "registry:lib"
         },
         {
+          "path": "src/lib/liquid/bar.ts",
+          "type": "registry:lib"
+        },
+        {
           "path": "src/lib/liquid/refraction.ts",
           "type": "registry:lib"
         },
@@ -144,21 +129,14 @@
     {
       "name": "liquid-dropdown-menu",
       "title": "Liquid Dropdown Menu",
-      "description": "Glass menus that grow out of their trigger as a droplet and fold back into it through a teardrop neck, with Radix focus management.",
-      "dependencies": [
-        "radix-ui",
-        "lucide-react"
-      ],
+      "description": "Glass menus that grow out of their trigger as a droplet and fold back into it through a teardrop neck, keeping the focus management of the shadcn dropdown menu.",
       "registryDependencies": [
-        "utils"
+        "utils",
+        "dropdown-menu"
       ],
       "files": [
         {
           "path": "src/components/ui/liquid/dropdown-menu.tsx",
-          "type": "registry:ui"
-        },
-        {
-          "path": "src/components/ui/dropdown-menu.tsx",
           "type": "registry:ui"
         },
         {
@@ -183,16 +161,18 @@
     {
       "name": "liquid-toolbar",
       "title": "Liquid Toolbar",
-      "description": "Floating glass toolbar with swelling actions and a lifting selection lens.",
-      "dependencies": [
-        "radix-ui"
-      ],
+      "description": "Floating glass toolbar: groups of swelling buttons on one capsule with a lifting selection lens, and round buttons beside them that fuse with it when pressed.",
       "registryDependencies": [
-        "utils"
+        "utils",
+        "button"
       ],
       "files": [
         {
           "path": "src/components/ui/liquid/toolbar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid/button.tsx",
           "type": "registry:ui"
         },
         {
@@ -217,6 +197,18 @@
         },
         {
           "path": "src/lib/liquid/refraction.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/fusion.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/bar.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/roving.ts",
           "type": "registry:lib"
         }
       ],

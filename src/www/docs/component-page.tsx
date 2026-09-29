@@ -9,8 +9,19 @@ import { PackageCommand } from "@/www/docs/package-command";
 import { Inline, Section, type TocItem } from "@/www/docs/prose";
 import { PropsTable, ValueTable } from "@/www/docs/tables";
 
+/** A list of code names: `a`, `a and b`, `a, b and c`. */
+function CodeList({ names }: { names: string[] }) {
+  return names.map((name, index) => (
+    <span key={name}>
+      {index > 0 && (index === names.length - 1 ? " and " : ", ")}
+      <code>{name}</code>
+    </span>
+  ));
+}
+
 function InstalledFiles({ item }: { item: RegistryItem }) {
   const packages = item.dependencies ?? [];
+  const bases = (item.registryDependencies ?? []).filter((name) => name !== "utils");
   return (
     <div className="installed">
       <p>The command copies these files into your project:</p>
@@ -24,14 +35,15 @@ function InstalledFiles({ item }: { item: RegistryItem }) {
       </ul>
       {packages.length > 0 && (
         <p>
-          It also installs{" "}
-          {packages.map((name, index) => (
-            <span key={name}>
-              {index > 0 && (index === packages.length - 1 ? " and " : ", ")}
-              <code>{name}</code>
-            </span>
-          ))}
-          . The CLI asks before replacing a base component you already have.
+          It also installs <CodeList names={packages} />.
+        </p>
+      )}
+      {bases.length > 0 && (
+        <p>
+          It extends the shadcn <CodeList names={bases} /> component, whichever primitive library
+          yours is built on. If your project doesn&apos;t have it yet, the CLI adds it from
+          shadcn&apos;s registry; if it does, yours stays as it is, and the CLI asks before
+          replacing it.
         </p>
       )}
     </div>
@@ -104,7 +116,7 @@ export function ComponentPage({ component }: { component: DocumentedComponent })
             <p>
               <Inline text={entry.description} />
             </p>
-            <PropsTable entry={entry} />
+            {entry.props.length > 0 && <PropsTable entry={entry} />}
           </div>
         ))}
       </Section>

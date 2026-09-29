@@ -4,21 +4,25 @@ liquidcn has two parts: a **component library** in `src/components/ui/liquid/` a
 
 ## Component library
 
-Each liquid component wraps a shadcn/ui base component and adds behavior through small, framework-free classes attached by hooks. Consumers keep the familiar shadcn props, refs, and events.
+Each liquid component **extends** a shadcn/ui base component; it never rebuilds it. The wrapper imports the base component from `@/components/ui/<name>`, forwards every prop, ref, and event, and adds only classes, `data-liquid-*` attributes, and behavior through small, framework-free classes attached by hooks. Consumers keep the familiar shadcn props, refs, and events.
 
-| File                                      | Responsibility                                                                                                       |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `components/ui/liquid/*.tsx`              | Thin React wrappers that combine a base component with the pieces below.                                             |
-| `components/ui/liquid/liquid.css`         | Glass material, lens, menu choreography, and every accessibility preference.                                         |
-| `lib/liquid/motion.ts`                    | Shared core: the spring, rubber band, reduced-motion checks, listener and ref helpers.                               |
-| `lib/liquid/press.ts`                     | `LiquidPress` (hover attraction, swell, rubber-band drag) and `LiquidMorph` (content morph); `useLiquidInteraction`. |
-| `lib/liquid/lens.ts`                      | `LiquidLens`, the selection lens for tabs and toolbars; `useLiquidIndicator`.                                        |
-| `lib/liquid/lens-parts.ts`                | Pure lens geometry and the lens's DOM helpers.                                                                       |
-| `lib/liquid/menu-morph.ts`                | Menu geometry, `MenuMorph` (unfold/fold), and `MenuSession` (trigger press tracking and guard).                      |
-| `lib/liquid/fusion.ts`                    | Metaball neck geometry, `LiquidFusion` (a glass neck between two surfaces), and `FusionLoop`.                        |
-| `lib/liquid/refraction.ts`                | Displacement map for a rounded surface, `LiquidRefraction` (SVG backdrop filter), `useLiquidRefraction`.             |
-| `lib/liquid/tab-bar.ts`                   | `TabBarMorph`: the search morph, the search button's press, and its fusion with the bar; `useTabBarMorph`.           |
-| `components/ui/button.tsx`, `tabs.tsx`, … | Unmodified shadcn/ui base components.                                                                                |
+A liquid component never imports a primitive library (`radix-ui`, Base UI, React Aria) itself. The consumer's base components stay exactly as they are, built on whichever library their shadcn uses. Where shadcn has no base component, a liquid component is built from ones it has (the toolbar's buttons are liquid `Button`s) or from plain elements (the tab bar).
+
+| File                                      | Responsibility                                                                                                        |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `components/ui/liquid/*.tsx`              | Thin React wrappers that combine a base component with the pieces below.                                              |
+| `components/ui/liquid/liquid.css`         | Glass material, lens, menu choreography, and every accessibility preference.                                          |
+| `lib/liquid/motion.ts`                    | Shared core: the spring, rubber band, reduced-motion checks, listener and ref helpers.                                |
+| `lib/liquid/press.ts`                     | `LiquidPress` (hover attraction, swell, rubber-band drag) and `LiquidMorph` (content morph); `useLiquidInteraction`.  |
+| `lib/liquid/lens.ts`                      | `LiquidLens`, the selection lens for tabs and toolbars; `useLiquidIndicator`.                                         |
+| `lib/liquid/lens-parts.ts`                | Pure lens geometry and the lens's DOM helpers.                                                                        |
+| `lib/liquid/menu-morph.ts`                | Menu geometry, `MenuMorph` (unfold/fold), and `MenuSession` (trigger press tracking and guard).                       |
+| `lib/liquid/fusion.ts`                    | Metaball neck geometry, `LiquidFusion` (a glass neck between two surfaces), and `FusionLoop`.                         |
+| `lib/liquid/refraction.ts`                | Displacement map for a rounded surface, `LiquidRefraction` (SVG backdrop filter), `useLiquidRefraction`.              |
+| `lib/liquid/bar.ts`                       | `BarFusion`: the shell toolbars and tab bars share, a capsule fusing with the round button beside it; `useBarFusion`. |
+| `lib/liquid/tab-bar.ts`                   | `TabBarMorph`: the search morph and the search button's press; `useTabBarMorph`.                                      |
+| `lib/liquid/roving.ts`                    | `RovingFocus`: one tab stop and arrow-key navigation over a set of controls; `useRovingFocus`.                        |
+| `components/ui/button.tsx`, `tabs.tsx`, … | Unmodified shadcn/ui base components (the Radix versions), used by the site. The registry does not ship them.         |
 
 Paths are relative to `src/`. The registry ships wrappers and `liquid.css` as `registry:ui` and the motion modules as `registry:lib`, so they install into the consumer's `ui/liquid/` and `lib/liquid/` folders and every `@/components/ui/…` and `@/lib/…` import keeps resolving.
 
@@ -51,9 +55,13 @@ Radix opens a dropdown on `pointerdown` and selects an item on `pointerup` even 
 
 `TabBar` lays out `TabBarItems` (the glass around a liquid `TabsList`) and `TabBarSearch` (a round button that becomes a field). CSS describes both states: while `data-searching` is set, the items are a circle `--liquid-tab-bar-circle` wide and the field fills the bar's resting width, `--liquid-tab-bar-width`. `TabBarMorph` remembers each part's resting width and, in a layout effect right after the state changes, springs each width from where it was to where the new layout puts it, then removes the inline widths. Because the layout lives in CSS, a consumer can restyle either state (the site stretches the field across the header on phones) and the morph follows.
 
+### Toolbar
+
+`Toolbar` is a plain element with the `toolbar` role, laid out like the tab bar: `ToolbarGroup`s (a capsule of glass each, with a lens over the button that has `aria-pressed`) and round buttons of their own beside them. `ToolbarButton` is a liquid `Button`: `ghost` inside a group, so it sits on the group's glass, and `default` glass outside one, where `useBarFusion` fuses it with the neighboring group. No primitive library is involved: `RovingFocus` gives the toolbar one tab stop, moves focus with arrow keys along `aria-orientation` (mirrored under `dir="rtl"`), Home, and End, and skips disabled buttons and the lens's inert copies.
+
 ### Fusion
 
-`LiquidFusion` draws the neck between two surfaces as a glass element clipped with `clip-path: path(…)`. Each surface is reduced to its round end nearest the other (a capsule's end, or a circle of a panel's corner radius just inside its nearest edge), measured with `getBoundingClientRect` so transforms and keyframes count. `neckBetween` builds the classic metaball outline between the two circles, closing along each circle's near side so the neck never tints a surface twice. `FusionLoop` redraws it per frame only while there is a neck, a press, or a hold. The tab bar fuses its search button and bar while pressed; `MenuMorph` fuses a folding menu with its trigger, synchronized to the fold keyframes' own progress.
+`LiquidFusion` draws the neck between two surfaces as a glass element clipped with `clip-path: path(…)`. Each surface is reduced to its round end nearest the other (a capsule's end, or a circle of a panel's corner radius just inside its nearest edge), measured with `getBoundingClientRect` so transforms and keyframes count. `neckBetween` builds the classic metaball outline between the two circles, closing along each circle's near side so the neck never tints a surface twice. `FusionLoop` redraws it per frame only while there is a neck, a press, or a hold. `BarFusion` fuses a bar's capsule with the round button beside it while either is pressed: the tab bar's search button (paused during the search morph) and a toolbar's own buttons. `MenuMorph` fuses a folding menu with its trigger, synchronized to the fold keyframes' own progress.
 
 ### Refraction
 
@@ -68,12 +76,13 @@ Where `refractionSupported()` (Chromium), `LiquidRefraction` generates a displac
 - The motion layer owns the CSS `translate` and `scale` properties of interactive elements; `transform` stays free.
 - During a content morph a button carries a temporary inline `width`. A button with its own inline width keeps it.
 - Tab and toolbar items carry a temporary `mask-image` while the lens passes over them.
+- A toolbar sets its buttons' `tabindex` to keep one tab stop.
 - In Chromium, tabs, toolbars, and the tab bar carry `--liquid-refraction` and `data-liquid-refraction`; a consumer's own `backdrop-filter` on them replaces the refraction.
 - During the search morph, a tab bar's parts carry temporary inline widths.
 
 ## Registry
 
-`registry.json` lists each item and the files it ships. `pnpm registry:build` (`scripts/build-registry.mjs`) validates it with the official shadcn schemas and writes `public/r/*.json` with the sources embedded, which Next.js serves as static files. The output is committed; run the command after changing `registry.json` or any file it lists, and CI fails if the committed JSON is stale. `tests/unit/registry.test.ts` fails if an item's files import a local module or package the item does not ship or declare, or if the shadcn CLI would install a file anywhere other than where its imports expect it.
+`registry.json` lists each item and the files it ships. `pnpm registry:build` (`scripts/build-registry.mjs`) validates it with the official shadcn schemas and writes `public/r/*.json` with the sources embedded, which Next.js serves as static files. The output is committed; run the command after changing `registry.json` or any file it lists, and CI fails if the committed JSON is stale. An item never ships a base shadcn component: it names it in `registryDependencies` (`"button"`, `"tabs"`, …), and the shadcn CLI resolves that name against shadcn's own registry for the consumer's style, so they get the version for their primitive library, or keep the one they have. `tests/unit/registry.test.ts` fails if an item's files import a local module or package the item does not ship, declare, or depend on, if an item ships a base component or imports a primitive library, or if the shadcn CLI would install a file anywhere other than where its imports expect it.
 
 ## Website
 

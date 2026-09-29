@@ -425,53 +425,8 @@
   opacity: 0;
   transition: opacity 90ms ease;
 }
-.liquid-toolbar {
-  display: flex;
-  align-items: center;
-  padding: 6px;
-  border-radius: 999px;
-  gap: 4px;
-  isolation: isolate;
-}
-.liquid-toolbar[data-orientation="vertical"] {
-  flex-direction: column;
-}
-.liquid-toolbar-button {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: inherit;
-}
-.liquid-toolbar-button svg {
-  width: 21px;
-  height: 21px;
-}
-.liquid-toolbar-button:hover:not(:disabled),
-.liquid-toolbar-button[aria-pressed="true"] {
-  background: rgb(255 255 255 / 0.18);
-}
-.liquid-toolbar[data-liquid-indicator] .liquid-toolbar-button[aria-pressed="true"] {
-  background: transparent;
-}
-.liquid-toolbar-button:disabled {
-  opacity: 0.5;
-}
-.liquid-toolbar-separator {
-  height: 20px;
-  width: 1px;
-  background: rgb(255 255 255 / 0.4);
-  margin-inline: 3px;
-}
-.liquid-toolbar-separator[data-orientation="horizontal"] {
-  height: 1px;
-  width: 20px;
-  margin: 3px 0;
-}
-/* A tab bar with a search button beside it (iOS 26 search tab, button appearance). */
+/* The shell toolbars and tab bars share: capsules of glass, and round buttons beside them. */
+.liquid-toolbar,
 .liquid-tab-bar {
   position: relative;
   isolation: isolate;
@@ -480,6 +435,72 @@
   gap: 10px;
   max-width: 100%;
 }
+.liquid-toolbar[aria-orientation="vertical"] {
+  flex-direction: column;
+}
+.liquid-toolbar-group {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 999px;
+  gap: 4px;
+  isolation: isolate;
+}
+.liquid-toolbar-group[data-orientation="vertical"] {
+  flex-direction: column;
+}
+/* Toolbar buttons are liquid Buttons: ghost on a group's glass, glass of their own outside. */
+.liquid-toolbar-button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-width: 0;
+  height: 44px;
+  min-height: 0;
+  padding: 0;
+  border-radius: 50%;
+}
+.liquid-toolbar-button svg {
+  width: 21px;
+  height: 21px;
+}
+/* An icon, not a disclosure chevron: it stays put while its menu is open. */
+.liquid-toolbar .liquid-button > svg {
+  rotate: none;
+}
+.liquid-toolbar-group .liquid-toolbar-button:hover:not(:disabled),
+.liquid-toolbar-group .liquid-toolbar-button[aria-pressed="true"] {
+  background: rgb(255 255 255 / 0.18);
+  box-shadow: none;
+}
+.liquid-toolbar-group[data-liquid-indicator] .liquid-toolbar-button[aria-pressed="true"] {
+  background: transparent;
+}
+.liquid-toolbar-button:disabled {
+  opacity: 0.5;
+}
+/* A button of its own is as tall as a group: 44px buttons, 6px padding, 1px border. */
+.liquid-toolbar > .liquid-toolbar-button {
+  width: 58px;
+  height: 58px;
+}
+.liquid-toolbar > .liquid-toolbar-button svg {
+  width: 22px;
+  height: 22px;
+}
+.liquid-toolbar-separator {
+  flex: none;
+  height: 20px;
+  width: 1px;
+  background: rgb(255 255 255 / 0.4);
+  margin-inline: 3px;
+}
+.liquid-toolbar-separator[aria-orientation="horizontal"] {
+  height: 1px;
+  width: 20px;
+  margin: 3px 0;
+}
+/* A tab bar with a search button beside it (iOS 26 search tab, button appearance). */
 .liquid-tab-bar:has(.liquid-tabbar) {
   --liquid-tab-bar-circle: 68px;
 }

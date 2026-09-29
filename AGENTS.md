@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # liquidcn agent guide
 
-liquidcn is an open-source shadcn/ui registry of Liquid Glass components (iOS 26 style) built on Radix. The library in `src/components/ui/liquid/` (wrappers and styles) and `src/lib/liquid/` (motion modules) is distributed as source, alongside the base shadcn components in `src/components/ui/`; the Next.js site (home page and docs, in `src/app/` and `src/www/`) demonstrates it and serves the registry from `/r/`. Each component's docs and live examples live in `src/examples/<slug>/`.
+liquidcn is an open-source shadcn/ui registry of Liquid Glass components (iOS 26 style) that extend the shadcn/ui base components instead of rebuilding them. The library in `src/components/ui/liquid/` (wrappers and styles) and `src/lib/liquid/` (motion modules) is distributed as source. The base shadcn components in `src/components/ui/` (their Radix versions) serve the site; consumers keep their own, whichever primitive library those use. The Next.js site (home page and docs, in `src/app/` and `src/www/`) demonstrates it and serves the registry from `/r/`. Each component's docs and live examples live in `src/examples/<slug>/`.
 
 ## Before you change anything
 
@@ -33,13 +33,14 @@ Scripts are plain Next.js commands on the default port. A dev server may already
 ## Rules
 
 - **Quality gates are errors, not suggestions:** at most 300 lines per file (stylesheets excepted) and cyclomatic complexity of at most 10 per function. Split by responsibility: pure helpers, a small class, a subcomponent. Never disable these rules inline.
+- **Extend shadcn, never rebuild it.** A liquid component imports its base component from `@/components/ui/<name>` and adds only classes, refs, `data-liquid-*` attributes, and motion. It never imports a primitive library (`radix-ui`, Base UI, React Aria) itself, so it works on whichever one the consumer's shadcn uses. Where shadcn has no base component, build from ones it has (toolbar buttons are liquid `Button`s) or from plain elements (the tab bar).
 - **Keep the shadcn API.** Liquid components forward props, refs, and events to the base component. Motion is added with native listeners and CSS custom properties; do not re-render React per animation frame.
 - **Motion lives in classes, hooks stay thin.** Follow `LiquidPress`, `LiquidLens`, and `MenuMorph` in `src/lib/liquid/`: a hook creates the instance in an effect and destroys it in cleanup.
 - **The motion layer owns `translate` and `scale`** on interactive elements. Never use `transform` for motion there.
 - **Accessibility is part of done.** Everything must work under reduced motion (`prefers-reduced-motion` and `data-reduced-motion="true"`), reduced transparency, dark material, forced colors, keyboard, and touch. Decorative copies must be `inert` and `aria-hidden`.
-- **Registry contract.** Any new module a component imports must be listed in that item's `files` in `registry.json`, and any package in its `dependencies`. `tests/unit/registry.test.ts` enforces this.
+- **Registry contract.** Any new module a component imports must be listed in that item's `files` in `registry.json`, and any package in its `dependencies`. A base shadcn component goes in `registryDependencies` (for example `"button"`), never in `files`, so installing a liquid component never replaces the consumer's copy. `tests/unit/registry.test.ts` enforces all of this, and fails if a shipped file imports a primitive library.
 - **Tests with every change.** Pure logic gets unit tests, consumer-facing behavior gets component tests, and layout or input behavior gets a Playwright test. A bug fix needs a test that fails without it.
-- **Base shadcn files** (`button.tsx`, `tabs.tsx`, `dropdown-menu.tsx`, `tooltip.tsx`) stay as shadcn ships them, apart from formatting.
+- **Base shadcn files** (`button.tsx`, `tabs.tsx`, `dropdown-menu.tsx`, `tooltip.tsx`) stay as shadcn ships them, apart from formatting. The site uses them; the registry never ships them.
 - `public/r/` is generated: after changing `registry.json` or any file it lists, run `pnpm registry:build` and commit the result. Never edit it by hand. CI fails when it is stale.
 
 ## Verifying motion

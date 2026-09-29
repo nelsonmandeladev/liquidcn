@@ -1,6 +1,6 @@
 # liquidcn
 
-**Liquid Glass for shadcn/ui.** Glass components that swell under your finger, lift a magnifying lens across tabs, and grow menus out of their buttons, the way iOS 26 does. Built on Radix primitives and installed as source from a shadcn registry.
+**Liquid Glass for shadcn/ui.** Glass components that swell under your finger, lift a magnifying lens across tabs, and grow menus out of their buttons, the way iOS 26 does. Each one extends a shadcn/ui component instead of rebuilding it, and installs as source from a shadcn registry.
 
 **[Docs and live examples →](https://liquidcn.snmandela.com)**
 
@@ -15,7 +15,7 @@
 | Tab bar       | `liquid-tab-bar`       | iOS 26 tab bar with a search button: the tabs fold into a circle as search stretches into a field. |
 | Tabs          | `liquid-tabs`          | A lens that lifts, magnifies, and tints the labels beneath it. Drag it across tabs to choose.      |
 | Dropdown menu | `liquid-dropdown-menu` | Grows out of and over its trigger as a droplet, folds back into it through a teardrop neck.        |
-| Toolbar       | `liquid-toolbar`       | Swelling actions and a selection lens.                                                             |
+| Toolbar       | `liquid-toolbar`       | Groups of swelling actions with a selection lens, and round buttons that fuse with them.           |
 | Toast         | `liquid-sonner`        | Top-center glass pills that form and fold away (Sonner).                                           |
 
 ## Install
@@ -26,7 +26,7 @@ In a React project set up for [shadcn/ui](https://ui.shadcn.com/docs/installatio
 npx shadcn@latest add https://liquidcn.snmandela.com/r/liquid-button.json
 ```
 
-Each item brings its source, the base shadcn component it wraps, `liquid.css`, and the motion modules it needs. There is no animation library to install. The CLI asks before replacing base components you already have.
+Each item brings its source, `liquid.css`, and the motion modules it needs. There is no animation library to install. Liquid components never replace your base shadcn components: each one imports the base component it extends (`button`, `tabs`, …), whichever primitive library yours is built on. If your project doesn't have it yet, the CLI adds it from shadcn's registry.
 
 ## Use
 
@@ -70,7 +70,7 @@ Use `.dark` or `data-liquid-theme="dark"` for dark material, and `data-reduced-t
 
 ## Accessibility
 
-- Radix keeps focus management, keyboard navigation, and ARIA semantics; the lens is decorative and hidden from assistive technology.
+- The base shadcn components keep their focus management, keyboard navigation, and ARIA semantics; the toolbar adds one tab stop with arrow keys. The lens is decorative and hidden from assistive technology.
 - `prefers-reduced-motion` (or `data-reduced-motion="true"` on an ancestor) removes all movement; every interaction still works.
 - Reduced transparency, increased contrast, and forced colors are supported.
 - Every page of the site is checked against WCAG 2.1 A/AA in CI.

@@ -8,7 +8,7 @@ import {
   type Cap,
 } from "@/lib/liquid/fusion";
 import { foldNeck } from "@/lib/liquid/menu-morph";
-import { fusionStrength } from "@/lib/liquid/tab-bar";
+import { fusionStrength } from "@/lib/liquid/bar";
 
 const rect = (left: number, top: number, width: number, height: number) => ({
   left,

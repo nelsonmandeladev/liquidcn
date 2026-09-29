@@ -25,7 +25,7 @@ The tuning comes from frame-by-frame study of a screen recording of the iOS 26 P
 | Menu open              | Button swells (0–250 ms), becomes a round refracting blob (~330–420 ms), stretches into the panel over the button with magnified, blurred content (~500 ms), settles with a small overshoot.  | Keyframes through a droplet at 26% and an overshoot at 62% of `--liquid-morph-duration`.                   |
 | Menu close             | Content blurs out; the panel shrinks into a teardrop connected to the button, which bulges as the drop merges (~250 ms).                                                                      | Fold through a droplet in 320 ms, drawn back through a metaball neck, then a 420 ms bulge on the trigger.  |
 | Search                 | The tab bar collapses into a circle showing the selected tab's icon while the search button stretches into a field; the close button reverses it.                                             | `TabBar`: each part's width springs from the old layout to the new; tabs fade, blur, and shrink away.      |
-| Fusion                 | Pressed, the search button and the tab bar flow into each other through a gooey neck.                                                                                                         | A glass neck clipped to a metaball outline between the two surfaces' nearest round ends.                   |
+| Fusion                 | Pressed, the search button and the tab bar flow into each other through a gooey neck; so do a toolbar's round button and the group beside it.                                                 | A glass neck clipped to a metaball outline between the two surfaces' nearest round ends.                   |
 | Edit → ✓               | Pill whitens, tints blue, overshoots as a larger blue circle, settles to a 44 pt circle; the check blurs in.                                                                                  | Content morph: width spring, pop, color transition, blurred content-in.                                    |
 
 ## Material
@@ -46,21 +46,21 @@ Dark material brightens the default lens ink to `#5aabff` so labels stay legible
 
 ## Motion
 
-| Parameter                 | Value                                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Spring                    | stiffness `440 − 180v`, damping `23 + 15v`, unit mass; `v` is `--liquid-viscosity` (0–1, default 0.5). |
-| Press swell               | `1 + clamp(8 / √(width × height), 0.04, 0.18)`.                                                        |
-| Press drag                | Rubber band with iOS coefficient 0.55: up to 10 px across, 7 px down.                                  |
-| Content pop               | Scale velocity impulse of 2.4/s on the press spring.                                                   |
-| Lens lift                 | +16% along the list, +34% across it, 12% magnification.                                                |
-| Lens stretch              | Along the direction of travel, up to 24% at 5200 px/s.                                                 |
-| Scrub start               | 6 px of pointer travel.                                                                                |
-| Menu unfold               | `--liquid-morph-duration`, default 520 ms.                                                             |
-| Menu fold / trigger bulge | 320 ms / 420 ms.                                                                                       |
-| Still-press threshold     | A menu press that moves less than 10 px never selects an item.                                         |
-| Search morph              | Width spring per part; tabs out over 220–360 ms (fade, 6 px blur, 0.86 scale); field pop 2.4/s.        |
-| Fusion neck               | Metaball spread `max(press × 0.5, lift × 0.32)` for the tab bar; up to 0.5 mid-fold for menus.         |
-| Refraction                | Bezel `min(radius, 18px)`; displacement up to 60% of it at the edge, easing as `(1 − d/bezel)²`.       |
+| Parameter                 | Value                                                                                                      |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Spring                    | stiffness `440 − 180v`, damping `23 + 15v`, unit mass; `v` is `--liquid-viscosity` (0–1, default 0.5).     |
+| Press swell               | `1 + clamp(8 / √(width × height), 0.04, 0.18)`.                                                            |
+| Press drag                | Rubber band with iOS coefficient 0.55: up to 10 px across, 7 px down.                                      |
+| Content pop               | Scale velocity impulse of 2.4/s on the press spring.                                                       |
+| Lens lift                 | +16% along the list, +34% across it, 12% magnification.                                                    |
+| Lens stretch              | Along the direction of travel, up to 24% at 5200 px/s.                                                     |
+| Scrub start               | 6 px of pointer travel.                                                                                    |
+| Menu unfold               | `--liquid-morph-duration`, default 520 ms.                                                                 |
+| Menu fold / trigger bulge | 320 ms / 420 ms.                                                                                           |
+| Still-press threshold     | A menu press that moves less than 10 px never selects an item.                                             |
+| Search morph              | Width spring per part; tabs out over 220–360 ms (fade, 6 px blur, 0.86 scale); field pop 2.4/s.            |
+| Fusion neck               | Metaball spread `max(press × 0.5, lift × 0.32)` for the tab bar and toolbar; up to 0.5 mid-fold for menus. |
+| Refraction                | Bezel `min(radius, 18px)`; displacement up to 60% of it at the edge, easing as `(1 − d/bezel)²`.           |
 
 Springs run only while moving, write CSS custom properties directly, and never re-render React per frame.
 
@@ -76,4 +76,4 @@ Springs run only while moving, write CSS custom properties directly, and never r
 
 - Refraction needs Chromium; elsewhere the glass keeps its blur without the bend at the rim.
 - The lens magnifies a copy of the control's own labels, not the backdrop: inside a surface with a backdrop filter, a nested backdrop filter only sees that surface.
-- Fusion is drawn between surfaces the library pairs: a tab bar and its search button, a menu and its trigger.
+- Fusion is drawn between surfaces the library pairs: a tab bar and its search button, a toolbar group and the round button beside it, a menu and its trigger.

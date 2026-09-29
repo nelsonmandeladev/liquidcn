@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Crop, MousePointer2, SlidersHorizontal, Sparkles } from "lucide-react";
 import { toast } from "@/components/ui/liquid/sonner";
-import { Toolbar, ToolbarButton, ToolbarSeparator } from "@/components/ui/liquid/toolbar";
+import { Toolbar, ToolbarButton, ToolbarGroup } from "@/components/ui/liquid/toolbar";
 
 const tools = [
   { id: "select", name: "Select", icon: MousePointer2 },
@@ -16,17 +16,18 @@ export default function ToolbarDemo() {
   return (
     <div className="flex flex-col items-center gap-5 text-center">
       <Toolbar aria-label="Editing tools">
-        {tools.map((item) => (
-          <ToolbarButton
-            key={item.id}
-            aria-label={item.name}
-            aria-pressed={tool === item.id}
-            onClick={() => setTool(item.id)}
-          >
-            <item.icon />
-          </ToolbarButton>
-        ))}
-        <ToolbarSeparator />
+        <ToolbarGroup>
+          {tools.map((item) => (
+            <ToolbarButton
+              key={item.id}
+              aria-label={item.name}
+              aria-pressed={tool === item.id}
+              onClick={() => setTool(item.id)}
+            >
+              <item.icon />
+            </ToolbarButton>
+          ))}
+        </ToolbarGroup>
         <ToolbarButton
           aria-label="Auto enhance"
           onClick={() => toast.success("Auto enhance applied")}

@@ -26,6 +26,8 @@ export type RegistryItem = {
   title: string;
   description: string;
   dependencies?: string[];
+  /** Base shadcn components and `utils`, installed from the shadcn registry. */
+  registryDependencies?: string[];
   files: RegistryFile[];
 };
 

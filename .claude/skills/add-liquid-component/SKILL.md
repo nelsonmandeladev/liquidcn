@@ -5,19 +5,19 @@ description: Add a new Liquid Glass component to the liquidcn registry, from the
 
 # Add a liquid component
 
-Read `docs/architecture.md` and `docs/design.md` first. Keep the shadcn API intact: the liquid wrapper forwards every prop, ref, and event.
+Read `docs/architecture.md` and `docs/design.md` first. A liquid component extends its shadcn base component; it never rebuilds it. Keep the shadcn API intact: the liquid wrapper forwards every prop, ref, and event, and never imports a primitive library (`radix-ui`, Base UI, React Aria) itself.
 
 ## Steps
 
-1. **Base component.** If `src/components/ui/<name>.tsx` does not exist, add it with `pnpm dlx shadcn@latest add <name>`, then run `pnpm format`. Do not otherwise edit base files.
+1. **Base component.** If `src/components/ui/<name>.tsx` does not exist, add it with `pnpm dlx shadcn@latest add <name>`, then run `pnpm format`. Do not otherwise edit base files. If shadcn has no such component, build from base components it has, or from plain elements.
 2. **Wrapper.** Create `src/components/ui/liquid/<name>.tsx`:
-   - `"use client"`, import `./liquid.css`, and re-export the parts that need no changes.
+   - `"use client"`, import `./liquid.css`, import the base component from `@/components/ui/<name>`, and re-export the parts that need no changes.
    - Get the DOM node with `useLiquidElement(ref)` from `@/lib/liquid/motion`.
    - Reuse before inventing: `useLiquidInteraction` (`@/lib/liquid/press`) for press, swell, and content morph; `useLiquidIndicator` (`@/lib/liquid/lens`) for a selection lens over items.
    - New motion goes in a class with a `destroy()` method in a module under `src/lib/liquid/`, created in a hook's effect (see `LiquidPress`, `LiquidLens`, `MenuMorph`). Put pure math in its own functions so it can be unit-tested.
    - Springs come from `createLiquidSpring`; write CSS custom properties, never React state, per frame. Use `translate`/`scale`, never `transform`.
 3. **Styles.** Add rules to `src/components/ui/liquid/liquid.css` using the material tokens. Cover reduced motion (both the media query and `[data-reduced-motion="true"]`), reduced transparency and increased contrast, dark material, and forced colors.
-4. **Registry.** Add an item to `registry.json` that lists every file the component needs (wrapper, base component, `liquid.css` as `registry:ui`; each motion module it imports as `registry:lib`) and every npm package it imports under `dependencies`. `pnpm test` runs `tests/unit/registry.test.ts`, which fails if anything is missing or would install in the wrong folder. Then run `pnpm registry:build` and commit `public/r/`.
+4. **Registry.** Add an item to `registry.json` that lists every file the component needs (wrapper and `liquid.css` as `registry:ui`; each motion module it imports as `registry:lib`), every npm package it imports under `dependencies`, and the base component it extends under `registryDependencies` (for example `["utils", "switch"]`). Never list the base component's file: the consumer keeps their own copy, built on whichever primitive library they use. `pnpm test` runs `tests/unit/registry.test.ts`, which fails if anything is missing or would install in the wrong folder. Then run `pnpm registry:build` and commit `public/r/`.
 5. **Docs page.** Create `src/examples/<slug>/` (the slug is the registry name without `liquid-`):
    - One file per example, default-exporting a component. The Code tab shows the file verbatim, so import only `react`, `lucide-react`, and `@/components/ui/...`, and use Tailwind classes for layout. The first example is the main preview.
    - `docs.ts` exporting a `ComponentDoc` (`src/examples/types.ts`): icon, hint, photo scene, examples, usage snippet, API props, motion numbers, accessibility notes. Title, description, and file list come from `registry.json`.

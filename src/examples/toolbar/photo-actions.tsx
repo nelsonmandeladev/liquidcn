@@ -9,24 +9,33 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/liquid/dropdown-menu";
 import { toast } from "@/components/ui/liquid/sonner";
-import { Toolbar, ToolbarButton, ToolbarSeparator } from "@/components/ui/liquid/toolbar";
+import {
+  Toolbar,
+  ToolbarButton,
+  ToolbarGroup,
+  ToolbarSeparator,
+} from "@/components/ui/liquid/toolbar";
 
 export default function ToolbarPhotoActions() {
   const [favorite, setFavorite] = useState(false);
   return (
     <Toolbar aria-label="Photo actions">
-      <ToolbarButton
-        aria-label="Favorite"
-        aria-pressed={favorite}
-        onClick={() => setFavorite(!favorite)}
-      >
-        <Heart fill={favorite ? "currentColor" : "none"} />
-      </ToolbarButton>
-      <ToolbarSeparator />
-      <ToolbarButton aria-label="Add to album" onClick={() => toast.success("Added to your album")}>
-        <Plus />
-      </ToolbarButton>
-      <ToolbarSeparator />
+      <ToolbarGroup>
+        <ToolbarButton
+          aria-label="Favorite"
+          aria-pressed={favorite}
+          onClick={() => setFavorite(!favorite)}
+        >
+          <Heart fill={favorite ? "currentColor" : "none"} />
+        </ToolbarButton>
+        <ToolbarSeparator />
+        <ToolbarButton
+          aria-label="Add to album"
+          onClick={() => toast.success("Added to your album")}
+        >
+          <Plus />
+        </ToolbarButton>
+      </ToolbarGroup>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <ToolbarButton aria-label="More actions">

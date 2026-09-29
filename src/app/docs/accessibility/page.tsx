@@ -48,7 +48,11 @@ export default function Page() {
     >
       <Section id="semantics" title="Semantics and focus">
         <ul>
-          <li>Roles, states, and keyboard support come from the Radix primitive underneath.</li>
+          <li>
+            Roles, states, and keyboard support come from the shadcn component underneath. The
+            toolbar, which shadcn does not have, keeps one tab stop and moves between its buttons
+            with the arrow keys, Home, and End.
+          </li>
           <li>
             The lens shows an <code>inert</code>, <code>aria-hidden</code> copy of its list. Screen
             readers and the keyboard only ever reach the real items.

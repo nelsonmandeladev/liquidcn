@@ -3,7 +3,12 @@ import { posix } from "node:path";
 import { describe, expect, it } from "vitest";
 
 type File = { path: string; type: string };
-type Item = { name: string; files: File[]; dependencies?: string[] };
+type Item = {
+  name: string;
+  files: File[];
+  dependencies?: string[];
+  registryDependencies?: string[];
+};
 const registry = JSON.parse(readFileSync("registry.json", "utf8")) as { items: Item[] };
 const manifest = JSON.parse(readFileSync("package.json", "utf8")) as {
   dependencies: Record<string, string>;
@@ -23,6 +28,16 @@ function installPath(file: File) {
   return `${folder}/${rest}`;
 }
 
+// Liquid components extend the consumer's base shadcn components, whichever primitive library
+// those use, so they never import one themselves.
+const primitives = /^(radix-ui|@radix-ui\/|@base-ui|react-aria)/;
+
+/** A base shadcn component, such as `src/components/ui/button`, as its registry name. */
+const baseComponent = (module: string) => /^src\/components\/ui\/([\w-]+)$/.exec(module)?.[1];
+
+const importsOf = (path: string) =>
+  [...readFileSync(path, "utf8").matchAll(/(?:from|import) "([^"]+)"/g)].map((match) => match[1]);
+
 /** The repository path a local import points at; null for packages and the shared `utils` item. */
 function localModule(from: string, specifier: string) {
   if (specifier === "@/lib/utils") return null;
@@ -39,16 +54,33 @@ describe.each(registry.items)("registry item $name", (item) => {
     expect(paths.filter((path) => !existsSync(path))).toEqual([]);
   });
 
-  it("ships every local module its files import", () => {
+  // Base components come from the shadcn registry, built for the consumer's primitive library.
+  it("ships every local module its files import, or depends on its base component", () => {
+    const bases = item.registryDependencies ?? [];
     const shipped = (module: string) =>
-      ["", ".ts", ".tsx"].some((ext) => paths.includes(module + ext));
+      ["", ".ts", ".tsx"].some((ext) => paths.includes(module + ext)) ||
+      bases.includes(baseComponent(module) ?? "");
     const missing = sources.flatMap((path) =>
-      [...readFileSync(path, "utf8").matchAll(/(?:from|import) "([^"]+)"/g)]
-        .map((match) => localModule(path, match[1]))
+      importsOf(path)
+        .map((specifier) => localModule(path, specifier))
         .filter((module) => module !== null && !shipped(module))
         .map((module) => `${path} -> ${module}`),
     );
     expect(missing).toEqual([]);
+  });
+
+  // A consumer's own base components stay as they are.
+  it("never ships a base shadcn component", () => {
+    expect(paths.filter((path) => baseComponent(path.replace(/\.tsx?$/, "")))).toEqual([]);
+  });
+
+  it("imports no primitive library directly", () => {
+    const direct = sources.flatMap((path) =>
+      importsOf(path)
+        .filter((specifier) => primitives.test(specifier))
+        .map((specifier) => `${path} -> ${specifier}`),
+    );
+    expect(direct).toEqual([]);
   });
 
   // Imports keep their path under the alias, so a file installed anywhere else breaks them,
