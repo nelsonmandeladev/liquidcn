@@ -1,0 +1,148 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "liquidcn",
+  "homepage": "http://localhost:5173",
+  "items": [
+    {
+      "name": "liquid-button",
+      "title": "Liquid Button",
+      "description": "Pointer-lit glass button with elastic press and spring release.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/liquid-button.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/button.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid.css",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid-motion.ts",
+          "type": "registry:ui"
+        }
+      ],
+      "type": "registry:ui"
+    },
+    {
+      "name": "liquid-tabs",
+      "title": "Liquid Tabs",
+      "description": "Glass segmented tabs with a continuous spring lens and Radix keyboard navigation.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/liquid-tabs.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/tabs.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid.css",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid-motion.ts",
+          "type": "registry:ui"
+        }
+      ],
+      "type": "registry:ui"
+    },
+    {
+      "name": "liquid-dropdown-menu",
+      "title": "Liquid Dropdown Menu",
+      "description": "Glass menus that morph from their trigger with Radix focus management.",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/liquid-dropdown-menu.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/dropdown-menu.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid.css",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid-motion.ts",
+          "type": "registry:ui"
+        }
+      ],
+      "type": "registry:ui"
+    },
+    {
+      "name": "liquid-toolbar",
+      "title": "Liquid Toolbar",
+      "description": "Floating glass toolbar with an animated selection lens and elastic actions.",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/liquid-toolbar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid.css",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid-motion.ts",
+          "type": "registry:ui"
+        }
+      ],
+      "type": "registry:ui"
+    },
+    {
+      "name": "liquid-sonner",
+      "title": "Liquid Toast",
+      "description": "Top-center glass notifications with pill formation, soft stacking, and Sonner accessibility.",
+      "dependencies": [
+        "sonner"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/liquid-sonner.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid.css",
+          "type": "registry:ui"
+        }
+      ],
+      "type": "registry:ui"
+    }
+  ]
+}
