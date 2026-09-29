@@ -27,7 +27,7 @@ const tokens = [
   ["`--liquid-tint`", "`0.22`", "Opacity of the glass fill."],
   ["`--liquid-fill`", "`255 255 255`", "Fill color as RGB channels."],
   ["`--liquid-ink`", "`#172323`", "Text and icons on glass."],
-  ["`--liquid-accent`", "`#007aff`", "Prominent buttons and labels under a lens."],
+  ["`--liquid-accent`", "`#155dfc`", "Prominent buttons and labels under a lens."],
   ["`--liquid-lens-ink`", "the accent", "Labels under a lens only."],
   ["`--liquid-viscosity`", "`0.5`", "Spring feel, from 0 (firm, bouncy) to 1 (slow, soft)."],
   ["`--liquid-morph-duration`", "`520ms`", "How long a menu takes to form."],

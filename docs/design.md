@@ -30,15 +30,15 @@ The tuning comes from frame-by-frame study of a screen recording of the iOS 26 P
 
 ## Material
 
-| Token                 | Default           | Purpose                                                            |
-| --------------------- | ----------------- | ------------------------------------------------------------------ |
-| `--liquid-blur`       | `20px`            | Backdrop blur of glass surfaces.                                   |
-| `--liquid-tint`       | `.22`             | Opacity of the glass fill.                                         |
-| `--liquid-fill`       | `255 255 255`     | Fill color as RGB channels; dark material uses `22 27 30`.         |
-| `--liquid-ink`        | `#172323`         | Text and icon color on glass.                                      |
-| `--liquid-accent`     | `#007aff`         | Prominent buttons and the labels under a lens.                     |
-| `--liquid-lens-ink`   | accent            | Tint for the lens only; set it to `var(--liquid-ink)` for neutral. |
-| `--liquid-lens-alpha` | `.5` (dark `.16`) | Frost of the resting lens.                                         |
+| Token                 | Default           | Purpose                                                                                                 |
+| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------- |
+| `--liquid-blur`       | `20px`            | Backdrop blur of glass surfaces.                                                                        |
+| `--liquid-tint`       | `.22`             | Opacity of the glass fill.                                                                              |
+| `--liquid-fill`       | `255 255 255`     | Fill color as RGB channels; dark material uses `22 27 30`.                                              |
+| `--liquid-ink`        | `#172323`         | Text and icon color on glass.                                                                           |
+| `--liquid-accent`     | `#155dfc`         | Prominent buttons and the labels under a lens. `oklch(54.6% 0.245 262.881)`; white text on it meets AA. |
+| `--liquid-lens-ink`   | accent            | Tint for the lens only; set it to `var(--liquid-ink)` for neutral.                                      |
+| `--liquid-lens-alpha` | `.5` (dark `.16`) | Frost of the resting lens.                                                                              |
 
 Dark material brightens the default lens ink to `#5aabff` so labels stay legible. Reduced transparency and increased contrast replace glass with opaque fills. Forced colors use system colors and hide the lens copy.
 

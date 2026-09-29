@@ -18,6 +18,22 @@ test.describe("button", () => {
     await expect.poll(() => edit.evaluate(scaleOf)).toBeLessThan(1.001);
   });
 
+  // liquid.css removes outlines and tints the glass instead; forced colors replace that tint.
+  test("marks keyboard focus with an outline in forced colors", async ({ page, isMobile }) => {
+    test.skip(isMobile, "Keyboard focus needs a keyboard.");
+    await page.emulateMedia({ forcedColors: "active" });
+    const outline = (element: Element) => getComputedStyle(element).outlineStyle;
+    const edit = page.getByRole("button", { name: "Edit" });
+    await edit.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(edit).toBeFocused();
+    expect(await edit.evaluate(outline)).toBe("solid");
+    const code = page.getByRole("tab", { name: "Code" }).first();
+    await code.focus();
+    expect(await code.evaluate(outline)).toBe("solid");
+  });
+
   test("Edit morphs into a round, prominent check", async ({ page, hasTouch }) => {
     await activate(page.getByRole("button", { name: "Edit" }), hasTouch);
     const done = page.getByRole("button", { name: "Done editing" });

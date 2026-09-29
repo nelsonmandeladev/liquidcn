@@ -61,7 +61,7 @@ Set these custom properties on any ancestor (including `document.documentElement
 | `--liquid-tint`           | `.22`         | Glass opacity.                                                            |
 | `--liquid-fill`           | `255 255 255` | Glass color as RGB channels.                                              |
 | `--liquid-ink`            | `#172323`     | Text and icons on glass.                                                  |
-| `--liquid-accent`         | `#007aff`     | Prominent buttons and labels under a lens.                                |
+| `--liquid-accent`         | `#155dfc`     | Prominent buttons and labels under a lens.                                |
 | `--liquid-lens-ink`       | accent        | Lens tint only, e.g. `var(--liquid-ink)` for a neutral segmented control. |
 | `--liquid-viscosity`      | `.5`          | 0 is firm and bouncy, 1 is slow and soft.                                 |
 | `--liquid-morph-duration` | `520ms`       | Menu formation.                                                           |

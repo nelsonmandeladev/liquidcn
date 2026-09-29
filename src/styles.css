@@ -37,8 +37,8 @@
   --destructive: #d70015;
   --ring: #0071e3;
   --link: #0066cc;
-  /* #007aff fails AA behind white text; this is the same blue, one step deeper. */
-  --liquid-accent: #0071e3;
+  /* liquidcn's default accent, set here because the site's own controls use it too. */
+  --liquid-accent: #155dfc;
   --font-text:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, "Helvetica Neue",
     Arial, sans-serif;
@@ -120,13 +120,12 @@ button:not(:disabled),
   background-color: var(--muted);
 }
 
-/* Forced colors replace every fill, so there an outline is the only focus cue that shows. */
+/*
+ * Forced colors replace every fill, so there an outline is the only focus cue that shows.
+ * liquid.css restores it for its own controls; this covers the site's.
+ */
 @media (forced-colors: active) {
-  :focus-visible,
-  .liquid-surface:focus-visible,
-  .liquid-tab:focus-visible,
-  .liquid-toolbar-button:focus-visible,
-  .liquid-tab-bar :is(button, input):focus-visible {
+  :focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
