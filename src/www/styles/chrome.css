@@ -1,38 +1,66 @@
-/* The floating header. Its wrapper spans the page but lets clicks through its empty edges. */
-.site-header-wrap {
+/*
+ * The floating header, laid out like an iPadOS toolbar: the title leading, the tab bar and its
+ * search button centered, actions trailing. Each group of glass is only as wide as its content,
+ * and only the glass takes clicks; the rest of the row lets them through.
+ */
+.site-header {
+  --site-bar: 50px;
   position: sticky;
   top: 0;
   z-index: 50;
-  padding: 12px var(--gutter) 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 12px max(var(--gutter), calc((100% - var(--page)) / 2 + var(--gutter))) 0;
   pointer-events: none;
 }
 
-.site-header {
+.site-header > * {
   pointer-events: auto;
-  max-width: var(--page);
-  height: 60px;
-  margin: 0 auto;
-  padding: 0 8px 0 18px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  border-radius: 999px;
-  /* Glass, but with enough fill to keep links legible over anything scrolling beneath. */
-  background: rgb(var(--liquid-fill) / max(var(--liquid-tint), 0.64));
+}
+
+/* Scroll edge effect: content fades as it passes under the controls, so the title stays legible. */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -24px;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--background) 0%,
+    color-mix(in srgb, var(--background) 78%, transparent) 48%,
+    transparent
+  );
 }
 
 .site-brand {
+  justify-self: start;
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--liquid-ink);
+  height: var(--site-bar);
+  padding-inline: 4px;
+  color: var(--foreground);
   font: 650 17px/1 var(--font-display);
   letter-spacing: -0.02em;
+  transition: opacity 180ms ease;
 }
 
 .site-logo {
   width: 28px;
   height: 28px;
+}
+
+/* Glass with enough fill to keep labels legible over anything scrolling beneath. */
+.site-glass {
+  background: rgb(var(--liquid-fill) / max(var(--liquid-tint), 0.58));
+}
+
+.site-tab-bar {
+  --liquid-tab-bar-circle: var(--site-bar);
+  justify-self: center;
 }
 
 .site-nav {
@@ -47,8 +75,8 @@
 .site-nav-link {
   display: inline-flex;
   align-items: center;
-  height: 36px;
-  padding: 0 14px;
+  height: 40px;
+  padding: 0 16px;
   border-radius: 999px;
   font-size: 14px;
   font-weight: 500;
@@ -67,15 +95,94 @@
 }
 
 .site-actions {
-  margin-left: auto;
+  justify-self: end;
   display: flex;
   align-items: center;
-  gap: 2px;
+  padding: 2px;
+  border-radius: 999px;
+  transition: opacity 180ms ease;
 }
 
 .site-actions .liquid-button svg {
   width: 19px;
   height: 19px;
+}
+
+/* Results under the field, like iPadOS search suggestions. */
+.site-search-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: calc(var(--liquid-tab-bar-circle) + 10px);
+  right: 0;
+  z-index: 3;
+  padding: 8px;
+  border-radius: 24px;
+  color: var(--liquid-ink);
+  transform-origin: top center;
+  animation: site-search-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.site-search-status {
+  margin: 4px 12px 6px;
+  color: color-mix(in srgb, var(--liquid-ink) 72%, transparent);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.site-search-panel ul {
+  max-height: min(60vh, 420px);
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.site-search-panel li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.site-search-panel li[aria-selected="true"] {
+  background: rgb(0 122 255 / 0.16);
+}
+
+.site-search-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.site-search-section {
+  color: color-mix(in srgb, var(--liquid-ink) 72%, transparent);
+  font-size: 12px;
+}
+
+@keyframes site-search-in {
+  from {
+    opacity: 0;
+    scale: 0.96;
+    filter: blur(6px);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .site-glass {
+    background: rgb(var(--liquid-fill));
+  }
+}
+
+[data-reduced-motion="true"] .site-search-panel {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-search-panel {
+    animation: none;
+  }
 }
 
 .site-mobile-nav {
@@ -104,8 +211,32 @@
   display: block;
 }
 
+/* Not enough room to center the tab bar on the page: center it between title and actions. */
+@media (max-width: 1023px) {
+  .site-header {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .site-nav-link {
+    padding-inline: 12px;
+  }
+}
+
+/*
+ * Phones: the sections live in the menu, and search is a circle at the trailing edge that
+ * stretches across the header, as the title and actions fade.
+ */
 @media (max-width: 767px) {
-  .site-nav-wrap {
+  .site-header {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 8px;
+  }
+
+  .site-tab-bar {
+    order: 3;
+  }
+
+  .site-tab-bar .liquid-tab-bar-items {
     display: none;
   }
 
@@ -113,9 +244,23 @@
     display: block;
   }
 
-  .site-header {
-    height: 56px;
-    padding-left: 16px;
+  .site-tab-bar[data-searching] {
+    position: absolute;
+    top: 12px;
+    inset-inline: var(--gutter);
+    /* Aligned abspos boxes shrink to fit; stretch fills the insets. */
+    justify-self: stretch;
+    width: auto;
+    justify-content: flex-end;
+  }
+
+  .site-tab-bar .site-search-panel {
+    left: 0;
+  }
+
+  .site-header:has(.site-tab-bar[data-searching]) :is(.site-brand, .site-actions) {
+    opacity: 0;
+    visibility: hidden;
   }
 }
 

@@ -21,7 +21,7 @@ const sections = [
 const principles = [
   [
     "Glass answers the finger.",
-    "Pressing makes a control swell toward you and fill with light; it does not sink. Small controls grow more than large ones, and dragging stretches them like a gel.",
+    "Pressing makes a control swell toward you; it does not sink. Small controls grow more than large ones, and dragging stretches them like a gel.",
   ],
   [
     "Selection is a lens.",
@@ -59,7 +59,7 @@ const reference = [
   [
     "Button press",
     "The button whitens and grows; a 44 pt circle grows about 20%.",
-    "Size-dependent swell with pressed light.",
+    "Size-dependent swell.",
   ],
   [
     "Menu open",
@@ -68,8 +68,18 @@ const reference = [
   ],
   [
     "Menu close",
-    "Content blurs out; the panel shrinks into a drop that merges with the button.",
-    "Fold through an elongated droplet in 320 ms, then a 420 ms bulge.",
+    "Content blurs out; the panel shrinks into a teardrop connected to the button, which bulges as the drop merges.",
+    "Fold through a droplet in 320 ms, drawn back through a neck, then a 420 ms bulge.",
+  ],
+  [
+    "Search",
+    "The tab bar collapses into a circle showing the selected tab's icon; the search button stretches into a field.",
+    "Each part's width springs from the old layout to the new; the tabs fade and blur away.",
+  ],
+  [
+    "Fusion",
+    "Pressed, the search button and the tab bar flow into each other through a gooey neck.",
+    "A metaball neck of glass drawn between the two surfaces while either is pressed.",
   ],
   [
     "Edit → ✓",
@@ -89,6 +99,9 @@ const numbers = [
   ["Menu unfold", "`--liquid-morph-duration`, 520 ms by default"],
   ["Menu fold, trigger bulge", "320 ms, 420 ms"],
   ["Still press", "A menu press moving less than 10 px never selects an item"],
+  ["Search morph", "Width spring per part; tabs out in 220–360 ms with 6 px blur"],
+  ["Fusion", "Neck spread up to 0.5 while pressed; 0.5 at the middle of a menu fold"],
+  ["Refraction", "Rim bezel up to 18 px, backdrop drawn up to 60% of it inward (Chromium)"],
 ];
 
 export default function Page() {

@@ -22,6 +22,11 @@ test.describe("tabs lens", () => {
     await page.mouse.down();
     await expect.poll(async () => (await lensOf(bar)).lift).toBeGreaterThan(0.9);
     await expect(bar).toHaveAttribute("data-liquid-pressed", "true");
+    // Lifted glass casts no dark shadow: every shadow on the lens is an inner highlight.
+    const shadows = await bar
+      .locator(":scope > .liquid-lens")
+      .evaluate((lens) => getComputedStyle(lens).boxShadow.split(/,(?![^(]*\))/));
+    expect(shadows.filter((shadow) => !shadow.includes("inset"))).toEqual([]);
     await page.mouse.up();
     await expect.poll(async () => (await lensOf(bar)).state).toBe("rest");
     expect((await lensOf(bar)).lift).toBe(0);
@@ -55,6 +60,24 @@ test.describe("tabs lens", () => {
 
   test("the lens copy stays out of the accessibility tree", async ({ page }) => {
     await expect(page.getByRole("tablist", { name: "Phone" }).getByRole("tab")).toHaveCount(3);
+  });
+});
+
+test.describe("tabs in dark mode", () => {
+  test.use({ colorScheme: "dark" });
+
+  test("no tab draws a border, before or after the lens arrives", async ({ page, hasTouch }) => {
+    await openComponent(page, "tabs");
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    const list = page.getByRole("tablist", { name: "Photo library" });
+    const borders = () =>
+      list
+        .getByRole("tab")
+        .evaluateAll((tabs) => tabs.map((tab) => getComputedStyle(tab).borderTopColor));
+    expect(new Set(await borders())).toEqual(new Set(["rgba(0, 0, 0, 0)"]));
+    // The new tab is selected at once, while the lens is still on its way.
+    await activate(list.getByRole("tab", { name: "Favorites" }), hasTouch);
+    expect(new Set(await borders())).toEqual(new Set(["rgba(0, 0, 0, 0)"]));
   });
 });
 

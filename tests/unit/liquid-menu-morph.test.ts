@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  MenuMorph,
   coverPlacement,
   measureAnchor,
   morphVariables,
@@ -96,5 +97,49 @@ describe("coverPlacement", () => {
   it("respects the consumer's own offset and alignment", () => {
     const chosen = { sideOffset: 4, align: "start" as const };
     expect(coverPlacement(anchor, "bottom", chosen)).toEqual(chosen);
+  });
+});
+
+describe("MenuMorph fold", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    document.body.replaceChildren();
+  });
+
+  function menuAndTrigger() {
+    const trigger = document.createElement("button");
+    const wrapper = document.createElement("div");
+    const menu = document.createElement("div");
+    menu.dataset.state = "open";
+    wrapper.append(menu);
+    document.body.append(trigger, wrapper);
+    return { trigger, menu };
+  }
+
+  const necks = () => document.querySelectorAll('.liquid-fusion[data-layer="fixed"]');
+
+  it("draws a neck back to the trigger while folding, and removes it after", async () => {
+    vi.stubGlobal("requestAnimationFrame", () => 1);
+    const { trigger, menu } = menuAndTrigger();
+    const morph = new MenuMorph(menu, () => trigger, false);
+    expect(necks()).toHaveLength(0);
+    menu.dataset.state = "closed";
+    await Promise.resolve();
+    expect(necks()).toHaveLength(1);
+    expect(necks()[0].getAttribute("aria-hidden")).toBe("true");
+    morph.destroy();
+    expect(necks()).toHaveLength(0);
+  });
+
+  it("skips the neck when motion is reduced", async () => {
+    vi.stubGlobal("requestAnimationFrame", () => 1);
+    const { trigger, menu } = menuAndTrigger();
+    document.body.dataset.reducedMotion = "true";
+    const morph = new MenuMorph(menu, () => trigger, false);
+    menu.dataset.state = "closed";
+    await Promise.resolve();
+    expect(necks()).toHaveLength(0);
+    morph.destroy();
+    delete document.body.dataset.reducedMotion;
   });
 });

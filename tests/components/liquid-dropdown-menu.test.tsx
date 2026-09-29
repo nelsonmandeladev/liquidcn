@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -93,5 +93,15 @@ describe("liquid DropdownMenu", () => {
     const menu = await screen.findByRole("menu");
     expect(menu.className).toContain("liquid-menu");
     expect(menu.firstElementChild?.className).toBe("liquid-menu-body");
+  });
+
+  it("ends the morph when the panel closes, while the menu stays mounted", async () => {
+    render(<Menu onSave={() => {}} />);
+    press();
+    const menu = await screen.findByRole("menu");
+    expect(trigger().dataset.liquidCovered).toBe("");
+    fireEvent.keyDown(menu, { key: "Escape" });
+    await waitFor(() => expect(screen.queryByRole("menu")).toBeNull());
+    expect(trigger().dataset.liquidCovered).toBeUndefined();
   });
 });

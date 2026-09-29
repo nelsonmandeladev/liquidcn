@@ -108,9 +108,28 @@ button:not(:disabled),
   cursor: pointer;
 }
 
+/*
+ * No focus outlines or rings. Keyboard focus shows the way hover does: links and scrolling
+ * regions take the hover fill, and glass lights up from within (liquid.css).
+ */
 :focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 3px;
+  outline: none;
+}
+
+:where(a, [tabindex="0"]):not(.liquid-surface, .liquid-interactive, .liquid-tab):focus-visible {
+  background-color: var(--muted);
+}
+
+/* Forced colors replace every fill, so there an outline is the only focus cue that shows. */
+@media (forced-colors: active) {
+  :focus-visible,
+  .liquid-surface:focus-visible,
+  .liquid-tab:focus-visible,
+  .liquid-toolbar-button:focus-visible,
+  .liquid-tab-bar :is(button, input):focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
 }
 
 ::selection {

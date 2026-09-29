@@ -8,7 +8,7 @@ The tuning comes from frame-by-frame study of a screen recording of the iOS 26 P
 
 ## Principles
 
-1. **Glass answers the finger.** Pressing a control makes it swell toward you and fill with light; it does not sink. Small controls grow more than large ones. Dragging while pressed stretches the glass like a gel, then it springs back.
+1. **Glass answers the finger.** Pressing a control makes it swell toward you; it does not sink. Small controls grow more than large ones. Dragging while pressed stretches the glass like a gel, then it springs back.
 2. **Selection is a lens.** The selected tab sits under a frosted pill. Pressing lifts that pill into clear glass that is larger than the bar, magnifies what is beneath it, and tints it with the accent color. It can be dragged. When released, it travels, lands, and frosts over again.
 3. **Surfaces grow from their source.** A menu is not placed next to its button; the button becomes the menu. It swells, turns into a round droplet, stretches into the panel over the button, and on close is drawn back into the button, which bulges as it lands.
 4. **Content condenses.** New content arrives magnified and out of focus, as if seen through glass that is still forming, then sharpens. Changed content in a button blurs in while the button's width springs to its new size.
@@ -21,9 +21,11 @@ The tuning comes from frame-by-frame study of a screen recording of the iOS 26 P
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | Tab press              | Bar grows ~2%. Selection pill lifts into clear glass ~30% taller than the bar, bright rim with faint rainbow fringe. Labels under it magnified and blue; a label can be half blue mid-flight. | `data-liquid-pressed` scales the bar 1.025. Lens lift, magnification, and accent copy clipped to the lens. |
 | Tab travel and landing | About 250 ms from press to landing; the lens stretches with speed and overshoots slightly, then shrinks and frosts.                                                                           | Spring travel with velocity stretch; lift returns to 0 once within 15% of the target.                      |
-| Button press           | The button whitens and grows (a 44 pt circle grows ~20%); the label fades if a menu is opening.                                                                                               | `swellFor()` growth and pressed light.                                                                     |
+| Button press           | The button whitens and grows (a 44 pt circle grows ~20%); the label fades if a menu is opening.                                                                                               | `swellFor()` growth.                                                                                       |
 | Menu open              | Button swells (0–250 ms), becomes a round refracting blob (~330–420 ms), stretches into the panel over the button with magnified, blurred content (~500 ms), settles with a small overshoot.  | Keyframes through a droplet at 26% and an overshoot at 62% of `--liquid-morph-duration`.                   |
-| Menu close             | Content blurs out; the panel shrinks into a teardrop connected to the button, which bulges as the drop merges (~250 ms).                                                                      | Fold through an elongated droplet in 320 ms, then a 420 ms bulge on the trigger.                           |
+| Menu close             | Content blurs out; the panel shrinks into a teardrop connected to the button, which bulges as the drop merges (~250 ms).                                                                      | Fold through a droplet in 320 ms, drawn back through a metaball neck, then a 420 ms bulge on the trigger.  |
+| Search                 | The tab bar collapses into a circle showing the selected tab's icon while the search button stretches into a field; the close button reverses it.                                             | `TabBar`: each part's width springs from the old layout to the new; tabs fade, blur, and shrink away.      |
+| Fusion                 | Pressed, the search button and the tab bar flow into each other through a gooey neck.                                                                                                         | A glass neck clipped to a metaball outline between the two surfaces' nearest round ends.                   |
 | Edit → ✓               | Pill whitens, tints blue, overshoots as a larger blue circle, settles to a 44 pt circle; the check blurs in.                                                                                  | Content morph: width spring, pop, color transition, blurred content-in.                                    |
 
 ## Material
@@ -40,6 +42,8 @@ The tuning comes from frame-by-frame study of a screen recording of the iOS 26 P
 
 Dark material brightens the default lens ink to `#5aabff` so labels stay legible. Reduced transparency and increased contrast replace glass with opaque fills. Forced colors use system colors and hide the lens copy.
 
+**Refraction.** Apple describes Liquid Glass as a layer whose edges bend what is beneath it. Tabs, toolbars, and the tab bar bend their backdrop at the rim with an SVG displacement map applied through `backdrop-filter: … url(#…)`. The map is generated per surface from its size and corner radius: inside a bezel of `min(radius, 18px)`, the backdrop is drawn from further inside, up to 60% of the bezel at the very edge, easing to nothing on the flat face. Only Chromium renders SVG filters in `backdrop-filter`, so other browsers keep the plain blur. Refraction is off under reduced transparency, increased contrast, and forced colors.
+
 ## Motion
 
 | Parameter                 | Value                                                                                                  |
@@ -54,6 +58,9 @@ Dark material brightens the default lens ink to `#5aabff` so labels stay legible
 | Menu unfold               | `--liquid-morph-duration`, default 520 ms.                                                             |
 | Menu fold / trigger bulge | 320 ms / 420 ms.                                                                                       |
 | Still-press threshold     | A menu press that moves less than 10 px never selects an item.                                         |
+| Search morph              | Width spring per part; tabs out over 220–360 ms (fade, 6 px blur, 0.86 scale); field pop 2.4/s.        |
+| Fusion neck               | Metaball spread `max(press × 0.5, lift × 0.32)` for the tab bar; up to 0.5 mid-fold for menus.         |
+| Refraction                | Bezel `min(radius, 18px)`; displacement up to 60% of it at the edge, easing as `(1 − d/bezel)²`.       |
 
 Springs run only while moving, write CSS custom properties directly, and never re-render React per frame.
 
@@ -62,8 +69,11 @@ Springs run only while moving, write CSS custom properties directly, and never r
 - The lens shows an `inert`, `aria-hidden` copy of the list; real items keep their roles, names, and focus.
 - Reduced motion (`prefers-reduced-motion` or `data-reduced-motion="true"` on an ancestor) snaps every change and removes the lift, swell, and morphs.
 - Menus keep Radix focus management: keyboard open focuses the first item, and Escape returns focus to the trigger.
+- Focus draws no outline or ring. Keyboard focus blue-tints a glass control, tints the lens when it lands on the selected item, turns a slider or switch thumb into clear glass, and gives links the hover fill. Forced colors, which override every fill, keep a system-colored outline.
 - Every page of the site passes axe WCAG 2.1 A/AA checks, which the UI tests enforce.
 
-## Not yet matched
+## Limits
 
-Tracked in [`tasks.todo`](../tasks.todo): the search morph (tab bar collapsing while search expands into a field), fusion between separate glass surfaces, and true refraction of the backdrop.
+- Refraction needs Chromium; elsewhere the glass keeps its blur without the bend at the rim.
+- The lens magnifies a copy of the control's own labels, not the backdrop: inside a surface with a backdrop filter, a nested backdrop filter only sees that surface.
+- Fusion is drawn between surfaces the library pairs: a tab bar and its search button, a menu and its trigger.

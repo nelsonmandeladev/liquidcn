@@ -2,6 +2,7 @@ import registry from "../../registry.json";
 import { buttonDoc } from "@/examples/button/docs";
 import { dropdownMenuDoc } from "@/examples/dropdown-menu/docs";
 import { sonnerDoc } from "@/examples/sonner/docs";
+import { tabBarDoc } from "@/examples/tab-bar/docs";
 import { tabsDoc } from "@/examples/tabs/docs";
 import { toolbarDoc } from "@/examples/toolbar/docs";
 import type { ComponentDoc } from "@/examples/types";
@@ -10,7 +11,14 @@ import type { ComponentDoc } from "@/examples/types";
  * Every documented component. Adding a registry item means adding its folder here; the docs
  * route, sidebar, index, pager, sitemap, and accessibility tests all follow from this list.
  */
-const docs: ComponentDoc[] = [buttonDoc, dropdownMenuDoc, sonnerDoc, tabsDoc, toolbarDoc];
+const docs: ComponentDoc[] = [
+  buttonDoc,
+  dropdownMenuDoc,
+  sonnerDoc,
+  tabBarDoc,
+  tabsDoc,
+  toolbarDoc,
+];
 
 export type RegistryFile = { path: string; type: string };
 export type RegistryItem = {

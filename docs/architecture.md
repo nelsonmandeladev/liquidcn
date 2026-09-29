@@ -6,22 +6,27 @@ liquidcn has two parts: a **component library** in `src/components/ui/liquid/` a
 
 Each liquid component wraps a shadcn/ui base component and adds behavior through small, framework-free classes attached by hooks. Consumers keep the familiar shadcn props, refs, and events.
 
-| File                                      | Responsibility                                                                                                  |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `components/ui/liquid/*.tsx`              | Thin React wrappers that combine a base component with the pieces below.                                        |
-| `components/ui/liquid/liquid.css`         | Glass material, lens, menu choreography, and every accessibility preference.                                    |
-| `lib/liquid/motion.ts`                    | Shared core: the spring, rubber band, reduced-motion checks, listener and ref helpers.                          |
-| `lib/liquid/press.ts`                     | `LiquidPress` (hover light, swell, rubber-band drag) and `LiquidMorph` (content morph); `useLiquidInteraction`. |
-| `lib/liquid/lens.ts`                      | `LiquidLens`, the selection lens for tabs and toolbars; `useLiquidIndicator`.                                   |
-| `lib/liquid/lens-parts.ts`                | Pure lens geometry and the lens's DOM helpers.                                                                  |
-| `lib/liquid/menu-morph.ts`                | Menu geometry, `MenuMorph` (unfold/fold), and `MenuSession` (trigger press tracking and guard).                 |
-| `components/ui/button.tsx`, `tabs.tsx`, … | Unmodified shadcn/ui base components.                                                                           |
+| File                                      | Responsibility                                                                                                       |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `components/ui/liquid/*.tsx`              | Thin React wrappers that combine a base component with the pieces below.                                             |
+| `components/ui/liquid/liquid.css`         | Glass material, lens, menu choreography, and every accessibility preference.                                         |
+| `lib/liquid/motion.ts`                    | Shared core: the spring, rubber band, reduced-motion checks, listener and ref helpers.                               |
+| `lib/liquid/press.ts`                     | `LiquidPress` (hover attraction, swell, rubber-band drag) and `LiquidMorph` (content morph); `useLiquidInteraction`. |
+| `lib/liquid/lens.ts`                      | `LiquidLens`, the selection lens for tabs and toolbars; `useLiquidIndicator`.                                        |
+| `lib/liquid/lens-parts.ts`                | Pure lens geometry and the lens's DOM helpers.                                                                       |
+| `lib/liquid/menu-morph.ts`                | Menu geometry, `MenuMorph` (unfold/fold), and `MenuSession` (trigger press tracking and guard).                      |
+| `lib/liquid/fusion.ts`                    | Metaball neck geometry, `LiquidFusion` (a glass neck between two surfaces), and `FusionLoop`.                        |
+| `lib/liquid/refraction.ts`                | Displacement map for a rounded surface, `LiquidRefraction` (SVG backdrop filter), `useLiquidRefraction`.             |
+| `lib/liquid/tab-bar.ts`                   | `TabBarMorph`: the search morph, the search button's press, and its fusion with the bar; `useTabBarMorph`.           |
+| `components/ui/button.tsx`, `tabs.tsx`, … | Unmodified shadcn/ui base components.                                                                                |
 
 Paths are relative to `src/`. The registry ships wrappers and `liquid.css` as `registry:ui` and the motion modules as `registry:lib`, so they install into the consumer's `ui/liquid/` and `lib/liquid/` folders and every `@/components/ui/…` and `@/lib/…` import keeps resolving.
 
 ### The spring
 
 `createLiquidSpring` integrates a damped spring for a vector of values at a fixed 240 Hz substep. Retargeting keeps velocity, `kick` adds velocity for pops, and `render` may retarget from inside a frame (a travelling lens lands this way). A frame whose timestamp precedes the input that scheduled it gets a small positive step rather than a negative one. Springs write CSS custom properties and never trigger React renders.
+
+Hooks get their element from `useLiquidElement`, whose ref cleanup clears it. React 19 calls a ref's cleanup instead of passing it `null`, so without that an effect would outlive its element whenever the component stays mounted, as a menu's content component does when Radix unmounts the panel on close.
 
 ### The lens
 
@@ -36,9 +41,23 @@ Selection stays with Radix. A drag across tabs follows the pointer with a rubber
 
 ### Menus
 
+The panel clips and its `liquid-menu-body` wrapper scrolls, up to the height Radix reports as available. The body arrives magnified during the unfold; with the panel as the scroller, that growth would flash scrollbars on every open.
+
 `DropdownMenuContent` opens over its trigger by default: a negative `sideOffset` equal to the trigger's size, aligned to the nearer screen edge. `MenuMorph` measures the trigger and panel after Radix positions the panel, and writes the CSS variables the unfold and fold keyframes use.
 
 Radix opens a dropdown on `pointerdown` and selects an item on `pointerup` even when the press began on the trigger. With the panel over the trigger, a still click would select the item that appeared beneath it. `MenuSession` tracks the press that opened the menu and swallows that release (and the click that follows a touch release) unless the pointer moved more than 10 px, so press-drag-release selection still works, as on iOS.
+
+### Search morph
+
+`TabBar` lays out `TabBarItems` (the glass around a liquid `TabsList`) and `TabBarSearch` (a round button that becomes a field). CSS describes both states: while `data-searching` is set, the items are a circle `--liquid-tab-bar-circle` wide and the field fills the bar's resting width, `--liquid-tab-bar-width`. `TabBarMorph` remembers each part's resting width and, in a layout effect right after the state changes, springs each width from where it was to where the new layout puts it, then removes the inline widths. Because the layout lives in CSS, a consumer can restyle either state (the site stretches the field across the header on phones) and the morph follows.
+
+### Fusion
+
+`LiquidFusion` draws the neck between two surfaces as a glass element clipped with `clip-path: path(…)`. Each surface is reduced to its round end nearest the other (a capsule's end, or a circle of a panel's corner radius just inside its nearest edge), measured with `getBoundingClientRect` so transforms and keyframes count. `neckBetween` builds the classic metaball outline between the two circles, closing along each circle's near side so the neck never tints a surface twice. `FusionLoop` redraws it per frame only while there is a neck, a press, or a hold. The tab bar fuses its search button and bar while pressed; `MenuMorph` fuses a folding menu with its trigger, synchronized to the fold keyframes' own progress.
+
+### Refraction
+
+Where `refractionSupported()` (Chromium), `LiquidRefraction` generates a displacement map for the surface's size and corner radius, draws it into an SVG `<filter>` in a shared hidden `<svg>`, and sets `--liquid-refraction: url(#…)` and `data-liquid-refraction`. CSS appends the variable to the surface's `backdrop-filter`, inside a media query that excludes reduced transparency, increased contrast, and forced colors. On resize the last map stretches at once and a new one is drawn when resizing pauses.
 
 ### Content morph
 
@@ -49,6 +68,8 @@ Radix opens a dropdown on `pointerdown` and selects an item on `pointerup` even 
 - The motion layer owns the CSS `translate` and `scale` properties of interactive elements; `transform` stays free.
 - During a content morph a button carries a temporary inline `width`. A button with its own inline width keeps it.
 - Tab and toolbar items carry a temporary `mask-image` while the lens passes over them.
+- In Chromium, tabs, toolbars, and the tab bar carry `--liquid-refraction` and `data-liquid-refraction`; a consumer's own `backdrop-filter` on them replaces the refraction.
+- During the search morph, a tab bar's parts carry temporary inline widths.
 
 ## Registry
 
@@ -58,22 +79,23 @@ Radix opens a dropdown on `pointerdown` and selects an item on `pointerup` even 
 
 A Next.js App Router app: the home page at `/`, guides under `/docs`, and one page per component at `/docs/components/<slug>`, all prerendered. Public addresses live in `src/site.ts`.
 
-| Path                                | Responsibility                                                                                          |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `examples/<slug>/docs.ts`           | What a person writes about a component: hint, examples, API, motion numbers, accessibility notes.       |
-| `examples/<slug>/*.tsx`             | Examples. Each is rendered live and shown as its own source, so it imports only the public API.         |
-| `examples/index.ts`                 | The list of documented components, joined with their `registry.json` items (title, description, files). |
-| `app/docs/components/[slug]/`       | Generates a page per documented component with `generateStaticParams`; unknown slugs are 404s.          |
-| `www/chrome/`                       | Floating glass header, footer, theme toggle, material popover, mobile menu.                             |
-| `www/docs/`                         | Docs shell: sidebar, table of contents, pager, previews, package-manager commands, tables.              |
-| `www/home/`                         | Hero and the showcase of examples on photos.                                                            |
-| `www/stage.tsx`                     | A photo for glass to sit on. Every stage crops one image, so the browser downloads it once.             |
-| `www/highlight.ts`                  | Build-time syntax highlighting with Shiki; token colors are CSS variables that follow the theme.        |
-| `www/material.ts`, `preferences.ts` | Theme and material settings, restored before first paint by an inline script, then external stores.     |
+| Path                                | Responsibility                                                                                                   |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `examples/<slug>/docs.ts`           | What a person writes about a component: hint, examples, API, motion numbers, accessibility notes.                |
+| `examples/<slug>/*.tsx`             | Examples. Each is rendered live and shown as its own source, so it imports only the public API.                  |
+| `examples/index.ts`                 | The list of documented components, joined with their `registry.json` items (title, description, files).          |
+| `app/docs/components/[slug]/`       | Generates a page per documented component with `generateStaticParams`; unknown slugs are 404s.                   |
+| `www/chrome/`                       | Floating header (title, tab bar with docs search, actions), footer, theme toggle, material popover, mobile menu. |
+| `www/search.ts`                     | Ranking for the header search; the index is built from the docs order in `www/docs/sections.ts`.                 |
+| `www/docs/`                         | Docs shell: sidebar, table of contents, pager, previews, package-manager commands, tables.                       |
+| `www/home/`                         | Hero and the showcase of examples on photos.                                                                     |
+| `www/stage.tsx`                     | A photo for glass to sit on. Every stage crops one image, so the browser downloads it once.                      |
+| `www/highlight.ts`                  | Build-time syntax highlighting with Shiki; token colors are CSS variables that follow the theme.                 |
+| `www/material.ts`, `preferences.ts` | Theme and material settings, restored before first paint by an inline script, then external stores.              |
 
 **Adding a component to the site** takes one folder in `src/examples/` and one line in `src/examples/index.ts`. The route, sidebar, components index, pager, sitemap, and the accessibility checks in `e2e/site.spec.ts` all derive from that list and `registry.json`. `tests/unit/docs.test.ts` fails if a registry item has no docs, an example file is missing, or an example imports anything a reader could not install.
 
-**The site uses the library on itself.** The header's current section and the docs sidebar's current page sit under `LiquidLens` (attached with `useLiquidIndicator` to plain links), so the lens travels when the page changes. Preview/Code switches and package-manager tabs are liquid `Tabs`; the mobile menu is a liquid `DropdownMenu`; icon buttons are liquid `Button`s. The material controls write the same custom properties a consumer would, on `document.documentElement`, so portaled menus and toasts follow them.
+**The site uses the library on itself.** The header is laid out like an iPadOS toolbar: the title leading, a liquid `TabBar` centered (its sections are links under `LiquidLens`, and its search button becomes the docs search), and a capsule of actions trailing, over a scroll edge instead of a full-width bar. The docs sidebar's current page sits under a lens too, so both lenses travel when the page changes. Preview/Code switches and package-manager tabs are liquid `Tabs`; the mobile menu is a liquid `DropdownMenu`; icon buttons are liquid `Button`s. The material controls write the same custom properties a consumer would, on `document.documentElement`, so portaled menus and toasts follow them.
 
 ## Testing layers
 

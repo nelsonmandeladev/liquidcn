@@ -4,6 +4,7 @@ import { TabsList as BaseList, TabsTrigger as BaseTrigger } from "@/components/u
 import { cn } from "@/lib/utils";
 import { useLiquidElement } from "@/lib/liquid/motion";
 import { useLiquidIndicator } from "@/lib/liquid/lens";
+import { useLiquidRefraction } from "@/lib/liquid/refraction";
 import "./liquid.css";
 export { Tabs, TabsContent } from "@/components/ui/tabs";
 export function TabsList({ className, ref, ...props }: ComponentProps<typeof BaseList>) {
@@ -13,6 +14,7 @@ export function TabsList({ className, ref, ...props }: ComponentProps<typeof Bas
     items: ".liquid-tab",
     scrub: true,
   });
+  useLiquidRefraction(node);
   return (
     <BaseList ref={mergedRef} className={cn("liquid-surface liquid-tabs", className)} {...props} />
   );

@@ -47,8 +47,8 @@
 
 .code-body pre:focus-visible,
 .command-body pre:focus-visible {
-  outline-offset: -3px;
   border-radius: 20px;
+  background-color: color-mix(in srgb, var(--liquid-accent) 8%, transparent);
 }
 
 .copy-button.liquid-button {

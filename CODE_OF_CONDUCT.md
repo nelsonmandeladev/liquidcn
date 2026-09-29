@@ -6,6 +6,6 @@ In short: be welcoming and considerate, give and accept feedback gracefully, and
 
 ## Reporting
 
-If you experience or witness unacceptable behavior, report it privately to the maintainers through a [private report on GitHub](https://github.com/nelsonmandeladev/liquidcn/security/advisories/new). Choose that form even though it is labelled for security issues; it is the project's private channel until a dedicated address is published. Please do not report conduct issues in public threads.
+If you experience or witness unacceptable behavior, report it privately to the maintainers through a [private report on GitHub](https://github.com/nelsonmandeladev/liquidcn/security/advisories/new). The form is labelled for security issues, but it is the project's private channel for conduct reports too: only the maintainers can read it, and it needs no email address. Please do not report conduct issues in public threads.
 
 Maintainers will review every report promptly and fairly, keep the reporter's identity confidential, and act according to the Covenant's [enforcement guidelines](https://www.contributor-covenant.org/version/2/1/code_of_conduct/#enforcement-guidelines).

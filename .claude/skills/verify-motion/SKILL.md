@@ -17,7 +17,7 @@ node scripts/capture-motion.mjs tabs-tap menu-open   # just these
 node scripts/capture-motion.mjs menu-close --slow 20 --out motion-frames
 ```
 
-Scenarios: `tabs-tap`, `tabs-drag`, `menu-open`, `menu-close`, `button-morph`. Frames land in `motion-frames/<scenario>/` (git-ignored), and the script prints the virtual time of each frame. With ffmpeg available (on PATH, or `FFMPEG=/path/to/ffmpeg`), it also writes one contact sheet per scenario, `motion-frames/<scenario>.png`. Read the sheet image to review a whole sequence at once.
+Scenarios: `tabs-tap`, `tabs-drag`, `menu-open`, `menu-close`, `menu-close-beside` (the fold neck), `search-morph`, `button-morph`. Frames land in `motion-frames/<scenario>/` (git-ignored), and the script prints the virtual time of each frame. With ffmpeg available (on PATH, or `FFMPEG=/path/to/ffmpeg`), it also writes one contact sheet per scenario, `motion-frames/<scenario>.png`; without it, tile the frames with any image tool (Pillow works). Read the sheet image to review a whole sequence at once.
 
 To add a scenario, add an entry to `scenarios` in `scripts/capture-motion.mjs`: the component page slug, a `clock`, the element to frame, frame times in ms, and the action.
 

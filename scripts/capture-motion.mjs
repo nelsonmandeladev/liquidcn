@@ -75,6 +75,27 @@ const scenarios = {
     },
     act: (page) => page.keyboard.press("Escape"),
   },
+  "menu-close-beside": {
+    component: "dropdown-menu",
+    clock: "css",
+    frame: (page) => page.getByRole("button", { name: "Share" }),
+    pad: [120, 60, 120, 230],
+    times: [0, 40, 80, 110, 140, 170, 200, 240, 290, 360, 600],
+    async prepare(page) {
+      await page.getByRole("button", { name: "Share" }).click();
+      await sleep(900 * slow);
+    },
+    act: (page) => page.keyboard.press("Escape"),
+  },
+  "search-morph": {
+    component: "tab-bar",
+    clock: "spring",
+    frame: (page) => page.locator("main .liquid-tab-bar").first(),
+    pad: [40, 60, 40, 30],
+    times: [0, 40, 80, 120, 170, 230, 300, 400, 550, 800],
+    act: (page) =>
+      page.locator("main .liquid-tab-bar").first().getByRole("button", { name: "Search" }).click(),
+  },
   "button-morph": {
     component: "button",
     clock: "spring",
@@ -120,8 +141,7 @@ async function clipFor(page, scenario) {
   };
 }
 
-async function record(page, scenario, folder) {
-  const clip = await clipFor(page, scenario);
+async function record(page, scenario, folder, clip) {
   const started = Date.now();
   await scenario.act(page);
   const stamps = [];
@@ -164,9 +184,11 @@ async function capture(name) {
     // Center the element so the clip stays inside the window and clear of the header.
     await scenario.frame(page).evaluate((element) => element.scrollIntoView({ block: "center" }));
     await sleep(500);
+    // Measure first: an open menu hides the rest of the page from the accessibility tree.
+    const clip = await clipFor(page, scenario);
     await startClock();
     await scenario.prepare?.(page);
-    const stamps = await record(page, scenario, folder);
+    const stamps = await record(page, scenario, folder, clip);
     const sheet = contactSheet(folder, stamps.length, join(values.out, `${name}.png`));
     console.log(`${name}: frames at ${stamps.join(", ")} ms -> ${sheet ?? folder}`);
   } finally {

@@ -73,6 +73,70 @@
         {
           "path": "src/lib/liquid/lens-parts.ts",
           "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/refraction.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "type": "registry:ui"
+    },
+    {
+      "name": "liquid-tab-bar",
+      "title": "Liquid Tab Bar",
+      "description": "iOS 26 tab bar with a search button: search collapses the tabs into a circle and stretches the button into a field, and the two glass surfaces fuse when pressed.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/liquid/tab-bar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid/tabs.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/tabs.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/components/ui/liquid/liquid.css",
+          "type": "registry:ui"
+        },
+        {
+          "path": "src/lib/liquid/motion.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/press.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/lens.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/lens-parts.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/fusion.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/refraction.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/tab-bar.ts",
+          "type": "registry:lib"
         }
       ],
       "type": "registry:ui"
@@ -80,7 +144,7 @@
     {
       "name": "liquid-dropdown-menu",
       "title": "Liquid Dropdown Menu",
-      "description": "Glass menus that grow out of their trigger as a droplet and fold back into it, with Radix focus management.",
+      "description": "Glass menus that grow out of their trigger as a droplet and fold back into it through a teardrop neck, with Radix focus management.",
       "dependencies": [
         "radix-ui",
         "lucide-react"
@@ -107,6 +171,10 @@
         },
         {
           "path": "src/lib/liquid/menu-morph.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/fusion.ts",
           "type": "registry:lib"
         }
       ],
@@ -145,6 +213,10 @@
         },
         {
           "path": "src/lib/liquid/lens-parts.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/liquid/refraction.ts",
           "type": "registry:lib"
         }
       ],

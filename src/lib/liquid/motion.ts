@@ -141,13 +141,21 @@ export function assignRef<T>(ref: Ref<T> | undefined, element: T | null): () => 
   };
 }
 
-/** Compose forwarded refs, including React 19 ref cleanups. */
+/**
+ * Compose forwarded refs, including React 19 ref cleanups. React calls a ref's cleanup instead
+ * of passing it null, so the cleanup clears the node: effects on it then end when the element
+ * goes, even if the component stays, as a menu panel does when Radix unmounts it on close.
+ */
 export function useLiquidElement<T extends HTMLElement>(forwardedRef?: Ref<T>) {
   const [node, setNode] = useState<T | null>(null);
   const ref = useCallback(
     (element: T | null) => {
       setNode(element);
-      return assignRef(forwardedRef, element);
+      const release = assignRef(forwardedRef, element);
+      return () => {
+        setNode(null);
+        release();
+      };
     },
     [forwardedRef],
   );

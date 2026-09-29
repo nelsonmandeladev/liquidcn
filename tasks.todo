@@ -1,25 +1,34 @@
 Liquid Glass fidelity:
   Gaps left after matching the iOS 26 Phone app reference video (tab lens, press swell, menu droplet, Edit → ✓ morph).
 
-  ☐ Search morph @component
+  ✔ Search morph @component @done(26-09-29 13:10)
     Tapping search collapses the tab bar into a single circle showing the selected tab's icon, while the search
     button stretches into a search field. The close button reverses it. Needs a new component (a tab bar with a
     search accessory), not a change to Tabs.
-  ☐ Fusion between separate glass surfaces @motion
+    Done: `liquid-tab-bar` (TabBar, TabBarItems, TabBarSearch) with TabBarMorph in src/lib/liquid/tab-bar.ts. The
+    site header uses it for the docs search.
+  ✔ Fusion between separate glass surfaces @motion @done(26-09-29 13:10)
     The gooey neck where two surfaces merge: the tab bar bulging into the search button while pressed, and the
     teardrop neck when a closing menu is drawn back into its trigger. Today the menu close approximates the
     droplet with an elongated ellipse.
-  ☐ Real refraction of the page behind the glass @material
+    Done: metaball neck in src/lib/liquid/fusion.ts, drawn by the tab bar while pressed and by MenuMorph during
+    the fold, in step with the fold keyframes.
+  ✔ Real refraction of the page behind the glass @material @done(26-09-29 13:10)
     Lens magnification only enlarges a copy of the control's own labels. True refraction of the backdrop needs an
     SVG displacement filter (`backdrop-filter: url(#…)`, Chromium only, so progressive enhancement) or WebGL.
+    Done: rim refraction for tabs, toolbars, and the tab bar in src/lib/liquid/refraction.ts (Chromium). The lens
+    still magnifies its label copy; docs/design.md lists this under Limits.
 
 Open-source launch:
-  ☐ Confirm the repository URL @docs
+  ✔ Confirm the repository URL @docs @done(26-09-29 13:10)
     Assumed https://github.com/nelsonmandeladev/liquidcn in src/site.ts, package.json, README badges,
     SECURITY.md, CODE_OF_CONDUCT.md, and .github/ISSUE_TEMPLATE/config.yml.
-  ☐ Enable private vulnerability reporting in the GitHub repository settings @docs
+    Done: the repository exists, is public, and matches the git remote. Its default branch is master.
+  ✔ Enable private vulnerability reporting in the GitHub repository settings @docs @done(26-09-29 13:10)
     SECURITY.md and CODE_OF_CONDUCT.md send reports there.
-  ☐ Choose a contact address for Code of Conduct reports @docs
-  ☐ Decide the copyright line in LICENSE (currently "liquidcn contributors") @docs
+  ✔ Choose a contact address for Code of Conduct reports @docs @done(26-09-29 13:10)
+    Done: GitHub private reporting is the conduct channel; CODE_OF_CONDUCT.md says so. No email is published.
+  ✔ Decide the copyright line in LICENSE (currently "liquidcn contributors") @docs @done(26-09-29 13:10)
+    Done: "Copyright (c) 2026 Sonfack Nelson Mandela", the repository owner's name on GitHub.
   ☐ Connect the GitHub repository to Vercel and point liquidcn.snmandela.com at it @deploy
-    Steps in docs/deployment.md.
+    Steps in docs/deployment.md. Needs the owner's Vercel account and DNS access.

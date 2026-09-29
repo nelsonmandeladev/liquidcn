@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useLiquidElement } from "@/lib/liquid/motion";
 import { useLiquidIndicator } from "@/lib/liquid/lens";
 import { useLiquidInteraction } from "@/lib/liquid/press";
+import { useLiquidRefraction } from "@/lib/liquid/refraction";
 import "./liquid.css";
 export function Toolbar({ className, ref, ...props }: ComponentProps<typeof Primitive.Root>) {
   const [node, mergedRef] = useLiquidElement(ref);
@@ -12,6 +13,7 @@ export function Toolbar({ className, ref, ...props }: ComponentProps<typeof Prim
     selected: '.liquid-toolbar-button[aria-pressed="true"]',
     items: ".liquid-toolbar-button",
   });
+  useLiquidRefraction(node);
   return (
     <Primitive.Root
       ref={mergedRef}

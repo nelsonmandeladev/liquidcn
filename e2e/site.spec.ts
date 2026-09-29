@@ -43,6 +43,20 @@ test("the open menu passes WCAG A/AA checks", async ({ page }) => {
   expect(violations.map(({ id }) => id)).toEqual([]);
 });
 
+test("open header search passes WCAG A/AA checks", async ({ page, hasTouch }) => {
+  await openComponent(page, "tabs");
+  const search = page.getByRole("button", { name: "Search docs" });
+  if (hasTouch) await search.tap();
+  else await search.click();
+  await page.getByRole("combobox", { name: "Search docs" }).fill("glass");
+  await expect(page.getByRole("option").first()).toBeVisible();
+  const { violations } = await new AxeBuilder({ page })
+    .include(".site-header")
+    .withTags(wcag)
+    .analyze();
+  expect(violations.map(({ id, nodes }) => `${id}: ${nodes[0]?.target}`)).toEqual([]);
+});
+
 test("unknown pages return 404", async ({ page }) => {
   const response = await page.goto("/docs/components/nope");
   expect(response?.status()).toBe(404);

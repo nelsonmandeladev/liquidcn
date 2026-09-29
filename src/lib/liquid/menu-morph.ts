@@ -1,3 +1,4 @@
+import { FusionLoop, LiquidFusion, type FusionSample } from "@/lib/liquid/fusion";
 import { listen, motionReduced } from "@/lib/liquid/motion";
 
 export type Anchor = { width: number; height: number; align: "start" | "center" | "end" };
@@ -51,9 +52,33 @@ export function morphVariables(from: Rect, panel: Rect, radius: number) {
   };
 }
 
+const FOLD_MS = 320;
+const smooth = (from: number, to: number, t: number) => {
+  const x = Math.max(0, Math.min(1, (t - from) / (to - from)));
+  return x * x * (3 - 2 * x);
+};
+
+/**
+ * The neck between a folding menu and its trigger at `t` (0–1 of the fold): it forms as the
+ * droplet pulls away from the panel's place, thins, and is gone once the drop has landed.
+ */
+export function foldNeck(t: number, opacity = 1): FusionSample {
+  const strength = 0.5 * smooth(0.12, 0.42, t) * (1 - smooth(0.78, 1, t));
+  return { strength, opacity, hold: t < 1 };
+}
+
+/** Progress of the running fold keyframes, so the neck keeps pace with them at any speed. */
+function foldProgress(node: HTMLElement) {
+  const fold = node
+    .getAnimations?.()
+    .find((animation) => (animation as CSSAnimation).animationName === "liquid-menu-fold");
+  return fold?.effect?.getComputedTiming().progress ?? null;
+}
+
 /** Drives the unfold and fold of one menu surface relative to its anchor element. */
 export class MenuMorph {
   private frame = 0;
+  private neck: FusionLoop | null = null;
   private readonly covered: HTMLElement | null;
   private readonly cleanups: (() => void)[] = [];
 
@@ -72,7 +97,9 @@ export class MenuMorph {
     this.covered = covering ? anchor() : null;
     if (this.covered) this.covered.dataset.liquidCovered = "";
     const closing = new MutationObserver(() => {
-      if (node.dataset.state === "closed") this.measure();
+      if (node.dataset.state !== "closed") return;
+      this.measure();
+      this.fold();
     });
     closing.observe(node, { attributes: true, attributeFilter: ["data-state"] });
     this.cleanups.push(
@@ -84,11 +111,25 @@ export class MenuMorph {
 
   destroy() {
     cancelAnimationFrame(this.frame);
+    this.neck?.destroy();
     this.cleanups.forEach((cleanup) => cleanup());
     const closed = this.node.dataset.state === "closed";
     delete this.node.dataset.liquidMorph;
     if (this.covered) delete this.covered.dataset.liquidCovered;
     if (closed) landIn(this.anchor());
+  }
+
+  // The drop is drawn back into its trigger through a narrowing neck.
+  private fold() {
+    const anchor = this.anchor();
+    if (!anchor || this.neck || motionReduced(this.node)) return;
+    const fusion = new LiquidFusion(this.node, anchor);
+    fusion.paint(this.node);
+    const start = performance.now();
+    const progress = () => foldProgress(this.node) ?? (performance.now() - start) / FOLD_MS;
+    const opacity = () => Number(getComputedStyle(this.node).opacity) || 0;
+    this.neck = new FusionLoop(fusion, () => foldNeck(progress(), opacity()));
+    this.neck.wake();
   }
 
   private measure = () => {

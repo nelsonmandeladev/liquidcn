@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-liquidcn is distributed as source through a shadcn registry. Fixes land on the `main` branch and are published by redeploying the registry, so only the latest version is supported. Reinstall a component with `npx shadcn@latest add` to pick up a fix.
+liquidcn is distributed as source through a shadcn registry. Fixes land on the `master` branch and are published by redeploying the registry, so only the latest version is supported. Reinstall a component with `npx shadcn@latest add` to pick up a fix.
 
 ## Reporting a vulnerability
 

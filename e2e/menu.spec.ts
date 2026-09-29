@@ -57,4 +57,61 @@ test.describe("dropdown menu", () => {
     await page.keyboard.press("Enter");
     await expect(page.getByText("Saved to collection")).toBeVisible();
   });
+
+  test("a menu beside its button is drawn back into it through a neck", async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, "Checked once; the fold is the same on touch.");
+    const trigger = page.getByRole("button", { name: "Share" });
+    await trigger.click();
+    await expect(page.getByRole("menu")).toHaveAttribute("data-liquid-morph", "ready");
+    // Watch every frame of the 320 ms fold for the neck.
+    const seen = page.evaluate(
+      () =>
+        new Promise<boolean>((resolve) => {
+          let shown = false;
+          const start = performance.now();
+          const watch = () => {
+            const neck = document.querySelector<HTMLElement>('.liquid-fusion[data-layer="fixed"]');
+            shown ||= !!neck && !neck.hidden;
+            if (performance.now() - start < 900) requestAnimationFrame(watch);
+            else resolve(shown);
+          };
+          requestAnimationFrame(watch);
+        }),
+    );
+    await page.keyboard.press("Escape");
+    expect(await seen).toBe(true);
+    await expect(page.getByRole("menu")).toHaveCount(0);
+    await expect(page.locator(".liquid-fusion[data-layer='fixed']")).toHaveCount(0);
+  });
+
+  test("never shows a scrollbar while it forms", async ({ page, hasTouch }) => {
+    const trigger = page.getByRole("button", { name: "Sort photos" });
+    await trigger.evaluate((element) => element.scrollIntoView({ block: "center" }));
+    // On every frame of the entrance, nothing in the menu that can scroll has anything to scroll.
+    const frames = page.evaluate(
+      () =>
+        new Promise<string[]>((resolve) => {
+          const overflowing: string[] = [];
+          const start = performance.now();
+          const scrolls = (element: Element) =>
+            /auto|scroll/.test(getComputedStyle(element).overflowY) &&
+            element.scrollHeight > element.clientHeight + 1;
+          const watch = () => {
+            const menu = document.querySelector('[role="menu"]');
+            const body = menu?.querySelector(".liquid-menu-body");
+            if (menu && scrolls(menu)) overflowing.push("panel");
+            if (body && scrolls(body)) overflowing.push("body");
+            if (performance.now() - start < 900) requestAnimationFrame(watch);
+            else resolve(overflowing);
+          };
+          requestAnimationFrame(watch);
+        }),
+    );
+    await activate(trigger, hasTouch);
+    expect(await frames).toEqual([]);
+    await expect(page.getByRole("menu")).toBeVisible();
+  });
 });

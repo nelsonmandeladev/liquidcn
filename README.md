@@ -9,13 +9,14 @@
 
 ## Components
 
-| Component     | Item                   | What it does                                                                                             |
-| ------------- | ---------------------- | -------------------------------------------------------------------------------------------------------- |
-| Button        | `liquid-button`        | Swells and brightens when pressed, stretches on drag, morphs its width and content. `prominent` variant. |
-| Tabs          | `liquid-tabs`          | A lens that lifts, magnifies, and tints the labels beneath it. Drag it across tabs to choose.            |
-| Dropdown menu | `liquid-dropdown-menu` | Grows out of and over its trigger as a droplet, folds back into it on close.                             |
-| Toolbar       | `liquid-toolbar`       | Swelling actions and a selection lens.                                                                   |
-| Toast         | `liquid-sonner`        | Top-center glass pills that form and fold away (Sonner).                                                 |
+| Component     | Item                   | What it does                                                                                       |
+| ------------- | ---------------------- | -------------------------------------------------------------------------------------------------- |
+| Button        | `liquid-button`        | Swells when pressed, stretches on drag, morphs its width and content. `prominent` variant.         |
+| Tab bar       | `liquid-tab-bar`       | iOS 26 tab bar with a search button: the tabs fold into a circle as search stretches into a field. |
+| Tabs          | `liquid-tabs`          | A lens that lifts, magnifies, and tints the labels beneath it. Drag it across tabs to choose.      |
+| Dropdown menu | `liquid-dropdown-menu` | Grows out of and over its trigger as a droplet, folds back into it through a teardrop neck.        |
+| Toolbar       | `liquid-toolbar`       | Swelling actions and a selection lens.                                                             |
+| Toast         | `liquid-sonner`        | Top-center glass pills that form and fold away (Sonner).                                           |
 
 ## Install
 

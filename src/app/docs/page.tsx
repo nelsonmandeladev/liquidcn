@@ -16,7 +16,7 @@ const sections = [
   { id: "what-you-get", title: "What you get" },
   { id: "one-import", title: "One import away" },
   { id: "reference", title: "Where the motion comes from" },
-  { id: "not-yet", title: "Not there yet" },
+  { id: "limits", title: "Limits" },
   { id: "browsers", title: "Browser support" },
 ];
 
@@ -69,31 +69,34 @@ import { Button } from "@/components/ui/liquid/button"`}
           was matched and the numbers behind it.
         </p>
       </Section>
-      <Section id="not-yet" title="Not there yet">
-        <p>Some of the reference is still missing, and it is better to say so:</p>
+      <Section id="limits" title="Limits">
+        <p>What the reference does that the web version does differently:</p>
         <ul>
           <li>
-            The search morph, where the tab bar collapses into a circle while search stretches into
-            a field.
+            Refraction of the page behind the glass needs Chromium, the only engine that renders SVG
+            filters in <code>backdrop-filter</code>. Elsewhere the glass keeps its blur without the
+            bend at the rim.
           </li>
           <li>
-            The neck between two glass surfaces as they merge. A closing menu is drawn back into its
-            button as an ellipse, not a true teardrop.
+            The lens magnifies a copy of the control&rsquo;s own labels. The page behind a bar bends
+            at the bar&rsquo;s rim, but the lens does not magnify it.
           </li>
           <li>
-            Refraction of the page behind the glass. The lens magnifies a copy of the
-            control&rsquo;s own labels, not the backdrop.
+            Surfaces fuse where the library knows they meet: a tab bar and its search button, and a
+            menu and its trigger.
           </li>
         </ul>
         <p>
-          Progress is tracked in <a href={`${site.repository}/blob/HEAD/tasks.todo`}>tasks.todo</a>.
+          Open work is tracked in <a href={`${site.repository}/blob/HEAD/tasks.todo`}>tasks.todo</a>
+          .
         </p>
       </Section>
       <Section id="browsers" title="Browser support">
         <p>
           Current Chrome, Edge, Safari, and Firefox all support backdrop blur. Where it is missing,
-          glass falls back to an opaque fill. Pointer events cover mouse, pen, and touch, and every
-          interaction has a keyboard path through Radix.
+          glass falls back to an opaque fill. Chrome and Edge also bend the backdrop at the rim of
+          bars and toolbars. Pointer events cover mouse, pen, and touch, and every interaction has a
+          keyboard path through Radix.
         </p>
       </Section>
     </DocArticle>

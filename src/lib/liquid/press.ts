@@ -15,15 +15,15 @@ const properties = [
   "--liquid-y",
   "--liquid-scale-x",
   "--liquid-scale-y",
-  "--liquid-light-x",
-  "--liquid-light-y",
-  "--liquid-light",
   "--liquid-press",
 ];
-const units = ["px", "px", "", "", "%", "%", "", ""];
-// offset x/y, scale x/y, light x/y, light, press
-const rest = [0, 0, 1, 1, 50, 25, 0, 0];
+const units = ["px", "px", "", "", ""];
+// offset x/y, scale x/y, press
+const rest = [0, 0, 1, 1, 0];
 const clampUnit = (value: number) => Math.max(-1, Math.min(1, value));
+// Typing and caret placement in a field inside the glass are not presses of the glass.
+const inField = (event: Event) =>
+  event.target instanceof Element && !!event.target.closest("input, textarea, [contenteditable]");
 
 /** Small controls grow more than large ones, as on iOS. */
 export function swellFor(width: number, height: number) {
@@ -41,12 +41,11 @@ export function pressedShape(width: number, height: number, drag: number[]) {
 }
 
 /**
- * Pointer light, hover attraction, and a press that swells the glass toward the finger.
+ * Hover attraction, and a press that swells the glass toward the finger and whitens it.
  * Native listeners decorate the element without replacing Radix or consumer handlers.
  */
 export class LiquidPress {
   private hover: number[] | null = null;
-  private light = [50, 25];
   private press: { id: number; x: number; y: number } | null = null;
   private drag = [0, 0];
   private keyboard = false;
@@ -78,7 +77,7 @@ export class LiquidPress {
 
   /** A springy pop, used when the content morphs. */
   pop() {
-    this.spring.kick([0, 0, 2.4, 2.4, 0, 0, 0, 0]);
+    this.spring.kick([0, 0, 2.4, 2.4, 0]);
   }
 
   destroy() {
@@ -95,11 +94,10 @@ export class LiquidPress {
   private target() {
     if (this.press || this.keyboard) {
       const shape = pressedShape(this.node.offsetWidth, this.node.offsetHeight, this.drag);
-      return [...shape, ...this.light, 1, 1];
+      return [...shape, 1];
     }
-    if (this.hover)
-      return [this.hover[0] * 2, this.hover[1] * 1.5, 1.012, 1.018, ...this.light, 1, 0];
-    return [0, 0, 1, 1, ...this.light, 0, 0];
+    if (this.hover) return [this.hover[0] * 2, this.hover[1] * 1.5, 1.012, 1.018, 0];
+    return rest;
   }
 
   private update() {
@@ -114,12 +112,11 @@ export class LiquidPress {
       clampUnit(((event.clientX - box.left) / box.width) * 2 - 1),
       clampUnit(((event.clientY - box.top) / box.height) * 2 - 1),
     ];
-    this.light = [(this.hover[0] + 1) * 50, (this.hover[1] + 1) * 50];
     if (!this.press) this.update();
   };
 
   private down = (event: PointerEvent) => {
-    if (event.button !== 0 || this.disabled()) return;
+    if (event.button !== 0 || this.disabled() || inField(event)) return;
     this.press = { id: event.pointerId, x: event.clientX, y: event.clientY };
     this.drag = [0, 0];
     this.stopTracking();
@@ -153,9 +150,9 @@ export class LiquidPress {
   };
 
   private keyDown = (event: KeyboardEvent) => {
-    if ((event.key !== " " && event.key !== "Enter") || event.repeat || this.disabled()) return;
+    if (event.key !== " " && event.key !== "Enter") return;
+    if (event.repeat || this.disabled() || inField(event)) return;
     this.keyboard = true;
-    this.light = [50, 50];
     this.update();
   };
 
@@ -241,7 +238,7 @@ export class LiquidMorph {
   }
 }
 
-/** Press, hover light, and content morph for one glass control. */
+/** Press, hover attraction, and content morph for one glass control. */
 export function useLiquidInteraction(node: HTMLElement | null) {
   useEffect(() => {
     if (!node) return;
