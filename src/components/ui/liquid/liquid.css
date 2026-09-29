@@ -1,8 +1,11 @@
-.liquid-surface {
+/* Material defaults live on the root, so a value set on any ancestor reaches its glass. */
+:root {
   --liquid-blur: 20px;
   --liquid-tint: 0.22;
   --liquid-ink: #172323;
   --liquid-fill: 255 255 255;
+}
+.liquid-surface {
   position: relative;
   color: var(--liquid-ink);
   background: rgb(var(--liquid-fill) / var(--liquid-tint));
@@ -118,13 +121,6 @@
   --liquid-ink: #a20c22;
   --liquid-fill: 255 200 208;
 }
-.liquid-button[data-liquid-variant="ghost"],
-.liquid-button[data-liquid-variant="link"] {
-  border-color: transparent;
-  box-shadow: none;
-  background: transparent;
-  backdrop-filter: none;
-}
 .liquid-button[data-liquid-variant="link"] {
   text-decoration: underline;
 }
@@ -186,6 +182,25 @@
 }
 .liquid-tab:hover:not(:disabled) {
   color: var(--liquid-ink);
+}
+/* An iOS tab bar: add `liquid-tabbar` to a TabsList to stack icons over labels. */
+.liquid-tabbar {
+  height: 66px;
+  padding: 5px;
+  gap: 0;
+}
+.liquid-tabbar .liquid-tab {
+  height: 54px;
+  min-width: 88px;
+  flex-direction: column;
+  gap: 3px;
+  padding-inline: 14px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.liquid-tabbar .liquid-tab svg {
+  width: 23px;
+  height: 23px;
 }
 .liquid-lens {
   position: absolute;
@@ -478,6 +493,14 @@
     --liquid-lens-fill: 120 120 128;
     --liquid-lens-alpha: 0.16;
   }
+}
+/* No glass until hovered or pressed, in every material. After the material overrides. */
+.liquid-button:is([data-liquid-variant="ghost"], [data-liquid-variant="link"]) {
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 /* Tinted glass, like iOS .glassProminent. Placed after the material overrides it replaces. */
 .liquid-button[data-liquid-variant="prominent"],

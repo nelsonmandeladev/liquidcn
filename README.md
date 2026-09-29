@@ -2,7 +2,7 @@
 
 **Liquid Glass for shadcn/ui.** Glass components that swell under your finger, lift a magnifying lens across tabs, and grow menus out of their buttons, the way iOS 26 does. Built on Radix primitives and installed as source from a shadcn registry.
 
-**[Playground →](https://liquidcn.snmandela.com)**
+**[Docs and live examples →](https://liquidcn.snmandela.com)**
 
 [![CI](https://github.com/nelsonmandeladev/liquidcn/actions/workflows/ci.yml/badge.svg)](https://github.com/nelsonmandeladev/liquidcn/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -72,7 +72,7 @@ Use `.dark` or `data-liquid-theme="dark"` for dark material, and `data-reduced-t
 - Radix keeps focus management, keyboard navigation, and ARIA semantics; the lens is decorative and hidden from assistive technology.
 - `prefers-reduced-motion` (or `data-reduced-motion="true"` on an ancestor) removes all movement; every interaction still works.
 - Reduced transparency, increased contrast, and forced colors are supported.
-- The playground is checked against WCAG 2.1 A/AA in CI.
+- Every page of the site is checked against WCAG 2.1 A/AA in CI.
 
 ## How it works
 

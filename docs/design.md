@@ -62,7 +62,7 @@ Springs run only while moving, write CSS custom properties directly, and never r
 - The lens shows an `inert`, `aria-hidden` copy of the list; real items keep their roles, names, and focus.
 - Reduced motion (`prefers-reduced-motion` or `data-reduced-motion="true"` on an ancestor) snaps every change and removes the lift, swell, and morphs.
 - Menus keep Radix focus management: keyboard open focuses the first item, and Escape returns focus to the trigger.
-- The playground itself passes axe WCAG 2.1 A/AA checks, which the UI tests enforce.
+- Every page of the site passes axe WCAG 2.1 A/AA checks, which the UI tests enforce.
 
 ## Not yet matched
 

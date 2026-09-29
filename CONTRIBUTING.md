@@ -19,7 +19,7 @@ pnpm dev                                # http://localhost:3000
 
 | Script                | What it does                                                             |
 | --------------------- | ------------------------------------------------------------------------ |
-| `pnpm dev`            | Start the playground with hot reload (`next dev`).                       |
+| `pnpm dev`            | Start the site with hot reload (`next dev`).                             |
 | `pnpm build`          | Production build (`next build`).                                         |
 | `pnpm registry:build` | Validate `registry.json` and write `public/r/*.json`. Commit the output. |
 | `pnpm check`          | Lint, format check, type check, and unit/component tests. Run it often.  |
@@ -42,7 +42,7 @@ These are enforced by ESLint, Git hooks, and CI:
 
 - `tests/unit` covers pure logic: the spring, lens geometry, menu morph geometry, press shaping, and the registry contract. Prefer extracting logic into pure functions and testing it here.
 - `tests/components` renders components in jsdom with Testing Library. Use it for behavior a consumer relies on: accessibility of the lens copy, ref forwarding, the menu's press guard, cleanup on unmount. jsdom has no layout, so do not assert positions here.
-- `e2e` drives the playground in real Chromium, with real layout and input: lens landing positions, drag-to-select, keyboard use, reduced motion, WCAG A/AA checks with axe, and the served registry.
+- `e2e` drives the site in real Chromium, with real layout and input: lens landing positions, drag-to-select, keyboard use, reduced motion, WCAG A/AA checks with axe, and the served registry.
 
 A bug fix should come with a test that fails without the fix.
 
@@ -62,7 +62,7 @@ See [docs/design.md](docs/design.md) for the motion language and [docs/architect
 2. Wrap it in `src/components/ui/liquid/<name>.tsx`. Reuse `useLiquidInteraction` (press and morph) and `useLiquidIndicator` (a selection lens) from `src/lib/liquid/` before writing new motion; new motion modules go there too.
 3. Add styles to `src/components/ui/liquid/liquid.css`, including reduced-motion, reduced-transparency, dark, and forced-colors handling.
 4. Add an item to `registry.json` listing **every** file it needs, with motion modules typed `registry:lib`. `tests/unit/registry.test.ts` fails if an imported module or package is missing or a file would install in the wrong place. Run `pnpm registry:build` and commit `public/r/`.
-5. Add a demo in `src/playground/demos/` and an entry in `src/playground/catalog.ts`.
+5. Document it in `src/examples/<slug>/`: a `docs.ts` and one file per example, then add it to the list in `src/examples/index.ts`. Its docs page, sidebar entry, and accessibility checks follow automatically.
 6. Add component tests and at least one UI test.
 7. Document it in the README.
 

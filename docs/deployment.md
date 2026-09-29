@@ -1,6 +1,6 @@
 # Deployment
 
-The playground and the registry deploy together as one Next.js app on Vercel, at **https://liquidcn.snmandela.com**. The registry is served from `/r/`, for example `https://liquidcn.snmandela.com/r/liquid-tabs.json`.
+The site and the registry deploy together as one Next.js app on Vercel, at **https://liquidcn.snmandela.com**. The registry is served from `/r/`, for example `https://liquidcn.snmandela.com/r/liquid-tabs.json`.
 
 ## Vercel project
 
@@ -9,7 +9,7 @@ The playground and the registry deploy together as one Next.js app on Vercel, at
 3. pnpm version: the repository pins `pnpm@12.6.0` in `packageManager`. If the build log shows a different pnpm, add the environment variable `ENABLE_EXPERIMENTAL_COREPACK=1` so Vercel uses the pinned version.
 4. Node version: 22.x (Project Settings, General).
 
-Preview deployments for pull requests work without extra setup; the playground computes install commands from whatever origin serves it.
+Preview deployments for pull requests work without extra setup; the docs compute install commands from whatever origin serves them.
 
 ## Custom domain
 

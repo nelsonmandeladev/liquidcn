@@ -1,6 +1,6 @@
 # Architecture
 
-liquidcn has two parts: a **component library** in `src/components/ui/liquid/` and `src/lib/liquid/`, distributed as source through a shadcn registry, and a **playground** in `src/playground/` that demonstrates it and hosts the registry.
+liquidcn has two parts: a **component library** in `src/components/ui/liquid/` and `src/lib/liquid/`, distributed as source through a shadcn registry, and a **website** (home page and docs) that demonstrates it and hosts the registry.
 
 ## Component library
 
@@ -54,9 +54,26 @@ Radix opens a dropdown on `pointerdown` and selects an item on `pointerup` even 
 
 `registry.json` lists each item and the files it ships. `pnpm registry:build` (`scripts/build-registry.mjs`) validates it with the official shadcn schemas and writes `public/r/*.json` with the sources embedded, which Next.js serves as static files. The output is committed; run the command after changing `registry.json` or any file it lists, and CI fails if the committed JSON is stale. `tests/unit/registry.test.ts` fails if an item's files import a local module or package the item does not ship or declare, or if the shadcn CLI would install a file anywhere other than where its imports expect it.
 
-## Playground
+## Website
 
-A Next.js App Router app. `src/app/page.tsx` renders the client `Playground`, which is split into the catalog (`catalog.ts`), settings (`settings.ts`), chrome, preview, inspector, and demos. Settings are written to `document.documentElement`, so portaled menus and toasts follow the theme, motion, and transparency controls. Public addresses live in `src/site.ts`.
+A Next.js App Router app: the home page at `/`, guides under `/docs`, and one page per component at `/docs/components/<slug>`, all prerendered. Public addresses live in `src/site.ts`.
+
+| Path                                | Responsibility                                                                                          |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `examples/<slug>/docs.ts`           | What a person writes about a component: hint, examples, API, motion numbers, accessibility notes.       |
+| `examples/<slug>/*.tsx`             | Examples. Each is rendered live and shown as its own source, so it imports only the public API.         |
+| `examples/index.ts`                 | The list of documented components, joined with their `registry.json` items (title, description, files). |
+| `app/docs/components/[slug]/`       | Generates a page per documented component with `generateStaticParams`; unknown slugs are 404s.          |
+| `www/chrome/`                       | Floating glass header, footer, theme toggle, material popover, mobile menu.                             |
+| `www/docs/`                         | Docs shell: sidebar, table of contents, pager, previews, package-manager commands, tables.              |
+| `www/home/`                         | Hero and the showcase of examples on photos.                                                            |
+| `www/stage.tsx`                     | A photo for glass to sit on. Every stage crops one image, so the browser downloads it once.             |
+| `www/highlight.ts`                  | Build-time syntax highlighting with Shiki; token colors are CSS variables that follow the theme.        |
+| `www/material.ts`, `preferences.ts` | Theme and material settings, restored before first paint by an inline script, then external stores.     |
+
+**Adding a component to the site** takes one folder in `src/examples/` and one line in `src/examples/index.ts`. The route, sidebar, components index, pager, sitemap, and the accessibility checks in `e2e/site.spec.ts` all derive from that list and `registry.json`. `tests/unit/docs.test.ts` fails if a registry item has no docs, an example file is missing, or an example imports anything a reader could not install.
+
+**The site uses the library on itself.** The header's current section and the docs sidebar's current page sit under `LiquidLens` (attached with `useLiquidIndicator` to plain links), so the lens travels when the page changes. Preview/Code switches and package-manager tabs are liquid `Tabs`; the mobile menu is a liquid `DropdownMenu`; icon buttons are liquid `Button`s. The material controls write the same custom properties a consumer would, on `document.documentElement`, so portaled menus and toasts follow them.
 
 ## Testing layers
 

@@ -1,0 +1,190 @@
+/* The floating header. Its wrapper spans the page but lets clicks through its empty edges. */
+.site-header-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 12px var(--gutter) 0;
+  pointer-events: none;
+}
+
+.site-header {
+  pointer-events: auto;
+  max-width: var(--page);
+  height: 60px;
+  margin: 0 auto;
+  padding: 0 8px 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-radius: 999px;
+  /* Glass, but with enough fill to keep links legible over anything scrolling beneath. */
+  background: rgb(var(--liquid-fill) / max(var(--liquid-tint), 0.64));
+}
+
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--liquid-ink);
+  font: 650 17px/1 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.site-logo {
+  width: 28px;
+  height: 28px;
+}
+
+.site-nav {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+}
+
+.site-nav-link {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--liquid-ink) 74%, transparent);
+  transition: color 180ms ease;
+}
+
+.site-nav-link:hover,
+.site-nav-link[aria-current] {
+  color: var(--liquid-ink);
+}
+
+/* Once the lens lands, its tinted copy stands in for the current label. */
+.site-nav[data-liquid-lens="rest"] .site-nav-link[aria-current]:not(.liquid-lens *) {
+  color: transparent;
+}
+
+.site-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.site-actions .liquid-button svg {
+  width: 19px;
+  height: 19px;
+}
+
+.site-mobile-nav {
+  display: none;
+}
+
+.site-mobile-menu {
+  min-width: 232px;
+}
+
+.site-mobile-menu [aria-current="page"] {
+  color: var(--liquid-accent);
+  font-weight: 600;
+}
+
+.dark .site-mobile-menu [aria-current="page"] {
+  color: #5aabff;
+}
+
+.theme-icon-dark,
+.dark .theme-icon-light {
+  display: none;
+}
+
+.dark .theme-icon-dark {
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .site-nav-wrap {
+    display: none;
+  }
+
+  .site-mobile-nav {
+    display: block;
+  }
+
+  .site-header {
+    height: 56px;
+    padding-left: 16px;
+  }
+}
+
+.site-footer {
+  width: calc(100% - 2 * var(--gutter));
+  max-width: calc(var(--page) - 2 * var(--gutter));
+  margin: 96px auto 0;
+  padding: 28px 0 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 32px;
+  border-top: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 3px;
+}
+
+.site-footer a:hover {
+  text-decoration-color: currentColor;
+}
+
+.not-found {
+  width: 100%;
+  max-width: var(--page);
+  margin: 0 auto;
+  padding: 24px var(--gutter) 0;
+}
+
+.stage.not-found-stage {
+  min-height: min(640px, 72dvh);
+}
+
+.not-found-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 36px 40px 32px;
+  border-radius: 32px;
+  text-align: center;
+  text-shadow: none;
+  color: var(--liquid-ink);
+}
+
+.not-found-card h1 {
+  margin: 0;
+  font: 700 32px/1.1 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+.not-found-card p {
+  margin: 0 0 12px;
+  font-weight: 500;
+}
+
+.not-found-card .not-found-code {
+  margin: 0;
+  font: 600 13px/1 var(--font-code);
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}

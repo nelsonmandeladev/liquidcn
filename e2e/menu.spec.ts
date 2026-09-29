@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { activate, centerOf, openComponent } from "./support";
 
 test.describe("dropdown menu", () => {
-  test.beforeEach(({ page }) => openComponent(page, "Dropdown menu"));
+  test.beforeEach(({ page }) => openComponent(page, "dropdown-menu"));
 
   test("opens over its trigger without choosing the item under the pointer", async ({
     page,

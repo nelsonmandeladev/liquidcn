@@ -2,7 +2,7 @@
 //
 //   node scripts/capture-motion.mjs <scenario> [--out motion-frames] [--slow 10] [--url http://localhost:3000]
 //
-// Needs the playground running (`pnpm dev`) and Playwright's Chromium. When ffmpeg is on PATH
+// Needs the site running (`pnpm dev`) and Playwright's Chromium. When ffmpeg is on PATH
 // (or FFMPEG points to it), frames are also tiled into one contact sheet per scenario.
 import { chromium } from "@playwright/test";
 import { execFileSync } from "node:child_process";
@@ -31,7 +31,7 @@ const phone = (page) => page.getByRole("tablist", { name: "Phone" });
 // The two do not combine: the DevTools rate also delays frame timestamps.
 const scenarios = {
   "tabs-tap": {
-    component: "Segmented control",
+    component: "tabs",
     clock: "spring",
     frame: phone,
     times: [0, 40, 90, 140, 200, 260, 340, 450, 700],
@@ -43,7 +43,7 @@ const scenarios = {
     },
   },
   "tabs-drag": {
-    component: "Segmented control",
+    component: "tabs",
     clock: "spring",
     frame: phone,
     times: [0, 60, 120, 180, 240, 300, 360, 420, 500, 650, 900],
@@ -56,7 +56,7 @@ const scenarios = {
     },
   },
   "menu-open": {
-    component: "Dropdown menu",
+    component: "dropdown-menu",
     clock: "css",
     frame: (page) => page.getByRole("button", { name: "Options" }),
     pad: [200, 90, 200, 210],
@@ -64,7 +64,7 @@ const scenarios = {
     act: (page) => page.getByRole("button", { name: "Options" }).click(),
   },
   "menu-close": {
-    component: "Dropdown menu",
+    component: "dropdown-menu",
     clock: "css",
     frame: (page) => page.getByRole("button", { name: "Options" }),
     pad: [200, 90, 200, 210],
@@ -76,7 +76,7 @@ const scenarios = {
     act: (page) => page.keyboard.press("Escape"),
   },
   "button-morph": {
-    component: "Button",
+    component: "button",
     clock: "spring",
     frame: (page) => page.getByRole("button", { name: "Edit" }),
     pad: [140, 120, 140, 40],
@@ -158,11 +158,11 @@ async function capture(name) {
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
     const startClock = await slowDown(page, scenario.clock);
-    await page.goto(values.url, { waitUntil: "networkidle" });
-    await page
-      .getByRole("navigation", { name: "Components" })
-      .getByRole("button", { name: scenario.component })
-      .click();
+    await page.goto(`${values.url}/docs/components/${scenario.component}`, {
+      waitUntil: "networkidle",
+    });
+    // Center the element so the clip stays inside the window and clear of the header.
+    await scenario.frame(page).evaluate((element) => element.scrollIntoView({ block: "center" }));
     await sleep(500);
     await startClock();
     await scenario.prepare?.(page);

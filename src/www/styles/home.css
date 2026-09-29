@@ -1,0 +1,216 @@
+.home {
+  width: 100%;
+  max-width: var(--page);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(48px, 9vh, 104px) 0 clamp(40px, 7vh, 72px);
+  text-align: center;
+}
+
+.hero-badge.liquid-button {
+  min-height: 34px;
+  gap: 6px;
+  padding-inline: 14px 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.hero-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+.hero h1 {
+  margin: 24px 0 0;
+  font: 700 clamp(2.9rem, 7.4vw, 5.75rem)/0.98 var(--font-display);
+  letter-spacing: -0.048em;
+  text-wrap: balance;
+}
+
+.hero-lead {
+  max-width: 38rem;
+  margin: 24px 0 0;
+  color: var(--muted-foreground);
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.hero-actions {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* A bento of screens. Four columns, two rows of tall tiles, one row of small ones. */
+.showcase {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 280px;
+  grid-template-areas:
+    "photos photos phone material"
+    "photos photos phone material"
+    "button menu toast tools";
+  gap: 16px;
+}
+
+.tile {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 28px;
+}
+
+.tile > .stage {
+  flex: 1;
+  min-height: 0;
+}
+
+.tile-photos {
+  grid-area: photos;
+}
+
+.tile-phone {
+  grid-area: phone;
+}
+
+.tile-material {
+  grid-area: material;
+}
+
+.tile-button {
+  grid-area: button;
+}
+
+.tile-menu {
+  grid-area: menu;
+}
+
+.tile-toast {
+  grid-area: toast;
+}
+
+.tile-tools {
+  grid-area: tools;
+}
+
+.tile-photos .stage-content {
+  justify-content: space-between;
+  padding: 88px 24px 32px;
+}
+
+.tile-phone .stage-content {
+  padding: 64px 16px 20px;
+}
+
+.tile-phone [data-slot="tabs"] {
+  flex: 1;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.tile-phone [role="tabpanel"] {
+  padding-top: 20px;
+  font: 700 30px/1.1 var(--font-display);
+  letter-spacing: -0.025em;
+}
+
+.tile-material {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 22px 18px;
+  background: var(--muted);
+}
+
+.tile-material h3 {
+  margin: 0;
+  font: 650 19px/1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.tile-material > p {
+  margin: 6px 0 20px;
+  color: var(--muted-foreground);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.home-install {
+  margin-top: 80px;
+  padding: 36px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: 32px;
+  border-radius: 32px;
+  background: var(--muted);
+}
+
+.home-install h2 {
+  margin: 0;
+  font: 700 clamp(1.6rem, 3vw, 2.2rem)/1.15 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+.home-install p {
+  margin: 10px 0 0;
+  color: var(--muted-foreground);
+}
+
+.home-install .command {
+  margin: 0;
+  background: var(--background);
+}
+
+@media (max-width: 1199px) {
+  .showcase {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "photos photos"
+      "photos photos"
+      "phone material"
+      "phone material"
+      "button menu"
+      "toast tools";
+  }
+}
+
+@media (max-width: 899px) {
+  .home-install {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 28px 20px;
+  }
+}
+
+@media (max-width: 679px) {
+  .showcase {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+    grid-template-areas: "photos" "phone" "button" "menu" "toast" "tools" "material";
+  }
+
+  .tile {
+    min-height: 300px;
+  }
+
+  .tile-photos {
+    min-height: 460px;
+  }
+
+  .tile-phone {
+    min-height: 440px;
+  }
+
+  .tile-photos .stage-content {
+    padding-inline: 12px;
+  }
+}

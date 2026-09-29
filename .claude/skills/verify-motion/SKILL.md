@@ -1,6 +1,6 @@
 ---
 name: verify-motion
-description: Check how a liquidcn interaction actually moves, by capturing slowed-down frames from the running playground and, when there is one, comparing them with frames from a reference screen recording (for example an iOS 26 video). Use after changing anything in src/components/ui/liquid/liquid.css or src/lib/liquid/ (motion.ts, press.ts, lens*.ts, menu-morph.ts), when tuning springs or timings, or when asked whether a component feels like the reference.
+description: Check how a liquidcn interaction actually moves, by capturing slowed-down frames from the running site and, when there is one, comparing them with frames from a reference screen recording (for example an iOS 26 video). Use after changing anything in src/components/ui/liquid/liquid.css or src/lib/liquid/ (motion.ts, press.ts, lens*.ts, menu-morph.ts), when tuning springs or timings, or when asked whether a component feels like the reference.
 ---
 
 # Verify motion
@@ -9,7 +9,7 @@ Unit and UI tests prove behavior. They cannot tell you whether the glass _feels_
 
 ## 1. Capture the implementation
 
-The playground must be running (`pnpm dev`, http://localhost:3000). Then:
+The site must be running (`pnpm dev`, http://localhost:3000). Then:
 
 ```sh
 node scripts/capture-motion.mjs                      # every scenario
@@ -19,7 +19,7 @@ node scripts/capture-motion.mjs menu-close --slow 20 --out motion-frames
 
 Scenarios: `tabs-tap`, `tabs-drag`, `menu-open`, `menu-close`, `button-morph`. Frames land in `motion-frames/<scenario>/` (git-ignored), and the script prints the virtual time of each frame. With ffmpeg available (on PATH, or `FFMPEG=/path/to/ffmpeg`), it also writes one contact sheet per scenario, `motion-frames/<scenario>.png`. Read the sheet image to review a whole sequence at once.
 
-To add a scenario, add an entry to `scenarios` in `scripts/capture-motion.mjs`: the playground component, a `clock`, the element to frame, frame times in ms, and the action.
+To add a scenario, add an entry to `scenarios` in `scripts/capture-motion.mjs`: the component page slug, a `clock`, the element to frame, frame times in ms, and the action.
 
 **Choosing the clock.** `spring` slows `requestAnimationFrame` and `performance.now` in the page; use it for anything spring-driven (lens, press, width morph). `css` slows CSS animations through the DevTools animation domain; use it for keyframes (menu unfold and fold). Do not combine them: the DevTools rate also delays frame timestamps, and springs then stall. If frames show nothing moving or a lens that vanishes, the wrong clock is the usual cause.
 

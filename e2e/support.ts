@@ -1,16 +1,51 @@
+import { readFileSync } from "node:fs";
 import { expect, type Locator, type Page } from "@playwright/test";
+import { guides } from "../src/www/nav";
 
-export const componentNames = [
-  "Button",
-  "Segmented control",
-  "Dropdown menu",
-  "Toolbar",
-  "Toast notification",
+const registry = JSON.parse(readFileSync("registry.json", "utf8")) as { items: { name: string }[] };
+
+/** Every component page, one per registry item, so new components are tested automatically. */
+export const componentSlugs = registry.items.map((item) => item.name.replace(/^liquid-/, ""));
+
+/** Every page of the site. */
+export const sitePages = [
+  "/",
+  ...guides.map((link) => link.href),
+  ...componentSlugs.map((slug) => `/docs/components/${slug}`),
 ];
 
-export async function openComponent(page: Page, name: string) {
-  await page.goto("/");
-  await page.getByRole("navigation", { name: "Components" }).getByRole("button", { name }).click();
+/**
+ * Pages are static HTML, so input sent before hydration is lost. Every page mounts at least one
+ * lens once React has hydrated, and a lens marks its list with `data-liquid-indicator`.
+ */
+export async function hydrated(page: Page) {
+  await expect(page.locator("[data-liquid-indicator]").first()).toBeAttached();
+}
+
+export async function open(page: Page, path: string) {
+  await page.goto(path);
+  await hydrated(page);
+}
+
+export async function openComponent(page: Page, slug: string) {
+  await open(page, `/docs/components/${slug}`);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+}
+
+/** A lens list itself, not the inert copy inside its lens that carries the same classes. */
+export const lensList = (scope: Locator, className: string) =>
+  scope.locator(`.${className}:not(.liquid-lens-optics)`);
+
+export function computed(locator: Locator, property: string) {
+  return locator.evaluate(
+    (element, name) => getComputedStyle(element).getPropertyValue(name),
+    property,
+  );
+}
+
+/** Scroll an element to the middle of the window, clear of the floating header. */
+export async function reveal(locator: Locator) {
+  await locator.evaluate((element) => element.scrollIntoView({ block: "center" }));
 }
 
 /** Lens state of a tab list or toolbar: resting/active, lift, and its left edge. */

@@ -1,0 +1,105 @@
+/* Token colors follow Xcode's default themes. Shiki writes var(--code-*) into each span. */
+:root {
+  --code-fg: #1d1d1f;
+  --code-comment: #5d6c79;
+  --code-keyword: #9b2393;
+  --code-string: #c41a16;
+  --code-tag: #3900a0;
+  --code-attribute: #815f03;
+  --code-function: #326d74;
+  --code-constant: #1c00cf;
+  --code-punctuation: #515154;
+}
+
+.dark {
+  --code-fg: #e3e3e6;
+  --code-comment: #7f8c98;
+  --code-keyword: #ff7ab2;
+  --code-string: #ff8170;
+  --code-tag: #dabaff;
+  --code-attribute: #cc9768;
+  --code-function: #67b7a4;
+  --code-constant: #d9c97c;
+  --code-punctuation: #b4b4b8;
+}
+
+.code-block {
+  position: relative;
+  margin: 16px 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--muted);
+}
+
+.code-block figcaption {
+  padding: 14px 20px 0;
+  color: var(--muted-foreground);
+  font: 500 12.5px/1.4 var(--font-code);
+}
+
+.code-body pre {
+  margin: 0;
+  padding: 18px 64px 20px 20px;
+  overflow-x: auto;
+  font: 13.5px/1.7 var(--font-code);
+  tab-size: 2;
+}
+
+.code-body pre:focus-visible,
+.command-body pre:focus-visible {
+  outline-offset: -3px;
+  border-radius: 20px;
+}
+
+.copy-button.liquid-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  min-width: 38px;
+  min-height: 38px;
+  width: 38px;
+  height: 38px;
+  color: var(--muted-foreground);
+}
+
+.copy-button.liquid-button:hover {
+  color: var(--foreground);
+}
+
+.copy-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* A package-manager command: segmented tabs above one line of shell. */
+.command {
+  position: relative;
+  margin: 16px 0;
+  border-radius: 20px;
+  background: var(--muted);
+  gap: 0;
+}
+
+.command-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 8px 0;
+}
+
+.command-bar .copy-button.liquid-button {
+  position: static;
+}
+
+.command-body pre {
+  margin: 0;
+  padding: 14px 20px 18px;
+  overflow-x: auto;
+  color: var(--code-fg);
+  font: 13.5px/1.6 var(--font-code);
+  white-space: pre;
+}
+
+.command-runner {
+  color: var(--code-keyword);
+}

@@ -1,0 +1,118 @@
+/* A photo for glass to sit on. Glass over nothing is invisible; the stage gives it a world. */
+.stage {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: 400px;
+  overflow: hidden;
+  border-radius: 28px;
+  background: #7ca3aa;
+}
+
+.stage-photo {
+  z-index: -1;
+  object-fit: cover;
+  transition: filter 400ms ease;
+}
+
+.dark .stage-photo {
+  filter: brightness(0.72) saturate(1.05);
+}
+
+.stage-content {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 60px 24px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.42);
+}
+
+.stage .liquid-surface {
+  text-shadow: none;
+}
+
+/*
+ * Glass ink per crop: white over forest and water, dark over sky and stone. Plain text on the
+ * photo stays white with a shadow, since it may cross from sky into forest as the layout wraps.
+ */
+.stage[data-ink="light"] {
+  --liquid-ink: #fff;
+}
+
+.stage[data-ink="light"] .liquid-surface {
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.22);
+}
+
+/* Nearly opaque glass is light enough for dark ink over any crop. */
+:root[data-glass="opaque"]:not(.dark) .stage {
+  --liquid-ink: #172323;
+}
+
+:root[data-glass="opaque"]:not(.dark) .stage .liquid-surface {
+  text-shadow: none;
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  :root:not(.dark) .stage {
+    --liquid-ink: #172323;
+  }
+
+  :root:not(.dark) .stage .liquid-surface {
+    text-shadow: none;
+  }
+}
+
+/* What to try, on a small pane of glass so it reads over any crop. */
+.stage-hint {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  max-width: calc(100% - 32px);
+  margin: 0;
+  padding: 6px 13px;
+  border-radius: 16px;
+  color: var(--liquid-ink);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.tile-label {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 10px 0 13px;
+  border-radius: 999px;
+  color: var(--liquid-ink);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.tile-label:hover {
+  background: rgb(var(--liquid-fill) / calc(var(--liquid-tint) + 0.14));
+}
+
+.tile-label svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (forced-colors: active) {
+  .stage-photo {
+    display: none;
+  }
+}

@@ -4,7 +4,7 @@ import { activate, centerOf, openComponent } from "./support";
 const scaleOf = (element: Element) => Number(getComputedStyle(element).scale.split(" ")[0]) || 1;
 
 test.describe("button", () => {
-  test.beforeEach(({ page }) => openComponent(page, "Button"));
+  test.beforeEach(({ page }) => openComponent(page, "button"));
 
   test("swells while pressed and settles after release", async ({ page, isMobile }) => {
     test.skip(isMobile, "Holding a press is mouse-only in Playwright.");

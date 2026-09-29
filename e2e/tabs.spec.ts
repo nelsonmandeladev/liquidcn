@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { activate, centerOf, expectLensAt, lensOf, openComponent } from "./support";
+import { activate, centerOf, expectLensAt, lensOf, openComponent, reveal } from "./support";
 
 test.describe("tabs lens", () => {
-  test.beforeEach(({ page }) => openComponent(page, "Segmented control"));
+  test.beforeEach(({ page }) => openComponent(page, "tabs"));
 
   test("a tap selects the tab and the lens lands on it", async ({ page, hasTouch }) => {
     const bar = page.getByRole("tablist", { name: "Phone" });
@@ -16,6 +16,7 @@ test.describe("tabs lens", () => {
   test("the lens lifts while pressed and lands on release", async ({ page, isMobile }) => {
     test.skip(isMobile, "Multi-step pointer input is mouse-only in Playwright.");
     const bar = page.getByRole("tablist", { name: "Phone" });
+    await reveal(bar);
     const point = await centerOf(bar.getByRole("tab", { name: "Keypad" }));
     await page.mouse.move(point.x, point.y);
     await page.mouse.down();
@@ -29,6 +30,7 @@ test.describe("tabs lens", () => {
   test("dragging across tabs selects where the lens is released", async ({ page, isMobile }) => {
     test.skip(isMobile, "Multi-step pointer input is mouse-only in Playwright.");
     const bar = page.getByRole("tablist", { name: "Phone" });
+    await reveal(bar);
     const contacts = bar.getByRole("tab", { name: "Contacts" });
     const from = await centerOf(bar.getByRole("tab", { name: "Calls" }));
     const to = await centerOf(contacts);
@@ -60,7 +62,7 @@ test.describe("tabs lens with reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
 
   test("snaps to the selection without lifting", async ({ page, hasTouch }) => {
-    await openComponent(page, "Segmented control");
+    await openComponent(page, "tabs");
     const bar = page.getByRole("tablist", { name: "Phone" });
     const calls = bar.getByRole("tab", { name: "Calls" });
     await activate(calls, hasTouch);

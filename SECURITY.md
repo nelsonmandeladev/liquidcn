@@ -12,4 +12,4 @@ You should get a first response within a week. We will agree on a fix and a disc
 
 ## Scope
 
-In scope: the component sources in `src/components/ui/` and `src/lib/liquid/`, the registry JSON served from `/r/`, and the playground site. Vulnerabilities in dependencies (Radix UI, Sonner, Next.js, and others) should be reported to those projects; tell us too if liquidcn's use of them makes the issue worse.
+In scope: the component sources in `src/components/ui/` and `src/lib/liquid/`, the registry JSON served from `/r/`, and the website. Vulnerabilities in dependencies (Radix UI, Sonner, Next.js, and others) should be reported to those projects; tell us too if liquidcn's use of them makes the issue worse.

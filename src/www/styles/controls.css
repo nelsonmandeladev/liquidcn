@@ -1,0 +1,265 @@
+.material-controls {
+  --control-track: rgb(118 118 128 / 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dark .material-controls {
+  --control-track: rgb(118 118 128 / 0.36);
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.control-row output {
+  color: var(--muted-foreground);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.control-range {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* An iOS slider. While dragged, the thumb turns into a clear lens, as in iOS 26. */
+.control-range input {
+  width: 100%;
+  height: 30px;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.control-range input::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 999px;
+  background:
+    linear-gradient(var(--liquid-accent), var(--liquid-accent)) 0 / var(--fill, 50%) 100% no-repeat,
+    var(--control-track);
+}
+
+.control-range input::-moz-range-track {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--control-track);
+}
+
+.control-range input::-moz-range-progress {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--liquid-accent);
+}
+
+.control-range input::-webkit-slider-thumb {
+  width: 28px;
+  height: 22px;
+  margin-top: -8.5px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0.5px 4px rgb(0 0 0 / 0.12),
+    0 6px 13px rgb(0 0 0 / 0.12);
+  appearance: none;
+  -webkit-appearance: none;
+  transition:
+    transform 320ms cubic-bezier(0.2, 0.9, 0.3, 1.3),
+    background 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.control-range input::-moz-range-thumb {
+  width: 28px;
+  height: 22px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0.5px 4px rgb(0 0 0 / 0.12),
+    0 6px 13px rgb(0 0 0 / 0.12);
+  transition:
+    transform 320ms cubic-bezier(0.2, 0.9, 0.3, 1.3),
+    background 200ms ease;
+}
+
+.control-range input:active::-webkit-slider-thumb {
+  transform: scale(1.45, 1.6);
+  background: rgb(255 255 255 / 0.28);
+  box-shadow:
+    inset 0 1px 1.5px rgb(255 255 255 / 0.95),
+    inset 1.5px 0 2px -1px rgb(255 110 190 / 0.6),
+    inset -1.5px 0 2px -1px rgb(70 200 255 / 0.6),
+    0 6px 16px rgb(0 20 25 / 0.18);
+}
+
+.control-range input:active::-moz-range-thumb {
+  transform: scale(1.45, 1.6);
+  background: rgb(255 255 255 / 0.4);
+}
+
+.control-scale {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted-foreground);
+  font-size: 11.5px;
+}
+
+.control-switches {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+/* An iOS switch. Pressing stretches the thumb toward where it will go. */
+.switch {
+  flex: none;
+  width: 50px;
+  height: 30px;
+  padding: 2px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(120 120 128 / 0.3);
+  box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.06);
+  transition: background 250ms ease;
+}
+
+.switch[data-state="checked"] {
+  background: var(--liquid-accent);
+}
+
+.switch-thumb {
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 3px 8px rgb(0 0 0 / 0.15),
+    0 1px 1px rgb(0 0 0 / 0.06);
+  transition:
+    translate 300ms cubic-bezier(0.2, 0.9, 0.3, 1.2),
+    width 200ms ease;
+}
+
+.switch[data-state="checked"] .switch-thumb {
+  translate: 20px 0;
+}
+
+.switch:active .switch-thumb {
+  width: 32px;
+}
+
+.switch[data-state="checked"]:active .switch-thumb {
+  translate: 14px 0;
+}
+
+.control-reset {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  color: var(--muted-foreground);
+  font-size: 12.5px;
+}
+
+.control-reset:hover {
+  color: var(--foreground);
+}
+
+.control-reset svg {
+  width: 13px;
+  height: 13px;
+}
+
+.material-popover {
+  z-index: 60;
+  width: min(300px, calc(100vw - 24px));
+  padding: 18px 18px 12px;
+  border-radius: 28px;
+  background: rgb(var(--liquid-fill) / max(var(--liquid-tint), 0.8));
+  color: var(--liquid-ink);
+  transform-origin: var(--radix-popover-content-transform-origin);
+  animation: popover-in 380ms cubic-bezier(0.2, 0.9, 0.25, 1.15);
+}
+
+.material-popover[data-state="closed"] {
+  animation: popover-out 160ms ease-in forwards;
+}
+
+.material-popover .material-controls {
+  margin-top: 14px;
+}
+
+.material-popover-title {
+  margin: 0;
+  font-weight: 650;
+}
+
+.material-popover-note {
+  margin: 2px 0 0;
+  color: var(--muted-foreground);
+  font-size: 12.5px;
+}
+
+.material-popover .control-row output,
+.material-popover .control-scale,
+.material-popover .control-reset,
+.material-popover-note {
+  color: color-mix(in srgb, var(--liquid-ink) 64%, transparent);
+}
+
+@keyframes popover-in {
+  from {
+    opacity: 0;
+    scale: 0.86;
+    filter: blur(6px);
+  }
+}
+
+@keyframes popover-out {
+  to {
+    opacity: 0;
+    scale: 0.92;
+    filter: blur(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .material-popover,
+  .switch,
+  .switch-thumb {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .control-range input::-webkit-slider-thumb {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+[data-reduced-motion="true"] .material-popover,
+[data-reduced-motion="true"] .switch,
+[data-reduced-motion="true"] .switch-thumb {
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-reduced-motion="true"] .control-range input::-webkit-slider-thumb {
+  transition: none;
+  transform: none !important;
+}

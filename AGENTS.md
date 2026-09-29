@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # liquidcn agent guide
 
-liquidcn is an open-source shadcn/ui registry of Liquid Glass components (iOS 26 style) built on Radix. The library in `src/components/ui/liquid/` (wrappers and styles) and `src/lib/liquid/` (motion modules) is distributed as source, alongside the base shadcn components in `src/components/ui/`; the Next.js playground in `src/playground/` demonstrates it and serves the registry from `/r/`.
+liquidcn is an open-source shadcn/ui registry of Liquid Glass components (iOS 26 style) built on Radix. The library in `src/components/ui/liquid/` (wrappers and styles) and `src/lib/liquid/` (motion modules) is distributed as source, alongside the base shadcn components in `src/components/ui/`; the Next.js site (home page and docs, in `src/app/` and `src/www/`) demonstrates it and serves the registry from `/r/`. Each component's docs and live examples live in `src/examples/<slug>/`.
 
 ## Before you change anything
 
@@ -22,7 +22,7 @@ liquidcn is an open-source shadcn/ui registry of Liquid Glass components (iOS 26
 
 | Task                               | Command                                   |
 | ---------------------------------- | ----------------------------------------- |
-| Start the playground               | `pnpm dev` (http://localhost:3000)        |
+| Start the site                     | `pnpm dev` (http://localhost:3000)        |
 | Everything CI checks except UI     | `pnpm check`                              |
 | Unit and component tests           | `pnpm test`                               |
 | UI tests (desktop and touch phone) | `pnpm test:e2e`                           |
