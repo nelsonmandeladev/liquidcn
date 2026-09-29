@@ -1,5 +1,5 @@
-import App from "@/App";
+import { Playground } from "@/playground/playground";
 
 export default function Page() {
-  return <App />;
+  return <Playground />;
 }

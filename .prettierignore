@@ -1,0 +1,14 @@
+# Generated
+.next/
+out/
+dist/
+coverage/
+playwright-report/
+test-results/
+public/r/
+next-env.d.ts
+pnpm-lock.yaml
+
+# Rewritten by `next dev`; formatting it would only create churn.
+AGENTS.md
+CLAUDE.md

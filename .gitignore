@@ -6,3 +6,16 @@ next-env.d.ts
 *.tsbuildinfo
 .env*
 !.env.example
+.vercel/
+
+# Tests
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# Motion captures from scripts/capture-motion.mjs
+motion-frames/
+
+# Personal agent settings
+.claude/settings.local.json

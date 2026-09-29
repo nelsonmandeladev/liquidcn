@@ -2,15 +2,41 @@
   "name": "liquidcn",
   "version": "0.1.0",
   "private": true,
+  "description": "Liquid Glass components for shadcn/ui: spring-driven glass on Radix primitives, installed from a registry.",
+  "license": "MIT",
+  "homepage": "https://liquidcn.snmandela.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nelsonmandeladev/liquidcn.git"
+  },
   "type": "module",
+  "packageManager": "pnpm@12.6.0",
+  "engines": {
+    "node": ">=20.9"
+  },
   "scripts": {
-    "test": "node --experimental-strip-types --test tests/liquid-motion.test.mjs",
-    "dev": "next dev --hostname 127.0.0.1 --port 5173",
-    "build": "npm run registry:build && next build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "registry:build": "node scripts/build-registry.mjs",
-    "preview": "npm run start",
-    "start": "next start --hostname 127.0.0.1 --port 5173",
-    "typecheck": "next typegen && tsc --noEmit"
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts,tsx}": [
+      "eslint --max-warnings=0 --fix",
+      "prettier --write"
+    ],
+    "*.{css,json,md,yml,yaml}": "prettier --write"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -24,12 +50,28 @@
     "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "@types/node": "^24.0.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
-    "shadcn": "latest",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitest/coverage-v8": "^5.0.2",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.6",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "jsdom": "^30.1.1",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.9",
+    "shadcn": "^4.21.0",
     "tailwindcss": "^4.1.0",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^5.0.2"
   }
 }

@@ -1,0 +1,16 @@
+name: Component or feature request
+description: Propose a new component or a change to an existing one.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would you like to build?
+      description: The use case, and which shadcn/ui component it relates to.
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: Reference
+      description: A video or screenshot of the iOS or macOS behavior helps a lot.

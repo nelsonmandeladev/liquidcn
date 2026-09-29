@@ -1,0 +1,37 @@
+name: Bug report
+description: Something looks or behaves wrong.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: A minimal example or a link to one helps most.
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      placeholder: liquid-tabs
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, OS, and input
+      placeholder: Safari 26 on iOS, touch
+    validations:
+      required: true
+  - type: checkboxes
+    id: preferences
+    attributes:
+      label: Accessibility settings
+      options:
+        - label: Reduced motion is on
+        - label: Reduced transparency or increased contrast is on

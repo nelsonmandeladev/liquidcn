@@ -1,84 +1,101 @@
 # liquidcn
 
-An experimental Liquid Glass component registry built on shadcn/ui's Radix components. Source lives in your app. No component-library runtime beyond the existing primitives.
+**Liquid Glass for shadcn/ui.** Glass components that swell under your finger, lift a magnifying lens across tabs, and grow menus out of their buttons, the way iOS 26 does. Built on Radix primitives and installed as source from a shadcn registry.
 
-## Development
+**[Playground →](https://liquidcn.snmandela.com)**
 
-```sh
-npm install
-npm run dev
-npm test
-npm run typecheck
-npm run build
-npm start
-```
+[![CI](https://github.com/nelsonmandeladev/liquidcn/actions/workflows/ci.yml/badge.svg)](https://github.com/nelsonmandeladev/liquidcn/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Development and production previews run at http://127.0.0.1:5173. Run `npm start` after a production build. `npm run preview` is an alias for the production server. Next.js requires Node 20.9+; use Node 22.6+ to also run the TypeScript motion tests. Both npm and pnpm lockfiles are maintained; use one package manager consistently for installs.
+## Components
 
-The playground includes button, segmented tabs, dropdown menu, toolbar, and toast previews, live blur/tint and viscosity controls, light/dark material, reduced transparency and motion, source examples, and install commands.
+| Component     | Item                   | What it does                                                                                             |
+| ------------- | ---------------------- | -------------------------------------------------------------------------------------------------------- |
+| Button        | `liquid-button`        | Swells and brightens when pressed, stretches on drag, morphs its width and content. `prominent` variant. |
+| Tabs          | `liquid-tabs`          | A lens that lifts, magnifies, and tints the labels beneath it. Drag it across tabs to choose.            |
+| Dropdown menu | `liquid-dropdown-menu` | Grows out of and over its trigger as a droplet, folds back into it on close.                             |
+| Toolbar       | `liquid-toolbar`       | Swelling actions and a selection lens.                                                                   |
+| Toast         | `liquid-sonner`        | Top-center glass pills that form and fold away (Sonner).                                                 |
 
-## App Router architecture
+## Install
 
-The Vite migration follows the [official Next.js guide](https://nextjs.org/docs/app/guides/migrating/from-vite). `src/app/layout.tsx` owns the document, metadata, and global CSS. `src/app/page.tsx` is the server entry point; `src/App.tsx` is the client boundary for the interactive playground. The homepage is prerendered rather than loaded through an SSR-disabled SPA wrapper. Browser APIs run in effects or event handlers, so server rendering and hydration use the same initial markup.
-
-Tailwind v4 runs through `@tailwindcss/postcss`. `components.json` enables React Server Component support, and interactive registry components retain their `"use client"` directives. Static assets and registry JSON keep their existing `/assets/*` and `/r/*` URLs. Playground and Registry are still views within the homepage; future pages can be added under `src/app`.
-
-Unlike the guide's transitional static-export setup, this project uses the standard Next.js server build to leave App Router server features available for future work. Vite's HTML entry, ReactDOM bootstrap, config, and build dependencies have been removed.
-
-## Install Into a Consumer
-
-Start the playground, then run in an initialized React + Tailwind v4 shadcn project:
+In a React project set up for [shadcn/ui](https://ui.shadcn.com/docs/installation) with Tailwind CSS v4:
 
 ```sh
-npx shadcn@latest add http://127.0.0.1:5173/r/liquid-button.json
+npx shadcn@latest add https://liquidcn.snmandela.com/r/liquid-button.json
 ```
 
-Use the actual dev-server port. Other items: `liquid-tabs`, `liquid-dropdown-menu`, `liquid-toolbar`, `liquid-sonner`. Controls use Radix; notifications use Sonner. The CLI may ask before replacing existing base components or shared CSS; review changes in customized projects.
+Each item brings its source, the base shadcn component it wraps, `liquid.css`, and the motion modules it needs. There is no animation library to install. The CLI asks before replacing base components you already have.
+
+## Use
+
+The components keep the shadcn API: same props, refs, and events.
 
 ```tsx
 import { Button } from "@/components/ui/liquid-button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/liquid-tabs";
 
-<Button onClick={() => console.log("Continue")}>Continue</Button>
+<Button onClick={save}>Save</Button>
+<Button variant="prominent" size="icon-lg" aria-label="Done"><Check /></Button>
+
+<Tabs defaultValue="photos">
+  <TabsList aria-label="Library">
+    <TabsTrigger value="photos">Photos</TabsTrigger>
+    <TabsTrigger value="albums">Albums</TabsTrigger>
+  </TabsList>
+  <TabsContent value="photos">…</TabsContent>
+  <TabsContent value="albums">…</TabsContent>
+</Tabs>
 ```
 
-Each item includes its source, `liquid.css`, and the shared `liquid-motion.ts` engine. No animation dependency is required. The familiar shadcn component props, refs, and event handlers are forwarded to the underlying component. Toolbar adds Radix Toolbar semantics. Material classes are unlayered CSS; consumer overrides should use a later stylesheet or style props.
+Menus open over their trigger by default, as on iOS. Pass `overlap={false}` to `DropdownMenuContent` to open beside it. For toasts, mount `Toaster` from `liquid-sonner` once and call its re-exported `toast`.
 
-## Material
+## Theming
 
-Set `--liquid-blur`, `--liquid-tint`, `--liquid-fill`, and `--liquid-ink` on a glass component. `--liquid-accent` (default `#007aff`) tints prominent buttons and the labels under a tab or toolbar lens; set `--liquid-lens-ink` to tint only the lens, for example `var(--liquid-ink)` for a neutral segmented control. Use `.dark` or `data-liquid-theme="dark"` on a common ancestor (including portals) for dark material. Set `data-reduced-transparency="true"` on that ancestor for opaque surfaces.
+Set these custom properties on any ancestor (including `document.documentElement`, so portaled menus and toasts follow):
 
-The material honors reduced-motion, reduced-transparency, and increased-contrast media preferences. Backdrop-filter fallback is opaque. Contrast should be assessed against your content.
+| Property                  | Default       | Effect                                                                    |
+| ------------------------- | ------------- | ------------------------------------------------------------------------- |
+| `--liquid-blur`           | `20px`        | Backdrop blur.                                                            |
+| `--liquid-tint`           | `.22`         | Glass opacity.                                                            |
+| `--liquid-fill`           | `255 255 255` | Glass color as RGB channels.                                              |
+| `--liquid-ink`            | `#172323`     | Text and icons on glass.                                                  |
+| `--liquid-accent`         | `#007aff`     | Prominent buttons and labels under a lens.                                |
+| `--liquid-lens-ink`       | accent        | Lens tint only, e.g. `var(--liquid-ink)` for a neutral segmented control. |
+| `--liquid-viscosity`      | `.5`          | 0 is firm and bouncy, 1 is slow and soft.                                 |
+| `--liquid-morph-duration` | `520ms`       | Menu formation.                                                           |
 
-## Liquid interaction
+Use `.dark` or `data-liquid-theme="dark"` for dark material, and `data-reduced-transparency="true"` for opaque surfaces.
 
-- **Buttons:** pressing swells the glass toward the finger and floods it with light. Small controls grow more than large ones, as on iOS. Dragging while pressed stretches the glass on a rubber band; release springs it back. Hover adds pointer-following light and slight attraction (not on touch). When a button's content or variant changes, its width springs to the new size, the surface pops, and the new content condenses in. `variant="prominent"` is accent-tinted glass, like iOS `.glassProminent`.
-- **Tabs:** one continuous glass lens. Pressing swells the bar and lifts the lens into clear, magnifying glass that overflows the bar. Labels beneath it take the accent color, so a label can be split mid-flight. Drag to scrub across tabs; releasing selects the tab under the lens. The lens stretches with speed, then lands and frosts over the selection. Keyboard changes travel lifted and land the same way. Resizing, RTL, and vertical lists use measured layout geometry. The lens shows an inert, `aria-hidden` copy of the list; the real triggers stay untouched for Radix and assistive technology.
-- **Menus:** a menu opens over its trigger and grows out of it, aligned to the nearer screen edge, as on iOS. The trigger swells into a round droplet that stretches into the panel while the content comes into focus. Closing collapses the panel into a droplet that is drawn back into the trigger, which bulges as it lands. Pass `overlap={false}` to open beside the trigger instead. A still click or tap never selects the item that appears under it; pressing the trigger and dragging onto an item selects it on release. Radix continues to manage focus, dismissal, and keyboard navigation.
-- **Toolbars:** buttons swell like liquid buttons, and a shared lens lifts, travels, and lands on the button with `aria-pressed="true"`. Use a single selected action for a moving lens; independently pressed buttons retain their semantic states.
-- **Toasts:** top-center glass pills expand with a soft spring, reveal their content, and fold away on dismissal. Existing Sonner calls, loading/success updates, actions, stacking, announcements, swipe dismissal, and timers remain available. Mount `Toaster` from `liquid-sonner` once in your app and call its re-exported `toast` API. The playground includes success, loading-to-success, and error previews.
+## Accessibility
 
-Set `--liquid-viscosity` (0–1, default 0.5) on a common ancestor: lower values produce a firmer, bouncier spring; higher values produce a slower, softer response. `--liquid-morph-duration` (default `520ms`) controls menu formation. The playground links these controls. Motion runs only while a spring is moving and does not rerender React on every frame.
+- Radix keeps focus management, keyboard navigation, and ARIA semantics; the lens is decorative and hidden from assistive technology.
+- `prefers-reduced-motion` (or `data-reduced-motion="true"` on an ancestor) removes all movement; every interaction still works.
+- Reduced transparency, increased contrast, and forced colors are supported.
+- The playground is checked against WCAG 2.1 A/AA in CI.
 
-Set `data-reduced-motion="true"` on an ancestor to disable motion explicitly. The OS `prefers-reduced-motion` preference always takes precedence. For portaled menus, put theme/motion/transparency settings on `document.documentElement` or use a portal container within the configured ancestor. Keep the liquid `DropdownMenu`, trigger, and content wrappers together for trigger-aware morphing.
+## How it works
 
-The motion layer owns the CSS `translate` and `scale` properties of interactive elements, leaving `transform` available to consumers. Avoid overriding those two properties when using the built-in spring. During a content morph, a button carries a temporary inline `width`; a button with its own inline width keeps it and skips the width spring. Tab and toolbar lenses set a temporary `mask-image` on the items they pass over.
+DOM and CSS glass with spring-driven motion; no WebGL, and no runtime dependency beyond the primitives. Springs write CSS custom properties directly and never re-render React per frame. The motion layer owns the `translate` and `scale` properties of interactive elements, so `transform` stays yours.
 
-This is DOM/CSS glass with spring-driven interaction, inspired by [Plasma UI](https://github.com/CruxGarden/plasma-ui). It does **not** implement Plasma's WebGL refraction, fusion between separate surfaces, or automatic background luminance adaptation. Lens magnification enlarges a copy of the control's own labels; it does not refract the page behind the glass. The spring and morph implementation is local; Plasma is not a runtime dependency.
+- [Design language](docs/design.md): what we match from iOS 26, with the numbers.
+- [Architecture](docs/architecture.md): the spring, the lens, menu morphs, and the registry.
+- [Deployment](docs/deployment.md): Vercel and the custom domain.
 
-## Registry and Publishing
+Browser support: current Chrome, Edge, Safari, and Firefox. Lens magnification enlarges a copy of the control's own labels; it does not refract the page behind the glass.
 
-`registry.json` is the source catalog. `npm run registry:build` validates against the official shadcn schemas and embeds current source files into `public/r/*.json`. `npm run build` rebuilds the registry, checks types, and creates the Next.js production output in `.next`. Deploy using a Next.js-compatible host or run `npm start`; an old Vite `dist` folder is not the current deployable output.
+## Contributing
 
-Before publishing, set the registry homepage to your real deployment URL. No domain or namespace is registered by this project. The playground computes install URLs from the running origin.
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, scripts, the quality gates, and how to add a component. Please follow the [Code of Conduct](CODE_OF_CONDUCT.md), and report security issues as described in [SECURITY.md](SECURITY.md).
 
-## Assets and References
+```sh
+corepack enable && pnpm install
+pnpm dev     # http://localhost:3000
+pnpm check   # lint, format, types, tests
+```
 
-`public/assets/alpine-lake.png` was generated using the built-in image generation tool. Prompt: photorealistic alpine lake, clear turquoise water and submerged rocks, pine forest, jagged Dolomite mountains, natural daylight, no text or UI.
+## License
 
-Design concept: white developer workbench, component sidebar, photographic alpine preview, Liquid Glass control, material inspector, and install command. Generated with the built-in image tool.
+[MIT](LICENSE). Base components from [shadcn/ui](https://ui.shadcn.com) (MIT); see [third-party notices](THIRD_PARTY_NOTICES.md).
 
-- https://ui.shadcn.com/docs/registry
-- https://ui.shadcn.com/docs/components/radix/button
-- https://developer.apple.com/design/human-interface-guidelines/materials
-
-Independent experimental project; not affiliated with Apple or shadcn.
+liquidcn is an independent project, not affiliated with Apple or shadcn/ui. Inspired by [Plasma UI](https://github.com/CruxGarden/plasma-ui).

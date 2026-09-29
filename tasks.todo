@@ -1,0 +1,25 @@
+Liquid Glass fidelity:
+  Gaps left after matching the iOS 26 Phone app reference video (tab lens, press swell, menu droplet, Edit → ✓ morph).
+
+  ☐ Search morph @component
+    Tapping search collapses the tab bar into a single circle showing the selected tab's icon, while the search
+    button stretches into a search field. The close button reverses it. Needs a new component (a tab bar with a
+    search accessory), not a change to Tabs.
+  ☐ Fusion between separate glass surfaces @motion
+    The gooey neck where two surfaces merge: the tab bar bulging into the search button while pressed, and the
+    teardrop neck when a closing menu is drawn back into its trigger. Today the menu close approximates the
+    droplet with an elongated ellipse.
+  ☐ Real refraction of the page behind the glass @material
+    Lens magnification only enlarges a copy of the control's own labels. True refraction of the backdrop needs an
+    SVG displacement filter (`backdrop-filter: url(#…)`, Chromium only, so progressive enhancement) or WebGL.
+
+Open-source launch:
+  ☐ Confirm the repository URL @docs
+    Assumed https://github.com/nelsonmandeladev/liquidcn in src/site.ts, package.json, README badges,
+    SECURITY.md, CODE_OF_CONDUCT.md, and .github/ISSUE_TEMPLATE/config.yml.
+  ☐ Enable private vulnerability reporting in the GitHub repository settings @docs
+    SECURITY.md and CODE_OF_CONDUCT.md send reports there.
+  ☐ Choose a contact address for Code of Conduct reports @docs
+  ☐ Decide the copyright line in LICENSE (currently "liquidcn contributors") @docs
+  ☐ Connect the GitHub repository to Vercel and point liquidcn.snmandela.com at it @deploy
+    Steps in docs/deployment.md.
