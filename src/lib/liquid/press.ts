@@ -42,7 +42,7 @@ export function pressedShape(width: number, height: number, drag: number[]) {
 
 /**
  * Hover attraction, and a press that swells the glass toward the finger and whitens it.
- * Native listeners decorate the element without replacing Radix or consumer handlers.
+ * Native listeners decorate the element without replacing the primitive's or consumer handlers.
  */
 export class LiquidPress {
   private hover: number[] | null = null;
@@ -59,7 +59,7 @@ export class LiquidPress {
     const disabledObserver = new MutationObserver(() => this.update());
     disabledObserver.observe(node, {
       attributes: true,
-      attributeFilter: ["disabled", "aria-disabled", "data-disabled"],
+      attributeFilter: ["disabled", "aria-disabled"],
     });
     this.cleanups.push(
       () => disabledObserver.disconnect(),
@@ -88,7 +88,7 @@ export class LiquidPress {
   }
 
   private disabled() {
-    return this.node.matches(':disabled, [aria-disabled="true"], [data-disabled]');
+    return this.node.matches(':disabled, [aria-disabled="true"]');
   }
 
   private target() {

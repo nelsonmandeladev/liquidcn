@@ -12,16 +12,18 @@ import {
   activate,
   boxWithin,
   followBox,
+  inactive,
   lensFrame,
   lensMask,
   mirror,
   nearestBox,
   pointerWithin,
+  watched,
   type Box,
 } from "@/lib/liquid/lens-parts";
 
 export type LensOptions = {
-  /** Matches the selected item, e.g. `.liquid-tab[data-state="active"]`. */
+  /** Matches the selected item by its ARIA state, e.g. `.liquid-tab[aria-selected="true"]`. */
   selected: string;
   /** Matches every item the lens can land on. */
   items: string;
@@ -29,13 +31,10 @@ export type LensOptions = {
   scrub?: boolean;
 };
 
-const inactive = ':disabled, [data-disabled], [aria-disabled="true"]';
-const watched = ["data-state", "aria-pressed", "data-orientation", "aria-orientation", "dir"];
-
 /**
  * One continuous glass lens. It lifts while pressed or travelling, magnifies and tints what is
  * beneath it, then lands and frosts over the selection. The lens shows an inert, aria-hidden
- * copy of the list; the real items stay untouched for Radix and assistive technology.
+ * copy of the list; the real items stay untouched for the primitive and assistive technology.
  */
 export class LiquidLens {
   private readonly lens = document.createElement("span");
@@ -74,7 +73,7 @@ export class LiquidLens {
       childList: true,
       characterData: true,
       attributes: true,
-      attributeFilter: [...watched, "class", "disabled", "data-disabled"],
+      attributeFilter: [...watched, "class", "disabled", "aria-disabled"],
     });
     this.cleanups.push(
       () => mutations.disconnect(),

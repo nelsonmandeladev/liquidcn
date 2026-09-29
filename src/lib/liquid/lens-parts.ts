@@ -5,6 +5,19 @@ import { rubberBand } from "@/lib/liquid/motion";
 /** x, y, width, height in a list's padding-box coordinates. */
 export type Box = [number, number, number, number];
 
+/** Items the lens cannot land on. */
+export const inactive = ':disabled, [aria-disabled="true"]';
+
+/** Attributes that move or reshape the lens: ARIA state, which every primitive sets, and layout. */
+export const watched = [
+  "aria-selected",
+  "aria-pressed",
+  "aria-current",
+  "aria-orientation",
+  "data-orientation",
+  "dir",
+];
+
 /** Layout position of `element` inside `root`, unaffected by CSS transforms. */
 export function boxWithin(element: HTMLElement, root: HTMLElement): Box {
   let x = 0;
@@ -90,13 +103,21 @@ export function pointerWithin(
   return (event.clientX - bounds.left) / (bounds.width / (list.offsetWidth || 1)) - border[0];
 }
 
-/** Refresh the optics: an inert copy of the list with its classes, minus the lens itself. */
+// The list's own styling hooks: direction and data attributes, but not the lens's state.
+const mirrored = (name: string) =>
+  name === "dir" || (name.startsWith("data-") && !name.startsWith("data-liquid-"));
+
+/**
+ * Refresh the optics: an inert copy of the list, minus the lens itself. It carries the list's
+ * classes and styling attributes, so the base component's own styles lay it out the same way.
+ */
 export function mirror(list: HTMLElement, lens: HTMLElement, optics: HTMLElement) {
   optics.className = `${list.className} liquid-lens-optics`;
-  for (const name of ["dir", "data-orientation", "data-variant"]) {
-    const value = list.getAttribute(name);
-    if (value === null) optics.removeAttribute(name);
-    else optics.setAttribute(name, value);
+  for (const { name } of [...optics.attributes]) {
+    if (mirrored(name) && !list.hasAttribute(name)) optics.removeAttribute(name);
+  }
+  for (const { name, value } of [...list.attributes]) {
+    if (mirrored(name)) optics.setAttribute(name, value);
   }
   const children = [...list.children].filter((child) => child !== lens);
   optics.replaceChildren(...children.map(copyOf));
@@ -113,9 +134,15 @@ function copyOf(child: Element) {
   return copy;
 }
 
-/** Radix tabs select on mousedown; focus keeps the roving tab stop in sync. */
+/**
+ * Select an item the way a press would. Primitives differ in which event selects: Radix tabs
+ * select on mousedown, others on click, so both are sent. Focus keeps the roving tab stop in
+ * sync.
+ */
 export function activate(element: HTMLElement, list: HTMLElement) {
-  const init = { bubbles: true, cancelable: true, button: 0, view: window };
-  element.dispatchEvent(new MouseEvent("mousedown", init));
+  element.dispatchEvent(
+    new MouseEvent("mousedown", { bubbles: true, cancelable: true, button: 0 }),
+  );
+  element.click();
   if (list.contains(document.activeElement)) element.focus({ preventScroll: true });
 }

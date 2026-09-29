@@ -120,7 +120,7 @@
 .liquid-button[data-liquid-variant="secondary"] {
   background: rgb(var(--liquid-fill) / 0.55);
 }
-.liquid-button[data-state="open"] > svg {
+.liquid-button[aria-expanded="true"] > svg {
   rotate: 180deg;
 }
 .liquid-button > svg {
@@ -143,7 +143,7 @@
     box-shadow 200ms ease,
     scale 460ms cubic-bezier(0.25, 1.45, 0.45, 1);
 }
-.liquid-tabs[data-orientation="vertical"] {
+.liquid-tabs[aria-orientation="vertical"] {
   height: auto;
   border-radius: 26px;
   touch-action: pan-x;
@@ -164,12 +164,12 @@
   background: transparent;
   transition: color 180ms ease;
 }
-.liquid-tab[data-state="active"] {
+.liquid-tab[aria-selected="true"] {
   color: var(--liquid-ink);
   background: rgb(var(--liquid-fill) / 0.58);
   box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.8);
 }
-.liquid-tabs[data-liquid-indicator] .liquid-tab[data-state="active"] {
+.liquid-tabs[data-liquid-indicator] .liquid-tab[aria-selected="true"] {
   background: transparent;
   box-shadow: none;
 }
@@ -177,7 +177,7 @@
   color: var(--liquid-ink);
 }
 /* The base tabs draw a ring on focus; glass has none. */
-.liquid-tab:focus-visible:not([data-state="active"]) {
+.liquid-tab:focus-visible:not([aria-selected="true"]) {
   box-shadow: none;
   background: rgb(var(--liquid-fill) / 0.3);
 }
@@ -232,7 +232,7 @@
 }
 /* Focus on the selected item tints the lens over it. */
 [data-liquid-indicator]:has(
-    > :is([data-state="active"], [aria-pressed="true"], [aria-current]):focus-visible
+    > :is([aria-selected="true"], [aria-pressed="true"], [aria-current]):focus-visible
   )
   > .liquid-lens {
   --liquid-lens-fill: 0 122 255;
@@ -273,7 +273,7 @@
 }
 /* Once the lens has landed the copy stands in for the selected label. */
 [data-liquid-lens="rest"]
-  :is(.liquid-tab[data-state="active"], .liquid-toolbar-button[aria-pressed="true"]):not(
+  :is(.liquid-tab[aria-selected="true"], .liquid-toolbar-button[aria-pressed="true"]):not(
     .liquid-lens *
   ) {
   color: transparent;
@@ -300,6 +300,8 @@
    * the panel the scroller, that growth would flash scrollbars during every entrance.
    */
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .liquid-menu [role^="menuitem"] {
   min-height: 40px;
@@ -307,34 +309,36 @@
   color: inherit;
   transition: background 140ms ease;
 }
-.liquid-menu [role^="menuitem"][data-highlighted] {
+/* Primitives move focus to the item under the pointer as well as the keyboard's. */
+.liquid-menu [role^="menuitem"]:focus {
   background: rgb(0 122 255 / 0.16);
 }
 .liquid-menu [data-variant="destructive"] {
   color: #c52238;
 }
+/* Fills the panel, whose max height the base component sets from its primitive, and scrolls. */
 .liquid-menu-body {
+  flex: 0 1 auto;
+  min-height: 0;
   transform-origin: 50% 40%;
-  /* The panel's available height, less its padding and border. */
-  max-height: calc(var(--radix-dropdown-menu-content-available-height, 100dvh) - 14px);
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
-.liquid-menu[data-state="open"]:not([data-liquid-morph="ready"]) {
+.liquid-menu[data-liquid-state="open"]:not([data-liquid-morph="ready"]) {
   opacity: 0;
 }
-.liquid-menu[data-state="open"][data-liquid-morph="ready"] {
+.liquid-menu[data-liquid-state="open"][data-liquid-morph="ready"] {
   animation: liquid-menu-unfold var(--liquid-morph-duration, 520ms) both;
 }
-.liquid-menu[data-state="open"][data-liquid-morph="ready"] > .liquid-menu-body {
+.liquid-menu[data-liquid-state="open"][data-liquid-morph="ready"] > .liquid-menu-body {
   animation: liquid-menu-body-in var(--liquid-morph-duration, 520ms) both;
 }
-.liquid-menu[data-state="closed"] {
+.liquid-menu[data-liquid-state="closed"] {
   animation: liquid-menu-fold 320ms both;
   pointer-events: none;
 }
-.liquid-menu[data-state="closed"] > .liquid-menu-body {
+.liquid-menu[data-liquid-state="closed"] > .liquid-menu-body {
   animation: liquid-menu-body-out 130ms ease-in both;
 }
 /* The trigger swells into a round droplet, which stretches into the panel. */
@@ -421,7 +425,7 @@
 [data-liquid-covered] {
   transition: opacity 140ms ease 120ms;
 }
-[data-liquid-covered][data-state="open"] {
+[data-liquid-covered][aria-expanded="true"] {
   opacity: 0;
   transition: opacity 90ms ease;
 }
@@ -727,7 +731,7 @@
 [data-reduced-motion="true"] .liquid-tabs {
   scale: none;
 }
-[data-reduced-motion="true"] .liquid-menu[data-state="open"] {
+[data-reduced-motion="true"] .liquid-menu[data-liquid-state="open"] {
   opacity: 1;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -749,7 +753,7 @@
   .liquid-tabs {
     scale: none;
   }
-  .liquid-menu[data-state="open"] {
+  .liquid-menu[data-liquid-state="open"] {
     opacity: 1;
   }
 }

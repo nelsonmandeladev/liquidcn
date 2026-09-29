@@ -87,6 +87,28 @@ test.describe("dropdown menu", () => {
     await expect(page.locator(".liquid-fusion[data-layer='fixed']")).toHaveCount(0);
   });
 
+  test("scrolls inside the panel when the screen is too short for it", async ({
+    page,
+    hasTouch,
+  }) => {
+    const height = 300;
+    await page.setViewportSize({ width: page.viewportSize()!.width, height });
+    const trigger = page.getByRole("button", { name: "Sort photos" });
+    await trigger.evaluate((element) => element.scrollIntoView({ block: "center" }));
+    await activate(trigger, hasTouch);
+    const menu = page.getByRole("menu");
+    await expect(menu).toHaveAttribute("data-liquid-morph", "ready");
+    await page.waitForTimeout(700); // let the panel finish forming
+    const panel = await menu.evaluate((element) => {
+      const box = element.getBoundingClientRect();
+      const body = element.querySelector(".liquid-menu-body")!;
+      return { top: box.top, bottom: box.bottom, scrolls: body.scrollHeight > body.clientHeight };
+    });
+    expect(panel.top).toBeGreaterThanOrEqual(0);
+    expect(panel.bottom).toBeLessThanOrEqual(height);
+    expect(panel.scrolls).toBe(true);
+  });
+
   test("never shows a scrollbar while it forms", async ({ page, hasTouch }) => {
     const trigger = page.getByRole("button", { name: "Sort photos" });
     await trigger.evaluate((element) => element.scrollIntoView({ block: "center" }));

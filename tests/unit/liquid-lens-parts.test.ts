@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  activate,
   boxWithin,
   followBox,
   lensFrame,
   lensMask,
+  mirror,
   nearestBox,
   pointerWithin,
   type Box,
@@ -103,6 +105,41 @@ describe("DOM measurement", () => {
     layout(wrapper, { clientTop: 1 });
     layout(item, { offsetHeight: 20 });
     expect(boxWithin(item, list)).toEqual([42, 6, 60, 20]);
+  });
+
+  it("copies the list's styling hooks into the optics, not its identity or the lens's state", () => {
+    const list = document.createElement("div");
+    const lens = document.createElement("span");
+    const optics = document.createElement("span");
+    list.className = "liquid-tabs";
+    list.id = "library";
+    list.setAttribute("aria-label", "Library");
+    list.setAttribute("dir", "rtl");
+    Object.assign(list.dataset, { orientation: "vertical", slot: "tabs-list" });
+    list.dataset.liquidIndicator = "true";
+    list.append(document.createElement("button"), lens);
+    mirror(list, lens, optics);
+    expect(optics.className).toBe("liquid-tabs liquid-lens-optics");
+    expect(optics.getAttribute("dir")).toBe("rtl");
+    expect({ ...optics.dataset }).toEqual({ orientation: "vertical", slot: "tabs-list" });
+    expect(optics.id).toBe("");
+    expect(optics.hasAttribute("aria-label")).toBe(false);
+    expect(optics.children).toHaveLength(1);
+    delete list.dataset.orientation;
+    mirror(list, lens, optics);
+    expect(optics.dataset.orientation).toBeUndefined();
+  });
+
+  it("selects an item with the mousedown Radix listens for and the click others do", () => {
+    const list = document.createElement("div");
+    const item = document.createElement("button");
+    list.append(item);
+    const events: string[] = [];
+    for (const type of ["mousedown", "click"]) {
+      item.addEventListener(type, () => events.push(type));
+    }
+    activate(item, list);
+    expect(events).toEqual(["mousedown", "click"]);
   });
 
   it("maps a pointer into padding-box coordinates, undoing the list's scale", () => {

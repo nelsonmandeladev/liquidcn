@@ -110,7 +110,7 @@ describe("MenuMorph fold", () => {
     const trigger = document.createElement("button");
     const wrapper = document.createElement("div");
     const menu = document.createElement("div");
-    menu.dataset.state = "open";
+    menu.dataset.liquidState = "open";
     wrapper.append(menu);
     document.body.append(trigger, wrapper);
     return { trigger, menu };
@@ -123,7 +123,7 @@ describe("MenuMorph fold", () => {
     const { trigger, menu } = menuAndTrigger();
     const morph = new MenuMorph(menu, () => trigger, false);
     expect(necks()).toHaveLength(0);
-    menu.dataset.state = "closed";
+    menu.dataset.liquidState = "closed";
     await Promise.resolve();
     expect(necks()).toHaveLength(1);
     expect(necks()[0].getAttribute("aria-hidden")).toBe("true");
@@ -136,7 +136,7 @@ describe("MenuMorph fold", () => {
     const { trigger, menu } = menuAndTrigger();
     document.body.dataset.reducedMotion = "true";
     const morph = new MenuMorph(menu, () => trigger, false);
-    menu.dataset.state = "closed";
+    menu.dataset.liquidState = "closed";
     await Promise.resolve();
     expect(necks()).toHaveLength(0);
     morph.destroy();

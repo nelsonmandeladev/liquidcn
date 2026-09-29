@@ -50,7 +50,7 @@ describe("liquid Tabs", () => {
     expect(screen.getByRole("tabpanel").textContent).toBe("All albums");
     const lens = lensOf(screen.getByRole("tablist"));
     await waitFor(() =>
-      expect(lens.querySelector('[data-state="active"]')?.textContent).toBe("Albums"),
+      expect(lens.querySelector('[aria-selected="true"]')?.textContent).toBe("Albums"),
     );
   });
 

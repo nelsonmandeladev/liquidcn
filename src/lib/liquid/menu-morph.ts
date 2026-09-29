@@ -75,7 +75,10 @@ function foldProgress(node: HTMLElement) {
   return fold?.effect?.getComputedTiming().progress ?? null;
 }
 
-/** Drives the unfold and fold of one menu surface relative to its anchor element. */
+/**
+ * Drives the unfold and fold of one menu surface relative to its anchor element. The surface's
+ * `data-liquid-state` says when it closes; the liquid menu sets it with the primitive's state.
+ */
 export class MenuMorph {
   private frame = 0;
   private neck: FusionLoop | null = null;
@@ -87,7 +90,7 @@ export class MenuMorph {
     private readonly anchor: () => HTMLElement | null,
     covering: boolean,
   ) {
-    // Wait for Radix placement and collision resolution before measuring the destination.
+    // Wait for the primitive to place the panel and resolve collisions before measuring it.
     this.frame = requestAnimationFrame(() => {
       this.frame = requestAnimationFrame(() => {
         this.measure();
@@ -97,11 +100,11 @@ export class MenuMorph {
     this.covered = covering ? anchor() : null;
     if (this.covered) this.covered.dataset.liquidCovered = "";
     const closing = new MutationObserver(() => {
-      if (node.dataset.state !== "closed") return;
+      if (node.dataset.liquidState !== "closed") return;
       this.measure();
       this.fold();
     });
-    closing.observe(node, { attributes: true, attributeFilter: ["data-state"] });
+    closing.observe(node, { attributes: true, attributeFilter: ["data-liquid-state"] });
     this.cleanups.push(
       () => closing.disconnect(),
       listen(window, { resize: this.measure }),
@@ -113,7 +116,7 @@ export class MenuMorph {
     cancelAnimationFrame(this.frame);
     this.neck?.destroy();
     this.cleanups.forEach((cleanup) => cleanup());
-    const closed = this.node.dataset.state === "closed";
+    const closed = this.node.dataset.liquidState === "closed";
     delete this.node.dataset.liquidMorph;
     if (this.covered) delete this.covered.dataset.liquidCovered;
     if (closed) landIn(this.anchor());
@@ -134,7 +137,7 @@ export class MenuMorph {
 
   private measure = () => {
     const anchor = this.anchor();
-    // Popper positions the wrapper; the content itself may still be springing.
+    // The primitive positions a wrapper around the panel, which may itself still be springing.
     const wrapper = this.node.parentElement?.getBoundingClientRect();
     const { offsetWidth: width, offsetHeight: height } = this.node;
     if (!anchor || !wrapper || !width || !height) return;

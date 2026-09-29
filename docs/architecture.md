@@ -8,6 +8,20 @@ Each liquid component **extends** a shadcn/ui base component; it never rebuilds 
 
 A liquid component never imports a primitive library (`radix-ui`, Base UI, React Aria) itself. The consumer's base components stay exactly as they are, built on whichever library their shadcn uses. Where shadcn has no base component, a liquid component is built from ones it has (the toolbar's buttons are liquid `Button`s) or from plain elements (the tab bar).
 
+Styles and motion never read a primitive's own attributes either. Every primitive sets ARIA, but each names its other states its own way: Radix's `data-state="active"` is Base UI's `data-active` and React Aria's `data-selected`. So liquidcn keys on what they share:
+
+| State                 | Read from                                                                       |
+| --------------------- | ------------------------------------------------------------------------------- |
+| Selected tab          | `aria-selected="true"`                                                          |
+| Toggle, current       | `aria-pressed="true"`, `aria-current`                                           |
+| Open trigger          | `aria-expanded="true"` (the covered trigger fades, a chevron turns)             |
+| Highlighted item      | `:focus`: primitives focus the item under the pointer as well as the keyboard's |
+| Orientation           | `aria-orientation`                                                              |
+| Disabled              | `:disabled`, `aria-disabled="true"`                                             |
+| Menu opening, closing | `data-liquid-state`, which the liquid menu sets itself (see Menus)              |
+
+`tests/unit/registry.test.ts` fails if a shipped file names a primitive's own attribute or variable (`data-state`, `data-highlighted`, `data-open`, `--radix-*`, …).
+
 | File                                      | Responsibility                                                                                                        |
 | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `components/ui/liquid/*.tsx`              | Thin React wrappers that combine a base component with the pieces below.                                              |
@@ -41,13 +55,15 @@ Two techniques keep the real items from showing through:
 - **While moving,** the lens sets a `mask-image` gradient on each real item it overlaps, hiding exactly the part under the lens.
 - **At rest,** `data-liquid-lens="rest"` makes the selected real item's text transparent; the copy stands in for it.
 
-Selection stays with Radix. A drag across tabs follows the pointer with a rubber band past the ends, and on release dispatches the `mousedown` that Radix tabs select on, then moves focus to keep the roving tab stop in sync.
+Selection stays with the base component. A drag across tabs follows the pointer with a rubber band past the ends, and on release sends the `mousedown` Radix tabs select on and the click other primitives select on, then moves focus to keep the roving tab stop in sync. The optics copies the list's `dir` and `data-*` attributes (not `data-liquid-*`), so the base component's own styles lay the copy out like the list.
 
 ### Menus
 
-The panel clips and its `liquid-menu-body` wrapper scrolls, up to the height Radix reports as available. The body arrives magnified during the unfold; with the panel as the scroller, that growth would flash scrollbars on every open.
+The panel clips and its `liquid-menu-body` wrapper scrolls. The panel is a flex column, so the body fills whatever max height the base component gives the panel from its primitive's available space. The body arrives magnified during the unfold; with the panel as the scroller, that growth would flash scrollbars on every open.
 
-`DropdownMenuContent` opens over its trigger by default: a negative `sideOffset` equal to the trigger's size, aligned to the nearer screen edge. `MenuMorph` measures the trigger and panel after Radix positions the panel, and writes the CSS variables the unfold and fold keyframes use.
+No ARIA attribute says a menu is closing, and a primitive keeps a closing panel mounted only if its exit animation is already running when it checks, in the same commit. So the liquid `DropdownMenu` and `DropdownMenuSub` mirror their open state, controlled or not, and pass it to their panels, which render `data-liquid-state="open"` or `"closed"` in the same render as the primitive's own state. The unfold and fold keyframes key on it, and `MenuMorph` watches it to draw the fold's neck. A panel inside a plain base menu has no `data-liquid-state` and opens without the morph.
+
+`DropdownMenuContent` opens over its trigger by default: a negative `sideOffset` equal to the trigger's size, aligned to the nearer screen edge. `MenuMorph` measures the trigger and panel after the primitive positions the panel, and writes the CSS variables the unfold and fold keyframes use.
 
 Radix opens a dropdown on `pointerdown` and selects an item on `pointerup` even when the press began on the trigger. With the panel over the trigger, a still click would select the item that appeared beneath it. `MenuSession` tracks the press that opened the menu and swallows that release (and the click that follows a touch release) unless the pointer moved more than 10 px, so press-drag-release selection still works, as on iOS.
 
@@ -77,12 +93,13 @@ Where `refractionSupported()` (Chromium), `LiquidRefraction` generates a displac
 - During a content morph a button carries a temporary inline `width`. A button with its own inline width keeps it.
 - Tab and toolbar items carry a temporary `mask-image` while the lens passes over them.
 - A toolbar sets its buttons' `tabindex` to keep one tab stop.
+- Menu panels carry `data-liquid-state`, and the liquid `DropdownMenu` and `DropdownMenuSub` hold a copy of their open state.
 - In Chromium, tabs, toolbars, and the tab bar carry `--liquid-refraction` and `data-liquid-refraction`; a consumer's own `backdrop-filter` on them replaces the refraction.
 - During the search morph, a tab bar's parts carry temporary inline widths.
 
 ## Registry
 
-`registry.json` lists each item and the files it ships. `pnpm registry:build` (`scripts/build-registry.mjs`) validates it with the official shadcn schemas and writes `public/r/*.json` with the sources embedded, which Next.js serves as static files. The output is committed; run the command after changing `registry.json` or any file it lists, and CI fails if the committed JSON is stale. An item never ships a base shadcn component: it names it in `registryDependencies` (`"button"`, `"tabs"`, …), and the shadcn CLI resolves that name against shadcn's own registry for the consumer's style, so they get the version for their primitive library, or keep the one they have. `tests/unit/registry.test.ts` fails if an item's files import a local module or package the item does not ship, declare, or depend on, if an item ships a base component or imports a primitive library, or if the shadcn CLI would install a file anywhere other than where its imports expect it.
+`registry.json` lists each item and the files it ships. `pnpm registry:build` (`scripts/build-registry.mjs`) validates it with the official shadcn schemas and writes `public/r/*.json` with the sources embedded, which Next.js serves as static files. The output is committed; run the command after changing `registry.json` or any file it lists, and CI fails if the committed JSON is stale. An item never ships a base shadcn component: it names it in `registryDependencies` (`"button"`, `"tabs"`, …), and the shadcn CLI resolves that name against shadcn's own registry for the consumer's style, so they get the version for their primitive library, or keep the one they have. `tests/unit/registry.test.ts` fails if an item's files import a local module or package the item does not ship, declare, or depend on, if an item ships a base component, imports a primitive library, or reads one's own attributes, or if the shadcn CLI would install a file anywhere other than where its imports expect it.
 
 ## Website
 

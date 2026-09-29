@@ -32,6 +32,11 @@ function installPath(file: File) {
 // those use, so they never import one themselves.
 const primitives = /^(radix-ui|@radix-ui\/|@base-ui|react-aria)/;
 
+// Every primitive library sets ARIA, but each names its other states its own way: Radix's
+// `data-state`, Base UI's `data-open`, React Aria's `data-selected`, and their variables.
+const primitiveStates =
+  /\bdata-(?:state|highlighted|active|selected|focused|pressed|hovered|open|closed|entering|exiting|starting-style|ending-style|side|align|placement|disabled)\b|\bdataset\.(?:state|highlighted|active|selected|focused|pressed|open|closed|side|align|placement|disabled)\b|--radix-|--available-height|data-\[/g;
+
 /** A base shadcn component, such as `src/components/ui/button`, as its registry name. */
 const baseComponent = (module: string) => /^src\/components\/ui\/([\w-]+)$/.exec(module)?.[1];
 
@@ -81,6 +86,17 @@ describe.each(registry.items)("registry item $name", (item) => {
         .map((specifier) => `${path} -> ${specifier}`),
     );
     expect(direct).toEqual([]);
+  });
+
+  // Styles and motion key on ARIA and liquidcn's own `data-liquid-*` attributes, so they work on
+  // whichever primitive the consumer's base components use.
+  it("reads ARIA and its own attributes, never a primitive's", () => {
+    const found = paths.flatMap((path) =>
+      [...readFileSync(path, "utf8").matchAll(primitiveStates)].map(
+        (match) => `${path}: ${match[0]}`,
+      ),
+    );
+    expect(found).toEqual([]);
   });
 
   // Imports keep their path under the alias, so a file installed anywhere else breaks them,

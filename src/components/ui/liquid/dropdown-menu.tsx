@@ -1,6 +1,7 @@
 "use client";
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -14,6 +15,7 @@ import {
   DropdownMenu as BaseMenu,
   DropdownMenuTrigger as BaseTrigger,
   DropdownMenuContent as BaseContent,
+  DropdownMenuSub as BaseSub,
   DropdownMenuSubContent as BaseSubContent,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
@@ -36,35 +38,90 @@ export {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuShortcut,
-  DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
 
 type SetAnchor = Dispatch<SetStateAction<Anchor | null>>;
-type MenuContextValue = { session: MenuSession; anchor: Anchor | null; setAnchor: SetAnchor };
+type MenuContextValue = {
+  session: MenuSession;
+  anchor: Anchor | null;
+  setAnchor: SetAnchor;
+  open?: boolean;
+};
 
-// Content rendered inside a plain Radix menu still works; it just opens beside its trigger.
+// Content rendered inside a plain base menu still works; it opens beside its trigger, unmorphed.
 const detached: MenuContextValue = {
   session: new MenuSession(),
   anchor: null,
   setAnchor: () => {},
 };
 const MenuContext = createContext<MenuContextValue>(detached);
+const SubContext = createContext<boolean | undefined>(undefined);
+
+/**
+ * A menu's open state, controlled or not. Liquid parts read it in the same render as the
+ * primitive, so the closing keyframes start as the menu closes; were they any later, the
+ * primitive would unmount the panel at once. Extra arguments reach `onChange` untouched.
+ */
+function useOpenState<Change extends (open: boolean, ...details: never[]) => void>(
+  controlled: boolean | undefined,
+  initial: boolean | undefined,
+  onChange: Change | undefined,
+) {
+  const [uncontrolled, setUncontrolled] = useState(initial ?? false);
+  const change = useCallback(
+    (next: boolean, ...details: never[]) => {
+      setUncontrolled(next);
+      onChange?.(next, ...details);
+    },
+    [onChange],
+  );
+  return [controlled ?? uncontrolled, change as Change] as const;
+}
+
+/** A panel's `data-liquid-state`, known only inside a liquid menu. */
+function stateOf(open: boolean | undefined) {
+  if (open === undefined) return undefined;
+  return open ? "open" : "closed";
+}
 
 function remeasure(element: HTMLElement, setAnchor: SetAnchor) {
   const next = measureAnchor(element);
   setAnchor((previous) => (sameAnchor(previous, next) ? previous : next));
 }
 
-export function DropdownMenu(props: ComponentProps<typeof BaseMenu>) {
+export function DropdownMenu({
+  open,
+  defaultOpen,
+  onOpenChange,
+  ...props
+}: ComponentProps<typeof BaseMenu>) {
   const [session] = useState(() => new MenuSession());
   const [anchor, setAnchor] = useState<Anchor | null>(null);
-  const value = useMemo(() => ({ session, anchor, setAnchor }), [session, anchor]);
+  const [state, setOpen] = useOpenState(open, defaultOpen, onOpenChange);
+  const value = useMemo(
+    () => ({ session, anchor, setAnchor, open: state }),
+    [session, anchor, state],
+  );
   return (
     <MenuContext.Provider value={value}>
-      <BaseMenu {...props} />
+      <BaseMenu open={state} onOpenChange={setOpen} {...props} />
     </MenuContext.Provider>
+  );
+}
+
+export function DropdownMenuSub({
+  open,
+  defaultOpen,
+  onOpenChange,
+  ...props
+}: ComponentProps<typeof BaseSub>) {
+  const [state, setOpen] = useOpenState(open, defaultOpen, onOpenChange);
+  return (
+    <SubContext.Provider value={state}>
+      <BaseSub open={state} onOpenChange={setOpen} {...props} />
+    </SubContext.Provider>
   );
 }
 
@@ -103,7 +160,7 @@ export function DropdownMenuContent({
   ref,
   ...props
 }: LiquidContentProps) {
-  const { session, anchor, setAnchor } = useContext(MenuContext);
+  const { session, anchor, setAnchor, open } = useContext(MenuContext);
   const [node, mergedRef] = useLiquidElement(ref);
   const cover = overlap ? anchor : null;
   // Covers opens that did not come from the trigger, e.g. a controlled `open`.
@@ -120,6 +177,7 @@ export function DropdownMenuContent({
       collisionPadding={8}
       {...coverPlacement(cover, side, { sideOffset, align })}
       className={cn("liquid-surface liquid-menu", className)}
+      data-liquid-state={stateOf(open)}
       {...props}
     >
       <div className="liquid-menu-body">{children}</div>
@@ -133,12 +191,14 @@ export function DropdownMenuSubContent({
   ref,
   ...props
 }: ComponentProps<typeof BaseSubContent>) {
+  const open = useContext(SubContext);
   const [node, mergedRef] = useLiquidElement(ref);
   useMenuMorph(node);
   return (
     <BaseSubContent
       ref={mergedRef}
       className={cn("liquid-surface liquid-menu", className)}
+      data-liquid-state={stateOf(open)}
       {...props}
     >
       <div className="liquid-menu-body">{children}</div>

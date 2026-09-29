@@ -10,7 +10,7 @@ export { Tabs, TabsContent } from "@/components/ui/tabs";
 export function TabsList({ className, ref, ...props }: ComponentProps<typeof BaseList>) {
   const [node, mergedRef] = useLiquidElement(ref);
   useLiquidIndicator(node, {
-    selected: '.liquid-tab[data-state="active"]',
+    selected: '.liquid-tab[aria-selected="true"]',
     items: ".liquid-tab",
     scrub: true,
   });

@@ -1,9 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
+import { useState } from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/liquid/dropdown-menu";
 
@@ -93,6 +97,70 @@ describe("liquid DropdownMenu", () => {
     const menu = await screen.findByRole("menu");
     expect(menu.className).toContain("liquid-menu");
     expect(menu.firstElementChild?.className).toBe("liquid-menu-body");
+  });
+
+  it("marks the panel with liquidcn's own open state", async () => {
+    render(<Menu onSave={() => {}} />);
+    press();
+    const menu = await screen.findByRole("menu");
+    expect(menu.dataset.liquidState).toBe("open");
+  });
+
+  it("follows a controlled menu and passes open changes through", async () => {
+    const changes: boolean[] = [];
+    function Controlled() {
+      const [open, setOpen] = useState(true);
+      const change = (next: boolean) => {
+        changes.push(next);
+        setOpen(next);
+      };
+      return (
+        <DropdownMenu open={open} onOpenChange={change}>
+          <DropdownMenuTrigger>Options</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Save</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    }
+    render(<Controlled />);
+    fireEvent.keyDown(await screen.findByRole("menu"), { key: "Escape" });
+    expect(changes).toEqual([false]);
+    await waitFor(() => expect(screen.queryByRole("menu")).toBeNull());
+  });
+
+  it("stays open while its consumer keeps it open", async () => {
+    const onOpenChange = vi.fn();
+    render(
+      <DropdownMenu open onOpenChange={onOpenChange}>
+        <DropdownMenuTrigger>Options</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Save</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    );
+    fireEvent.keyDown(await screen.findByRole("menu"), { key: "Escape" });
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(screen.getByRole("menu").dataset.liquidState).toBe("open");
+  });
+
+  it("marks a submenu's panel with its own open state", async () => {
+    render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>Options</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>More</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem>Archive</DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    );
+    fireEvent.keyDown(await screen.findByRole("menuitem", { name: "More" }), { key: "ArrowRight" });
+    const archive = await screen.findByRole("menuitem", { name: "Archive" });
+    expect(archive.closest<HTMLElement>(".liquid-menu")?.dataset.liquidState).toBe("open");
   });
 
   it("ends the morph when the panel closes, while the menu stays mounted", async () => {
