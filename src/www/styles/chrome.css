@@ -282,6 +282,15 @@
   margin: 0;
 }
 
+.site-footer-notice {
+  flex-basis: 100%;
+  color: var(--foreground);
+}
+
+.site-footer-notice strong {
+  font-weight: 600;
+}
+
 .site-footer a {
   color: var(--foreground);
   text-decoration: underline;

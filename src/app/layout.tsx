@@ -22,11 +22,11 @@ export const metadata: Metadata = {
   title: { default: title, template: "%s · liquidcn" },
   description: site.description,
   icons: { icon: "/favicon.svg" },
-  // The shared image is app/opengraph-image.tsx.
+  // No title here, so each page's card takes the page's own title. The image is
+  // app/opengraph-image.tsx.
   openGraph: {
     type: "website",
     siteName: site.name,
-    title,
     description: site.tagline,
   },
   twitter: { card: "summary_large_image" },

@@ -1,11 +1,21 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { PackageCommand } from "@/www/docs/package-command";
 import { Hero } from "@/www/home/hero";
 import { Showcase } from "@/www/home/showcase";
+import { jsonLdScript, siteJsonLd } from "@/www/structured-data";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (
     <main id="content" className="home">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(siteJsonLd()) }}
+      />
       <Hero />
       <Showcase />
       <section className="home-install" aria-labelledby="install-title">

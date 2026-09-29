@@ -173,7 +173,8 @@ describe("liquid TabBar", () => {
     const field = screen.getByRole("searchbox");
     fireEvent.pointerDown(field, { button: 0, pointerId: 1 });
     fireEvent.keyDown(field, { key: " " });
-    time.settle();
+    // The pointer stays down, so frames never stop coming: half a second is enough to show a press.
+    for (let frame = 0; frame < 30; frame++) time.step();
     expect(Number(part("search").style.getPropertyValue("--liquid-press") || 0)).toBe(0);
   });
 

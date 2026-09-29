@@ -32,3 +32,13 @@ Open-source launch:
     Done: "Copyright (c) 2026 Sonfack Nelson Mandela", the repository owner's name on GitHub.
   ☐ Connect the GitHub repository to Vercel and point liquidcn.snmandela.com at it @deploy
     Steps in docs/deployment.md. Needs the owner's Vercel account and DNS access.
+  ☐ Tag v0.1.0 and publish its GitHub release @deploy
+    CHANGELOG.md links to the release; its notes are the 0.1.0 section.
+
+Next:
+  ☐ More components @component
+    Extend more shadcn/ui components, starting with switch, slider, popover, dialog, and sheet. Follow the
+    add-liquid-component skill. README lists the plan under Status.
+  ☐ Blocks @registry
+    Ready-made compositions of liquid components, installable from the registry like shadcn blocks: an app
+    header with a tab bar and search, a media toolbar, a settings panel.

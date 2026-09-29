@@ -7,6 +7,8 @@
 [![CI](https://github.com/nelsonmandeladev/liquidcn/actions/workflows/ci.yml/badge.svg)](https://github.com/nelsonmandeladev/liquidcn/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+> **Early stage.** APIs may still change, so add liquidcn to existing projects with care.
+
 ## Components
 
 | Component     | Item                   | What it does                                                                                         |
@@ -83,7 +85,22 @@ DOM and CSS glass with spring-driven motion; no WebGL, and no runtime dependency
 - [Architecture](docs/architecture.md): the spring, the lens, menu morphs, and the registry.
 - [Deployment](docs/deployment.md): Vercel and the custom domain.
 
-Browser support: current Chrome, Edge, Safari, and Firefox. Lens magnification enlarges a copy of the control's own labels; it does not refract the page behind the glass.
+Browser support: current Chrome, Edge, Safari, and Firefox. Chrome and Edge also bend the page behind bars and toolbars at their rim. The lens magnifies a copy of the control's own labels, not the page behind it.
+
+For AI agents, [llms.txt](https://liquidcn.snmandela.com/llms.txt) indexes the docs and [llms-full.txt](https://liquidcn.snmandela.com/llms-full.txt) has every component's usage, props, and accessibility notes.
+
+## Status
+
+**Shipped in 0.1.0**, the first public release: six components (button, tabs, tab bar, dropdown menu, toolbar, toast), the shadcn registry, theming tokens, and the docs site. [CHANGELOG.md](CHANGELOG.md) lists everything.
+
+**Next:**
+
+- **More components.** Extend more shadcn/ui components with glass, starting with switch, slider, popover, dialog, and sheet.
+- **Blocks.** Ready-made compositions of liquid components that install from the registry, like shadcn blocks: an app header with a tab bar and search, a media toolbar, a settings panel.
+- **A lens that magnifies the page**, not only the control's own labels.
+- **A stable API** on the way to 1.0.
+
+Ideas and requests are welcome as [issues](https://github.com/nelsonmandeladev/liquidcn/issues/new/choose).
 
 ## Contributing
 

@@ -29,7 +29,8 @@ test.describe("tabs lens", () => {
     expect(shadows.filter((shadow) => !shadow.includes("inset"))).toEqual([]);
     await page.mouse.up();
     await expect.poll(async () => (await lensOf(bar)).state).toBe("rest");
-    expect((await lensOf(bar)).lift).toBe(0);
+    // Rest starts below a lift of 0.005; the spring carries it the rest of the way to 0.
+    await expect.poll(async () => (await lensOf(bar)).lift).toBe(0);
   });
 
   test("dragging across tabs selects where the lens is released", async ({ page, isMobile }) => {
