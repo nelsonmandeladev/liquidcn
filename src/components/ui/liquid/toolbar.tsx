@@ -2,9 +2,9 @@
 import type { ComponentProps } from "react";
 import { Toolbar as Primitive } from "radix-ui";
 import { cn } from "@/lib/utils";
-import { useLiquidElement } from "@/components/ui/liquid-motion";
-import { useLiquidIndicator } from "@/components/ui/liquid-lens";
-import { useLiquidInteraction } from "@/components/ui/liquid-press";
+import { useLiquidElement } from "@/lib/liquid/motion";
+import { useLiquidIndicator } from "@/lib/liquid/lens";
+import { useLiquidInteraction } from "@/lib/liquid/press";
 import "./liquid.css";
 export function Toolbar({ className, ref, ...props }: ComponentProps<typeof Primitive.Root>) {
   const [node, mergedRef] = useLiquidElement(ref);

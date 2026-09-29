@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/liquid-tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/liquid/tabs";
 
 function Library() {
   return (

@@ -17,7 +17,7 @@ import {
   DropdownMenuSubContent as BaseSubContent,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useLiquidElement } from "@/components/ui/liquid-motion";
+import { useLiquidElement } from "@/lib/liquid/motion";
 import {
   MenuMorph,
   MenuSession,
@@ -25,7 +25,7 @@ import {
   measureAnchor,
   sameAnchor,
   type Anchor,
-} from "@/components/ui/liquid-menu-morph";
+} from "@/lib/liquid/menu-morph";
 import "./liquid.css";
 export {
   DropdownMenuGroup,

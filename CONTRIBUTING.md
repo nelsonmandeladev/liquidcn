@@ -59,9 +59,9 @@ See [docs/design.md](docs/design.md) for the motion language and [docs/architect
 ## Adding a component
 
 1. Add the shadcn/ui base component under `src/components/ui/` if it is not there yet.
-2. Wrap it in `src/components/ui/liquid-<name>.tsx`. Reuse `useLiquidInteraction` (press and morph) and `useLiquidIndicator` (a selection lens) before writing new motion.
-3. Add styles to `src/components/ui/liquid.css`, including reduced-motion, reduced-transparency, dark, and forced-colors handling.
-4. Add an item to `registry.json` listing **every** file it needs. `tests/unit/registry.test.ts` fails if an imported module or package is missing. Run `pnpm registry:build` and commit `public/r/`.
+2. Wrap it in `src/components/ui/liquid/<name>.tsx`. Reuse `useLiquidInteraction` (press and morph) and `useLiquidIndicator` (a selection lens) from `src/lib/liquid/` before writing new motion; new motion modules go there too.
+3. Add styles to `src/components/ui/liquid/liquid.css`, including reduced-motion, reduced-transparency, dark, and forced-colors handling.
+4. Add an item to `registry.json` listing **every** file it needs, with motion modules typed `registry:lib`. `tests/unit/registry.test.ts` fails if an imported module or package is missing or a file would install in the wrong place. Run `pnpm registry:build` and commit `public/r/`.
 5. Add a demo in `src/playground/demos/` and an entry in `src/playground/catalog.ts`.
 6. Add component tests and at least one UI test.
 7. Document it in the README.

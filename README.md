@@ -32,8 +32,8 @@ Each item brings its source, the base shadcn component it wraps, `liquid.css`, a
 The components keep the shadcn API: same props, refs, and events.
 
 ```tsx
-import { Button } from "@/components/ui/liquid-button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/liquid-tabs";
+import { Button } from "@/components/ui/liquid/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/liquid/tabs";
 
 <Button onClick={save}>Save</Button>
 <Button variant="prominent" size="icon-lg" aria-label="Done"><Check /></Button>

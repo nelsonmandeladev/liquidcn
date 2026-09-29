@@ -1,21 +1,23 @@
 # Architecture
 
-liquidcn has two parts: a **component library** in `src/components/ui/`, distributed as source through a shadcn registry, and a **playground** in `src/playground/` that demonstrates it and hosts the registry.
+liquidcn has two parts: a **component library** in `src/components/ui/liquid/` and `src/lib/liquid/`, distributed as source through a shadcn registry, and a **playground** in `src/playground/` that demonstrates it and hosts the registry.
 
 ## Component library
 
 Each liquid component wraps a shadcn/ui base component and adds behavior through small, framework-free classes attached by hooks. Consumers keep the familiar shadcn props, refs, and events.
 
-| File                        | Responsibility                                                                                                  |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `liquid.css`                | Glass material, lens, menu choreography, and every accessibility preference.                                    |
-| `liquid-motion.ts`          | Shared core: the spring, rubber band, reduced-motion checks, listener and ref helpers.                          |
-| `liquid-press.ts`           | `LiquidPress` (hover light, swell, rubber-band drag) and `LiquidMorph` (content morph); `useLiquidInteraction`. |
-| `liquid-lens.ts`            | `LiquidLens`, the selection lens for tabs and toolbars; `useLiquidIndicator`.                                   |
-| `liquid-lens-parts.ts`      | Pure lens geometry and the lens's DOM helpers.                                                                  |
-| `liquid-menu-morph.ts`      | Menu geometry, `MenuMorph` (unfold/fold), and `MenuSession` (trigger press tracking and guard).                 |
-| `liquid-*.tsx`              | Thin React wrappers that combine a base component with the pieces above.                                        |
-| `button.tsx`, `tabs.tsx`, … | Unmodified shadcn/ui base components.                                                                           |
+| File                                      | Responsibility                                                                                                  |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `components/ui/liquid/*.tsx`              | Thin React wrappers that combine a base component with the pieces below.                                        |
+| `components/ui/liquid/liquid.css`         | Glass material, lens, menu choreography, and every accessibility preference.                                    |
+| `lib/liquid/motion.ts`                    | Shared core: the spring, rubber band, reduced-motion checks, listener and ref helpers.                          |
+| `lib/liquid/press.ts`                     | `LiquidPress` (hover light, swell, rubber-band drag) and `LiquidMorph` (content morph); `useLiquidInteraction`. |
+| `lib/liquid/lens.ts`                      | `LiquidLens`, the selection lens for tabs and toolbars; `useLiquidIndicator`.                                   |
+| `lib/liquid/lens-parts.ts`                | Pure lens geometry and the lens's DOM helpers.                                                                  |
+| `lib/liquid/menu-morph.ts`                | Menu geometry, `MenuMorph` (unfold/fold), and `MenuSession` (trigger press tracking and guard).                 |
+| `components/ui/button.tsx`, `tabs.tsx`, … | Unmodified shadcn/ui base components.                                                                           |
+
+Paths are relative to `src/`. The registry ships wrappers and `liquid.css` as `registry:ui` and the motion modules as `registry:lib`, so they install into the consumer's `ui/liquid/` and `lib/liquid/` folders and every `@/components/ui/…` and `@/lib/…` import keeps resolving.
 
 ### The spring
 
@@ -50,7 +52,7 @@ Radix opens a dropdown on `pointerdown` and selects an item on `pointerup` even 
 
 ## Registry
 
-`registry.json` lists each item and the files it ships. `pnpm registry:build` (`scripts/build-registry.mjs`) validates it with the official shadcn schemas and writes `public/r/*.json` with the sources embedded, which Next.js serves as static files. The output is committed; run the command after changing `registry.json` or any file it lists, and CI fails if the committed JSON is stale. `tests/unit/registry.test.ts` fails if an item's files import a component module or package the item does not ship or declare.
+`registry.json` lists each item and the files it ships. `pnpm registry:build` (`scripts/build-registry.mjs`) validates it with the official shadcn schemas and writes `public/r/*.json` with the sources embedded, which Next.js serves as static files. The output is committed; run the command after changing `registry.json` or any file it lists, and CI fails if the committed JSON is stale. `tests/unit/registry.test.ts` fails if an item's files import a local module or package the item does not ship or declare, or if the shadcn CLI would install a file anywhere other than where its imports expect it.
 
 ## Playground
 

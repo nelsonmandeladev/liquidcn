@@ -16,7 +16,7 @@
       ],
       "files": [
         {
-          "path": "src/components/ui/liquid-button.tsx",
+          "path": "src/components/ui/liquid/button.tsx",
           "type": "registry:ui"
         },
         {
@@ -24,16 +24,16 @@
           "type": "registry:ui"
         },
         {
-          "path": "src/components/ui/liquid.css",
+          "path": "src/components/ui/liquid/liquid.css",
           "type": "registry:ui"
         },
         {
-          "path": "src/components/ui/liquid-motion.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/motion.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "src/components/ui/liquid-press.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/press.ts",
+          "type": "registry:lib"
         }
       ],
       "type": "registry:ui"
@@ -51,7 +51,7 @@
       ],
       "files": [
         {
-          "path": "src/components/ui/liquid-tabs.tsx",
+          "path": "src/components/ui/liquid/tabs.tsx",
           "type": "registry:ui"
         },
         {
@@ -59,20 +59,20 @@
           "type": "registry:ui"
         },
         {
-          "path": "src/components/ui/liquid.css",
+          "path": "src/components/ui/liquid/liquid.css",
           "type": "registry:ui"
         },
         {
-          "path": "src/components/ui/liquid-motion.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/motion.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "src/components/ui/liquid-lens.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/lens.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "src/components/ui/liquid-lens-parts.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/lens-parts.ts",
+          "type": "registry:lib"
         }
       ],
       "type": "registry:ui"
@@ -90,7 +90,7 @@
       ],
       "files": [
         {
-          "path": "src/components/ui/liquid-dropdown-menu.tsx",
+          "path": "src/components/ui/liquid/dropdown-menu.tsx",
           "type": "registry:ui"
         },
         {
@@ -98,16 +98,16 @@
           "type": "registry:ui"
         },
         {
-          "path": "src/components/ui/liquid.css",
+          "path": "src/components/ui/liquid/liquid.css",
           "type": "registry:ui"
         },
         {
-          "path": "src/components/ui/liquid-motion.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/motion.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "src/components/ui/liquid-menu-morph.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/menu-morph.ts",
+          "type": "registry:lib"
         }
       ],
       "type": "registry:ui"
@@ -124,28 +124,28 @@
       ],
       "files": [
         {
-          "path": "src/components/ui/liquid-toolbar.tsx",
+          "path": "src/components/ui/liquid/toolbar.tsx",
           "type": "registry:ui"
         },
         {
-          "path": "src/components/ui/liquid.css",
+          "path": "src/components/ui/liquid/liquid.css",
           "type": "registry:ui"
         },
         {
-          "path": "src/components/ui/liquid-motion.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/motion.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "src/components/ui/liquid-press.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/press.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "src/components/ui/liquid-lens.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/lens.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "src/components/ui/liquid-lens-parts.ts",
-          "type": "registry:ui"
+          "path": "src/lib/liquid/lens-parts.ts",
+          "type": "registry:lib"
         }
       ],
       "type": "registry:ui"
@@ -162,11 +162,11 @@
       ],
       "files": [
         {
-          "path": "src/components/ui/liquid-sonner.tsx",
+          "path": "src/components/ui/liquid/sonner.tsx",
           "type": "registry:ui"
         },
         {
-          "path": "src/components/ui/liquid.css",
+          "path": "src/components/ui/liquid/liquid.css",
           "type": "registry:ui"
         }
       ],

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createLiquidSpring, rubberBand } from "@/components/ui/liquid-motion";
+import { createLiquidSpring, rubberBand } from "@/lib/liquid/motion";
 import { frameClock } from "../frame-clock";
 
 afterEach(() => vi.unstubAllGlobals());

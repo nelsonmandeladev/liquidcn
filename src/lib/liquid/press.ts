@@ -8,7 +8,7 @@ import {
   motionReduced,
   observeMotion,
   rubberBand,
-} from "@/components/ui/liquid-motion";
+} from "@/lib/liquid/motion";
 
 const properties = [
   "--liquid-x",

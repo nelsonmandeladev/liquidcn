@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createRef } from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { Button } from "@/components/ui/liquid-button";
+import { Button } from "@/components/ui/liquid/button";
 import { frameClock } from "../frame-clock";
 
 afterEach(() => vi.unstubAllGlobals());

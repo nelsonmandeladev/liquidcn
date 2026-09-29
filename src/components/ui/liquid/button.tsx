@@ -2,8 +2,8 @@
 import type { ComponentProps } from "react";
 import { Button as BaseButton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useLiquidElement } from "@/components/ui/liquid-motion";
-import { useLiquidInteraction } from "@/components/ui/liquid-press";
+import { useLiquidElement } from "@/lib/liquid/motion";
+import { useLiquidInteraction } from "@/lib/liquid/press";
 import "./liquid.css";
 type BaseProps = ComponentProps<typeof BaseButton>;
 /** `prominent` is accent-tinted glass, like iOS `.glassProminent`. */

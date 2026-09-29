@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { pressedShape, swellFor } from "@/components/ui/liquid-press";
+import { pressedShape, swellFor } from "@/lib/liquid/press";
 
 describe("swellFor", () => {
   it("grows small controls more than large ones, within bounds", () => {

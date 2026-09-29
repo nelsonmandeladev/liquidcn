@@ -10,15 +10,15 @@ import {
   SlidersHorizontal,
   Sparkles,
 } from "lucide-react";
-import { toast } from "@/components/ui/liquid-sonner";
-import { Toolbar, ToolbarButton, ToolbarSeparator } from "@/components/ui/liquid-toolbar";
+import { toast } from "@/components/ui/liquid/sonner";
+import { Toolbar, ToolbarButton, ToolbarSeparator } from "@/components/ui/liquid/toolbar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/liquid-dropdown-menu";
+} from "@/components/ui/liquid/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { copy } from "@/playground/settings";
 

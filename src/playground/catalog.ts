@@ -26,7 +26,7 @@ export const interactionHints: Record<string, string> = {
 };
 
 export const examples: Record<string, string> = {
-  "liquid-sonner": `import { Toaster, toast } from "@/components/ui/liquid-sonner";
+  "liquid-sonner": `import { Toaster, toast } from "@/components/ui/liquid/sonner";
 
 // Mount once in your app. Defaults to top center.
 <Toaster />
@@ -34,7 +34,7 @@ export const examples: Record<string, string> = {
 toast.success("Saved to your collection", {
   description: "A little moment, kept forever.",
 });`,
-  "liquid-button": `import { Button } from "@/components/ui/liquid-button";
+  "liquid-button": `import { Button } from "@/components/ui/liquid/button";
 
 <Button onClick={() => console.log("Continue")} size="lg">
   Continue
@@ -45,7 +45,7 @@ toast.success("Saved to your collection", {
   <Check />
 </Button>`,
   "liquid-tabs": `import { Tabs, TabsList, TabsTrigger, TabsContent }
-  from "@/components/ui/liquid-tabs";
+  from "@/components/ui/liquid/tabs";
 
 <Tabs defaultValue="photos">
   <TabsList aria-label="Library">
@@ -57,7 +57,7 @@ toast.success("Saved to your collection", {
 </Tabs>`,
   "liquid-dropdown-menu": `import { DropdownMenu, DropdownMenuTrigger,
   DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem
-} from "@/components/ui/liquid-dropdown-menu";
+} from "@/components/ui/liquid/dropdown-menu";
 
 <DropdownMenu>
   <DropdownMenuTrigger>Options</DropdownMenuTrigger>
@@ -69,7 +69,7 @@ toast.success("Saved to your collection", {
   </DropdownMenuContent>
 </DropdownMenu>`,
   "liquid-toolbar": `import { Toolbar, ToolbarButton, ToolbarSeparator }
-  from "@/components/ui/liquid-toolbar";
+  from "@/components/ui/liquid/toolbar";
 
 <Toolbar aria-label="Photo actions">
   <ToolbarButton aria-label="Save">Save</ToolbarButton>

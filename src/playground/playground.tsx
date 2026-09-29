@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type CSSProperties } from "react";
-import { Toaster } from "@/components/ui/liquid-sonner";
+import { Toaster } from "@/components/ui/liquid/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { components, type ComponentEntry } from "@/playground/catalog";
 import { Footer, Header, RegistryView, Sidebar, type Page } from "@/playground/chrome";

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { act, render, screen, waitFor } from "@testing-library/react";
-import { Toolbar, ToolbarButton, ToolbarSeparator } from "@/components/ui/liquid-toolbar";
-import { Toaster, toast } from "@/components/ui/liquid-sonner";
+import { Toolbar, ToolbarButton, ToolbarSeparator } from "@/components/ui/liquid/toolbar";
+import { Toaster, toast } from "@/components/ui/liquid/sonner";
 
 function Tools({ pressed }: { pressed?: string }) {
   return (

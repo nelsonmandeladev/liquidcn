@@ -11,7 +11,7 @@ export default defineConfig({
     restoreMocks: true,
     coverage: {
       provider: "v8",
-      include: ["src/components/ui/liquid-*.{ts,tsx}"],
+      include: ["src/components/ui/liquid/*.tsx", "src/lib/liquid/*.ts"],
       reporter: ["text", "html"],
       // Layout-driven paths (lens drag, landing) are covered by the Playwright suite.
       thresholds: { statements: 75, branches: 60, functions: 75, lines: 75 },

@@ -1,6 +1,6 @@
 ---
 name: verify-motion
-description: Check how a liquidcn interaction actually moves, by capturing slowed-down frames from the running playground and, when there is one, comparing them with frames from a reference screen recording (for example an iOS 26 video). Use after changing anything in liquid.css, liquid-motion.ts, liquid-press.ts, liquid-lens*.ts, or liquid-menu-morph.ts, when tuning springs or timings, or when asked whether a component feels like the reference.
+description: Check how a liquidcn interaction actually moves, by capturing slowed-down frames from the running playground and, when there is one, comparing them with frames from a reference screen recording (for example an iOS 26 video). Use after changing anything in src/components/ui/liquid/liquid.css or src/lib/liquid/ (motion.ts, press.ts, lens*.ts, menu-morph.ts), when tuning springs or timings, or when asked whether a component feels like the reference.
 ---
 
 # Verify motion

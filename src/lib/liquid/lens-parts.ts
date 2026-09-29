@@ -1,6 +1,6 @@
-import { rubberBand } from "@/components/ui/liquid-motion";
+import { rubberBand } from "@/lib/liquid/motion";
 
-// Geometry and DOM helpers for the lens in liquid-lens.ts.
+// Geometry and DOM helpers for the lens in lens.ts.
 
 /** x, y, width, height in a list's padding-box coordinates. */
 export type Box = [number, number, number, number];

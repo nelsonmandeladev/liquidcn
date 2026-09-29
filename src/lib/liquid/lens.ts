@@ -7,7 +7,7 @@ import {
   liquidViscosity,
   motionReduced,
   observeMotion,
-} from "@/components/ui/liquid-motion";
+} from "@/lib/liquid/motion";
 import {
   activate,
   boxWithin,
@@ -18,7 +18,7 @@ import {
   nearestBox,
   pointerWithin,
   type Box,
-} from "@/components/ui/liquid-lens-parts";
+} from "@/lib/liquid/lens-parts";
 
 export type LensOptions = {
   /** Matches the selected item, e.g. `.liquid-tab[data-state="active"]`. */

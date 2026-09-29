@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/liquid-dropdown-menu";
+} from "@/components/ui/liquid/dropdown-menu";
 
 function Menu({ onSave, overlap }: { onSave: () => void; overlap?: boolean }) {
   return (

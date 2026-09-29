@@ -1,4 +1,4 @@
-import { listen, motionReduced } from "@/components/ui/liquid-motion";
+import { listen, motionReduced } from "@/lib/liquid/motion";
 
 export type Anchor = { width: number; height: number; align: "start" | "center" | "end" };
 export type Press = { id: number; x: number; y: number; moved: boolean };

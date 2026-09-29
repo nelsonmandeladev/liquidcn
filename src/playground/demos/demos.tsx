@@ -13,16 +13,16 @@ import {
   Download,
   Grip,
 } from "lucide-react";
-import { Button } from "@/components/ui/liquid-button";
-import { toast } from "@/components/ui/liquid-sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/liquid-tabs";
+import { Button } from "@/components/ui/liquid/button";
+import { toast } from "@/components/ui/liquid/sonner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/liquid/tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/liquid-dropdown-menu";
+} from "@/components/ui/liquid/dropdown-menu";
 import { EditingToolbar } from "@/playground/demos/toolbars";
 import { copy } from "@/playground/settings";
 

@@ -7,7 +7,7 @@ import {
   nearestBox,
   pointerWithin,
   type Box,
-} from "@/components/ui/liquid-lens-parts";
+} from "@/lib/liquid/lens-parts";
 
 function layout(element: HTMLElement, values: Partial<Record<string, unknown>>) {
   for (const [key, value] of Object.entries(values)) {

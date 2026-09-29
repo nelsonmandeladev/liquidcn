@@ -5,7 +5,7 @@ import {
   morphVariables,
   radiusOf,
   sameAnchor,
-} from "@/components/ui/liquid-menu-morph";
+} from "@/lib/liquid/menu-morph";
 
 function triggerAt(left: number, width = 60, height = 40) {
   const element = document.createElement("button");

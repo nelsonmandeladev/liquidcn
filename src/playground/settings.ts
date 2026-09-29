@@ -1,6 +1,6 @@
 "use client";
 
-import { toast } from "@/components/ui/liquid-sonner";
+import { toast } from "@/components/ui/liquid/sonner";
 import { useEffect, useState } from "react";
 
 export type Settings = {

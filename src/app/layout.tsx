@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { site } from "@/site";
-import "@/components/ui/liquid.css";
+import "@/components/ui/liquid/liquid.css";
 import "@/styles.css";
 
 export const metadata: Metadata = {
