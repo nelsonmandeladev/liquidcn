@@ -14,7 +14,7 @@ import "@/www/styles/controls.css";
 import "@/www/styles/code.css";
 import "@/www/styles/docs.css";
 import "@/www/styles/home.css";
-
+import { Analytics } from "@vercel/analytics/next";
 const title = "liquidcn: Liquid Glass for shadcn/ui";
 
 export const metadata: Metadata = {
@@ -50,6 +50,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <a className="skip-link" href="#content">
           Skip to content
         </a>
+        <Analytics />
         <SiteHeader />
         {children}
         <SiteFooter />
